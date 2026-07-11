@@ -1,0 +1,139 @@
+# skill.contract.yaml template
+#
+# Put this file next to SKILL.md for complex or production skills.
+# The contract describes the stable boundary. SKILL.md should explain how to use
+# the boundary, not carry every state-machine detail itself.
+
+name: example-skill
+kind: atomic # atomic | orchestrator | router | adapter | composite
+owner: self
+status: draft # draft | active | deprecated
+
+purpose: >-
+  One sentence describing the skill's stable job.
+
+triggers:
+  use_when:
+    - "User asks for the exact reusable workflow this skill owns."
+  do_not_use_when:
+    - "The task belongs to a lower-level script, another skill, or a plugin runtime."
+
+inputs:
+  - name: source
+    type: path
+    required: true
+    format: "repo-relative path or absolute path supplied by user"
+
+outputs:
+  - name: result_file
+    type: path
+    required: true
+
+profiles:
+  governance:
+    default: personal
+    supported:
+      - personal
+      - team
+      - production
+
+providers:
+  - name: example-api
+    classification: personal_local_byok # personal_local_byok | open_source_byok | mcp_plugin_runtime | commercial_saas
+    credential_sources:
+      - env # env | config_file | os_keychain | secret_manager | oauth | docker_mcp_secret
+    secrets_outside_skill_dir: true
+    network_allowlist:
+      - api.example.com
+    side_effect_boundary:
+      dry_run_no_remote_side_effects: true
+      apply_requires_explicit_user_approval: true
+    redaction:
+      enabled: true
+      forbidden_output_fields:
+        - access_token
+        - appsecret
+    docs:
+      revoke_rotate_delete: references/example-api-credentials.md
+
+stops:
+  - name: awaiting_user_review
+    condition: "Draft exists but user has not approved irreversible work."
+
+delegates:
+  - name: child-skill-name
+    kind: skill
+    when: "Only after input validation succeeds."
+    contract: "Pass one explicit input and expect one file output."
+
+forbidden:
+  - hardcoded_user_absolute_paths
+  - long_task_in_background_when_output_is_downstream
+  - implicit_today_fallback_for_explicit_dates
+  - irreversible_side_effect_without_user_approval
+
+state:
+  files:
+    - name: state_json
+      path: ".skill-state/example-skill.json"
+      required: false
+  approvals:
+    - name: user_review
+      required_before:
+        - irreversible_side_effect
+  transitions:
+    - from: sources_ready
+      to: awaiting_user_review
+      when: "Draft is ready but not approved."
+    - from: awaiting_user_review
+      to: approved
+      when: "User approval is explicit and recorded."
+
+scripts:
+  - path: scripts/example.py
+    required_flags:
+      - "--dry-run"
+      - "--apply"
+      - "--json"
+      - "--timeout-sec"
+
+tests:
+  regression_cases:
+    - tests/skills/example/case-001.yaml
+  security_cases:
+    - "missing credentials returns a redacted JSON error"
+    - "redaction masks provider tokens and app secrets"
+    - "blocked non-allowlisted host exits before request"
+    - "no secret JSON output includes provider tokens"
+  verification_commands:
+    - "skill-engineering lint ."
+    - "skill-engineering doctor . --profile team"
+
+# Required for complex/production skills. Declared evidence improves readiness;
+# it does not prove downstream utility unless behavioral + baseline + holdout
+# + negative-transfer evidence actually exists.
+evaluation:
+  suite_id: example-suite-v1
+  score_scope: structural_readiness # structural_readiness | downstream_utility
+  claims:
+    utility: false
+  case_portfolio:
+    success: tests/skills/example/success.yaml
+    failure: tests/skills/example/failure.yaml
+    high_risk: tests/skills/example/high-risk.yaml
+  baseline: artifacts/example/baseline-results.json
+  holdout: tests/skills/example/evaluation-suite.yaml
+  negative_transfer: "reject when holdout or safety results regress"
+  behavioral_results:
+    report: evidence/example/latest-behavior-report.json
+  independent_review: "reviewer identity or review artifact distinct from editor"
+  type_checks:
+    - cross_stage_io
+    - partial_failure
+    - aggregation
+
+review:
+  lint:
+    command: "skill-engineering lint ."
+  notes:
+    - "Move incidents to docs/postmortems or handoff docs, not SKILL.md."

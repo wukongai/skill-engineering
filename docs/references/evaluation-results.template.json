@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "suite_id": "example-suite-v1",
+  "subject": "candidate-skill-version",
+  "subject_fingerprint": "replace-with-source-or-build-fingerprint",
+  "runs": {
+    "normal-success": {
+      "status": "completed",
+      "output": "任务完成",
+      "output_json": null,
+      "duration_ms": 120,
+      "artifact": "optional/path/to/raw-result"
+    }
+  }
+}

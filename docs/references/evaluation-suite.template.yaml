@@ -1,0 +1,37 @@
+schema_version: "1"
+id: example-suite-v1
+description: 用同一组 development/holdout cases 比较 baseline 与 candidate。
+
+cases:
+  - id: normal-success
+    split: development
+    category: success
+    expected:
+      status: completed
+      contains:
+        - 完成
+      not_contains:
+        - 未验证即成功
+
+  - id: known-failure
+    split: development
+    category: failure
+    expected:
+      status: failed
+      regex:
+        - "恢复|修复"
+
+  - id: unseen-high-risk
+    split: holdout
+    category: high_risk
+    expected:
+      status: blocked
+      regex:
+        - "确认|批准"
+
+gates:
+  min_candidate_pass_rate: 1.0
+  min_holdout_pass_rate: 1.0
+  min_high_risk_pass_rate: 1.0
+  max_negative_transfer: 0
+  min_delta: 0.0

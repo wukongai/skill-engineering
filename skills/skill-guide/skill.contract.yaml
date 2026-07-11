@@ -1,0 +1,244 @@
+name: skill-guide
+kind: orchestrator
+owner: self
+status: active
+
+purpose: >-
+  为普通用户提供可恢复的对话式引导,自动完成 Skill 选择、创建计划、体检、
+  自进化候选与评测、安装或发布推荐、确认执行、验证与安全撤销。
+
+triggers:
+  use_when:
+    - "用户想创建、更新、重构、review、安装或体检 skill。"
+    - "用户希望 skill 根据失败、纠正或运行证据自动生成候选并进化。"
+    - "用户需要判断某个能力应该做成 skill、plugin、script、project doc 还是 profile entry。"
+    - "用户想检查 global/project/plugin/direct skill 暴露和路由成本。"
+  do_not_use_when:
+    - "任务只是普通应用开发,没有可复用 skill 或安装治理问题。"
+    - "用户要执行某个领域 skill 的业务流程,而不是工程化这个 skill。"
+
+inputs:
+  - name: capability_brief
+    type: text
+    required: false
+  - name: skill_path
+    type: path
+    required: false
+  - name: project_path
+    type: path
+    required: false
+  - name: governance_profile
+    type: enum
+    required: false
+    values: [personal, team, production]
+    default: personal
+
+outputs:
+  - name: journey_session
+    type: json-or-text
+    required: false
+  - name: selection_recommendation
+    type: text
+    required: false
+  - name: skill_scaffold
+    type: files
+    required: false
+  - name: doctor_report
+    type: json-or-text
+    required: false
+  - name: quality_score
+    type: json-or-text
+    required: false
+  - name: evidence_assessment
+    type: json-or-text
+    required: false
+  - name: repair_plan
+    type: text
+    required: false
+  - name: maintenance_record
+    type: json-or-text
+    required: false
+  - name: change_record
+    type: json-or-text
+    required: false
+  - name: verification_record
+    type: json-or-text
+    required: false
+  - name: evolution_proposal
+    type: json-or-text
+    required: false
+  - name: candidate_jobs
+    type: files
+    required: false
+  - name: skill_version
+    type: files
+    required: false
+  - name: release_plan
+    type: json-or-text
+    required: false
+  - name: release_record
+    type: json-or-text
+    required: false
+
+stops:
+  - name: awaiting_scope_confirmation
+    condition: "将引入新的 global skill、plugin 或生产级 workflow。"
+  - name: awaiting_user_approval
+    condition: "请求执行 apply、Canary/Active release、sync、publish、delete、write 等目标 skill 之外的副作用。"
+  - name: missing_input
+    condition: "没有提供 capability brief、skill path 或 project path,且无法从上下文推断。"
+
+delegates:
+  - name: skill-engineering journey
+    kind: cli
+    when: "开始、恢复或更新对话式引导任务。"
+  - name: skill-engineering decide
+    kind: cli
+    when: "判断能力应该做成 Skill、Plugin/runtime、Script、项目文档、Profile entry 或不新增产物。"
+  - name: official skill-creator
+    kind: skill
+    when: "官方 skill-creator 可用且需要创建或更新标准 Skill 内容。"
+  - name: skill-engineering create
+    kind: cli
+    when: "官方 skill-creator 不可用,或需要确定性的本地创建计划与 apply。"
+  - name: skill-engineering improve
+    kind: cli
+    when: "记录失败模式和根因,对比独立候选目录,生成复杂度增量与确定性 preflight,再按同一计划更新。"
+  - name: skill-engineering verify-improvement
+    kind: cli
+    when: "按维护记录复验修改结果和漂移。"
+  - name: skill-engineering undo-improvement
+    kind: cli
+    when: "用户明确要求撤销本次 Skill 修改且目标未漂移。"
+  - name: skill-engineering maintenance-history
+    kind: cli
+    when: "查看 Skill 多次修改的复杂度趋势和维护记录。"
+  - name: Agent Skill Hub
+    kind: external-project
+    when: "需要 registry、Profile、Global、多项目安装、inventory 或 adapter 分发。"
+  - name: skill-engineering lint
+    kind: cli
+    when: "检查静态 SKILL.md prompt debt 和 frontmatter 问题。"
+  - name: skill-engineering doctor
+    kind: cli
+    when: "检查单个 skill 的结构、contract、行为风险和可维护性。"
+  - name: skill-engineering validate-eval-suite
+    kind: cli
+    when: "在运行行为比较前校验 case portfolio、holdout 和 gates。"
+  - name: skill-engineering evaluate
+    kind: cli
+    when: "对同一 suite 的 baseline/candidate 真实结果计算 holdout、negative transfer 和行为证据结论。"
+  - name: skill-engineering evolution
+    kind: cli
+    when: "导入 SkillRun,形成 Proposal/Dataset/CandidateJob,登记候选、自动评测、Pareto 推荐、版本化并进入 Shadow。"
+  - name: host Agent candidate generation
+    kind: agent
+    when: "读取 CandidateJob 并只在隔离 source 中生成候选内容;核心不绑定模型 provider。"
+  - name: skill-engineering release-plan
+    kind: cli
+    when: "为 Canary 或 Active 生成不可变发布计划并展示确认边界。"
+  - name: skill-engineering release
+    kind: cli
+    when: "用户明确批准同一份未漂移 Release Plan 后发布并验证。"
+  - name: skill-engineering release-rollback
+    kind: cli
+    when: "按 ReleaseRecord 安全回滚且 channel/target 未漂移。"
+
+forbidden:
+  - global_enable_without_scope_review
+  - plugin_enable_without_inventory_review
+  - irreversible_side_effect_without_user_approval
+  - credential_or_network_transfer_without_security_review
+  - prompt_injection_or_hidden_override_instruction
+  - hardcoded_user_absolute_paths_in_skill_content
+  - incident_postmortem_inside_root_skill_md
+  - adding_hard_rule_without_rule_id_and_failure_mode
+  - internal_stage_exposed_as_top_level_skill
+  - arbitrary_command_execution_from_evaluation_suite
+  - direct_source_edit_without_maintenance_plan
+  - implicit_delete_from_candidate_absence
+  - improvement_apply_without_preflight_or_same_plan_id
+  - llm_semantic_score_in_deterministic_evaluation_version
+  - raw_sensitive_prompt_or_secret_in_evolution_state
+  - holdout_assertion_exposed_to_candidate_generator
+  - unapproved_canary_or_active_release
+  - automatic_global_release
+  - release_apply_without_same_plan_id
+
+state:
+  files:
+    - name: journey_sessions
+      path: ".skill-engineering/journeys/*.json"
+      required: false
+    - name: install_plans
+      path: ".skill-engineering/plans/*.json"
+      required: false
+    - name: change_records
+      path: ".skill-engineering/records/*.json"
+      required: false
+    - name: maintenance_records
+      path: ".skill-engineering/maintenance-records/*.json"
+      required: false
+    - name: maintenance_backups
+      path: ".skill-engineering/maintenance-backups/*"
+      required: false
+    - name: optional_doctor_report
+      path: ".skill-engineering/doctor-report.json"
+      required: false
+    - name: evolution_state
+      path: ".skill-engineering/evolution/"
+      required: false
+    - name: immutable_skill_versions
+      path: ".skill-engineering/evolution/skills/*/versions/*/source/"
+      required: false
+    - name: release_records
+      path: ".skill-engineering/evolution/release-records/*.json"
+      required: false
+  approvals:
+    - name: irreversible_side_effect
+      required_before:
+        - apply_sync_publish_delete
+    - name: canary_or_active_release
+      required_before:
+        - canary_install
+        - active_source_promotion
+
+scripts:
+  - path: scripts/doctor_skill.py
+    required_flags:
+      - "--profile"
+      - "--json"
+  - path: scripts/render_report.py
+    required_flags:
+      - "--input"
+
+tests:
+  regression_cases:
+    - tests/test_skill_doctor.py
+    - tests/test_evolution.py
+
+evaluation:
+  score_scope: structural_readiness
+  claims:
+    utility: false
+  case_portfolio:
+    success: tests/test_skill_doctor.py::test_doctor_skill_clean_atomic_ok
+    failure: tests/test_skill_doctor.py::test_doctor_skill_side_effect_without_approval_fails
+    high_risk: tests/test_skill_doctor.py::test_doctor_skill_flags_script_exfiltration_risk
+  baseline: "Doctor rule ids and exit-code behavior before this upgrade"
+  holdout: "Third-party skills not used to author individual EVAL rules"
+  negative_transfer: "Reject changes that reduce existing pytest or credential-lint coverage"
+  behavioral_results: "python3 -m pytest"
+  independent_review: "A reviewer other than the editing agent is required before claiming semantic utility"
+  type_checks:
+    - cross_stage_io
+    - partial_failure
+    - aggregation
+
+review:
+  lint:
+    command: "skill-engineering doctor skills/skill-guide --profile team"
+  notes:
+    - "根 SKILL.md 必须保持轻薄,只路由到 references 或内部 workflow step。"
+    - "创建/选择治理和安装治理是同一个 meta skill 下的两条独立流程。"
+    - "安装第三方 skill 前必须检查 prompt injection、凭证访问、网络传输和数据外传组合风险。"
