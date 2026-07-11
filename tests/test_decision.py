@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from skill_engineering.decision import decide_capability
+from skill_engineering.decision import decide_capability, format_decision
 
 
 def make_root(tmp_path: Path) -> Path:
@@ -64,3 +64,15 @@ def test_unknowns_are_questions_not_zero_score(tmp_path):
     assert report.confidence == "low"
     assert 1 <= len(report.unknowns) <= 3
     assert not hasattr(report, "score")
+
+
+def test_default_decision_feedback_is_user_readable(tmp_path):
+    report = decide_capability(make_root(tmp_path), "模糊想法", {})
+
+    text = format_decision(report)
+
+    assert "建议：" in text
+    assert "下一步：" in text
+    assert "还需要你确认" in text
+    assert report.id not in text
+    assert "create_skill" not in text

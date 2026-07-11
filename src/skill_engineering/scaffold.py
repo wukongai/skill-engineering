@@ -327,12 +327,17 @@ def format_build_plan(plan: BuildPlan) -> str:
         from .maintenance import format_improvement_plan
 
         return format_improvement_plan(plan)
-    title = "创建计划"
-    action = "将创建:"
-    lines = [f"{title}:{plan.skill_name}", f"目标:{plan.target}", f"类型:{plan.kind}", "", action]
-    for item in plan.files:
-        lines.append(f"- {item.relative_path}:{item.reason}")
-    lines.extend(["", "不会创建:"])
-    lines.extend(f"- {item['path']}:{item['reason']}" for item in plan.omitted)
-    lines.extend(["", "尚未写入任何文件。确认后才会应用这个计划。"])
-    return "\n".join(lines)
+    from .interaction import UserFeedback
+
+    return UserFeedback(
+        status="awaiting-approval",
+        result=f"{plan.skill_name} 的创建方案已经准备好。",
+        impact=[
+            f"将在 {plan.target} 创建 {len(plan.files)} 个文件。",
+            f"能力类型：{plan.kind}。",
+            "目前尚未写入任何文件。",
+        ],
+        next_action="确认创建位置和文件范围后再写入。",
+        decision="是否继续创建这个 Skill？",
+        technical_details=[f"plan={plan.id}"],
+    ).render()

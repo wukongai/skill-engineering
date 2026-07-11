@@ -130,7 +130,7 @@ def test_name_must_be_hyphen_case(tmp_path):
         )
 
 
-def test_improvement_plan_shows_diff_and_applies_after_preview(tmp_path: Path):
+def test_improvement_plan_summarizes_impact_and_applies_after_preview(tmp_path: Path):
     root = make_root(tmp_path)
     target = tmp_path / "demo-skill"
     candidate = tmp_path / "candidate"
@@ -152,8 +152,12 @@ def test_improvement_plan_shows_diff_and_applies_after_preview(tmp_path: Path):
     )
     assert plan.operation == "improve"
     assert (target / "SKILL.md").read_text(encoding="utf-8") == old
-    assert "-description: 旧描述。" in format_build_plan(plan)
-    assert "+description: 新描述。" in format_build_plan(plan)
+    summary = format_build_plan(plan)
+    assert "改进方案已经准备好" in summary
+    assert "目前尚未写入任何文件" in summary
+    assert "是否继续应用" in summary
+    assert "-description: 旧描述。" not in summary
+    assert "+description: 新描述。" not in summary
 
     apply_build_plan(root, plan)
     assert (target / "SKILL.md").read_text(encoding="utf-8") == new

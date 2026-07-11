@@ -311,15 +311,9 @@ class JourneySession:
     updated_at: str = field(default_factory=now_iso)
 
     def handoff_summary(self) -> str:
-        completed = "、".join(self.completed_steps) if self.completed_steps else "尚未完成步骤"
-        current = self.stage or "未确定"
-        next_action = self.next_action or "等待继续分析"
-        return (
-            f"已接续 Skill Guide 任务。\n\n"
-            f"已完成:{completed}\n"
-            f"当前状态:{current}({self.status})\n"
-            f"下一步:{next_action}"
-        )
+        from .interaction import format_journey_feedback
+
+        return format_journey_feedback(self)
 
 
 T = TypeVar("T")

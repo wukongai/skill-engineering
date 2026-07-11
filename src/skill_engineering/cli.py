@@ -277,6 +277,7 @@ def _evolution(root: Path, args: argparse.Namespace) -> int:
         submit_results,
         version_candidate,
     )
+    from .interaction import format_evolution_collection, format_evolution_feedback
 
     command = args.evolution_cmd
     if command == "record-run":
@@ -287,7 +288,10 @@ def _evolution(root: Path, args: argparse.Namespace) -> int:
         value = build_dataset(root, args.proposal)
     elif command == "prepare-candidates":
         values = prepare_candidates(root, args.proposal)
-        print(json.dumps([asdict(item) for item in values], ensure_ascii=False, indent=2))
+        if args.json:
+            print(json.dumps([asdict(item) for item in values], ensure_ascii=False, indent=2))
+        else:
+            print(format_evolution_collection(values, action="prepared"))
         return 0
     elif command == "register-candidate":
         value = register_candidate(root, args.job, args.path)
@@ -301,14 +305,28 @@ def _evolution(root: Path, args: argparse.Namespace) -> int:
         )
     elif command == "select":
         values = select_candidates(root, args.proposal)
-        print(json.dumps([asdict(item) for item in values], ensure_ascii=False, indent=2))
+        if args.json:
+            print(json.dumps([asdict(item) for item in values], ensure_ascii=False, indent=2))
+        else:
+            print(format_evolution_collection(values, action="selected"))
         return 0
     elif command == "version":
         value = version_candidate(root, args.candidate, args.label)
     else:
-        print(json.dumps(evolution_status(root, args.skill), ensure_ascii=False, indent=2))
+        payload = evolution_status(root, args.skill)
+        if args.json:
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+        else:
+            proposals = len(payload.get("proposals", []))
+            candidates = len(payload.get("candidates", []))
+            versions = len(payload.get("versions", []))
+            print(
+                "自进化状态已经汇总。\n\n"
+                f"影响：\n- 改进建议 {proposals} 个，候选 {candidates} 个，观察版本 {versions} 个。\n\n"
+                "下一步：继续处理尚未完成验证的候选。"
+            )
         return 0
-    _emit(value, f"{type(value).__name__}:{value.id}", args.json)
+    _emit(value, format_evolution_feedback(value), args.json)
     return 0 if getattr(value, "status", "") not in {"rejected"} else 1
 
 
@@ -425,7 +443,13 @@ def main(argv: list[str] | None = None) -> int:
         value, fingerprint = load_evaluation_suite(args.suite, production=args.production)
         payload = asdict(value)
         payload["sha256"] = fingerprint
-        _emit(payload, f"Evaluation suite valid:{value.id}", args.json)
+        _emit(
+            payload,
+            "评测案例已经通过结构检查。\n\n"
+            "影响：\n- 可以继续采集基线和候选的真实运行结果。\n\n"
+            "下一步：使用同一组案例分别运行基线和候选。",
+            args.json,
+        )
         return 0
     if args.cmd == "evaluate":
         from .evaluation import evaluate_behavior, format_behavior_report
@@ -443,6 +467,7 @@ def main(argv: list[str] | None = None) -> int:
         return _evolution(root, args)
     if args.cmd == "release-plan":
         from .evolution import create_release_plan
+        from .interaction import format_release_plan_feedback
 
         value = create_release_plan(
             root,
@@ -451,10 +476,11 @@ def main(argv: list[str] | None = None) -> int:
             project=args.project,
             active_source=args.active_source,
         )
-        _emit(value, f"Release Plan:{value.id};尚未发布。", args.json)
+        _emit(value, format_release_plan_feedback(value), args.json)
         return 0
     if args.cmd in {"release", "release-verify", "release-rollback"}:
         from .evolution import apply_release_plan, rollback_release, verify_release
+        from .interaction import format_release_record_feedback
 
         if args.cmd == "release":
             if not args.apply:
@@ -466,7 +492,7 @@ def main(argv: list[str] | None = None) -> int:
             value = rollback_release(root, args.record_id)
         else:
             value = verify_release(root, args.record_id)
-        _emit(value, f"Release:{value.id};{value.status}", args.json)
+        _emit(value, format_release_record_feedback(value), args.json)
         return 0
     raise SystemExit(f"未知命令:{args.cmd}")
 

@@ -8,6 +8,8 @@ Skill Engineering has three layers.
 
 It does not duplicate deterministic implementation in prose. Commands delegate to the Python core.
 
+Default human output is rendered through `UserFeedback`: result, real-world impact, one next action, and an explicit decision only when approval is required. Internal IDs, fingerprints, state enums, and raw records remain in JSON for automation, audit, and recovery instead of appearing as the user-facing conclusion.
+
 ## Deterministic core
 
 `src/skill_engineering/` owns:

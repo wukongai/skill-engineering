@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import difflib
 import os
 import re
 import shutil
@@ -625,57 +624,68 @@ def maintenance_history(root: Path, target: Path | None = None) -> list[Maintena
 
 
 def format_improvement_plan(plan: BuildPlan) -> str:
-    lines = [
-        f"改进计划:{plan.skill_name}",
-        f"Plan ID:{plan.id}",
-        f"问题:{plan.failure_mode or '未提供'}",
-        f"根因层级:{plan.root_cause_layer or '未提供'}",
-        f"预期行为:{plan.expected_behavior or '未提供'}",
-        f"Preflight:{plan.preflight.get('status', 'unknown')}",
-        "",
-        "将修改:",
+    from .interaction import UserFeedback
+
+    blocked = plan.preflight.get("status") != "pass"
+    delta = plan.complexity.get("delta", {})
+    impact = [
+        f"目标：{plan.target}",
+        f"将修改 {len(plan.files)} 个文件，显式删除 {len(plan.deletions)} 个文件。",
+        f"根入口预计变化 {delta.get('skill_md_lines', 0):+d} 行。",
+        "目前尚未写入任何文件。",
     ]
-    for item in plan.files:
-        destination = Path(plan.target) / item.relative_path
-        before = _read_utf8(destination).splitlines() if destination.is_file() else []
-        after = item.content.splitlines()
-        lines.append(f"- {item.relative_path}:{item.reason}")
-        lines.extend(
-            difflib.unified_diff(
-                before,
-                after,
-                fromfile=f"a/{item.relative_path}",
-                tofile=f"b/{item.relative_path}",
-                lineterm="",
-            )
-        )
-    lines.extend(["", "将显式删除:"])
-    lines.extend(f"- {path}" for path in plan.deletions)
-    if not plan.deletions:
-        lines.append("- 无")
-    lines.extend(["", "复杂度变化:"])
-    for key, value in plan.complexity.get("delta", {}).items():
-        lines.append(f"- {key}:{value:+d}")
-    lines.extend(["", "维护发现:"])
-    for finding in plan.findings:
-        lines.append(f"- {finding['level']} {finding['rule_id']}:{finding['message']}")
-    if not plan.findings:
-        lines.append("- 无")
-    lines.extend(["", "尚未写入任何文件。确认后必须使用同一 Plan ID 应用。"])
-    return "\n".join(lines)
+    if plan.findings:
+        impact.append(f"预检发现 {len(plan.findings)} 个需要处理的问题。")
+    return UserFeedback(
+        status="blocked" if blocked else "awaiting-approval",
+        result=(
+            "改进方案没有通过写入前检查，当前不能应用。"
+            if blocked
+            else f"{plan.skill_name} 的改进方案已经准备好。"
+        ),
+        impact=impact,
+        next_action=(
+            "先修复预检问题，再重新生成方案。"
+            if blocked
+            else "确认实际修改范围后，再决定是否应用。"
+        ),
+        decision="是否继续应用这次修改？" if not blocked else "",
+        technical_details=[f"plan={plan.id}", f"root_cause={plan.root_cause_layer}"],
+    ).render()
 
 
 def format_maintenance_record(record: MaintenanceRecord) -> str:
-    delta = record.complexity.get("delta", {})
-    return "\n".join(
-        [
-            f"维护记录:{record.id}",
-            f"状态:{record.status}",
-            f"问题:{record.failure_mode}",
-            f"根因层级:{record.root_cause_layer}",
-            f"修改:{len(record.actions)} 个文件动作",
-            f"根入口行数变化:{delta.get('skill_md_lines', 0):+d}",
-            f"验证:{record.verification.get('status', 'unknown')}",
-            f"可安全撤销:{'是' if record.undo_available else '否'}",
-        ]
-    )
+    from .interaction import UserFeedback
+
+    verification = record.verification.get("status", "unknown")
+    if record.status == "undone":
+        return UserFeedback(
+            status="completed",
+            result="本次 Skill 修改已经撤销，修改前的内容已恢复。",
+            impact=[f"只撤销了本次记录拥有的 {len(record.actions)} 个文件动作。"],
+            next_action="如需继续改进，请重新生成候选和修改方案。",
+            technical_details=[f"record={record.id}"],
+        ).render()
+    if record.status == "applied" and verification == "passed":
+        return UserFeedback(
+            status="completed",
+            result="Skill 修改已经应用并验证通过。",
+            impact=[
+                f"本次完成 {len(record.actions)} 个文件动作。",
+                "当前内容与已验证的候选一致。",
+                f"可以安全撤销：{'是' if record.undo_available else '否'}。",
+            ],
+            next_action="继续用真实任务观察效果；需要时可撤销本次修改。",
+            technical_details=[f"record={record.id}"],
+        ).render()
+    restored = record.status == "rolled_back"
+    return UserFeedback(
+        status="incomplete",
+        result="这次 Skill 修改整体尚未完成。",
+        impact=[
+            "写入后验证没有完整通过。",
+            "系统已经恢复修改前内容。" if restored else "请先确认目标是否已经安全恢复。",
+        ],
+        next_action="检查失败原因，修复候选后重新生成修改方案。",
+        technical_details=[f"record={record.id}", f"status={record.status}"],
+    ).render()

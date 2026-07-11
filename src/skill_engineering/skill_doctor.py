@@ -12,6 +12,7 @@ from typing import Any
 import yaml
 
 from .evaluation import load_evaluation_report
+from .interaction import UserFeedback
 from .skill_lint import lint_skill
 
 
@@ -1724,24 +1725,48 @@ def _format_assessment(assessment: SkillAssessment) -> list[str]:
 
 
 def format_text(result: DoctorResult) -> str:
-    lines = [
-        "Skill doctor report:" if result.issues else "Skill doctor report: OK",
-        f"Target: {result.target}",
-        f"Profile: {result.profile}",
-    ]
+    impact: list[str] = []
     if result.score:
-        lines.extend(_format_score(result.score))
+        impact.append(f"工程完整度为 {result.score.total} 分（{result.score.grade}）。")
     if result.assessment:
-        lines.extend(_format_assessment(result.assessment))
+        impact.append(
+            f"当前证据覆盖率为 {result.assessment.coverage_percent}%；"
+            "这只代表检查覆盖情况，不代表真实业务效果。"
+        )
+
     if not result.issues:
-        return "\n".join(lines)
-    for issue in result.issues:
-        loc = f"{issue.path}:{issue.line}" if issue.line else issue.path
-        lines.append(f"- {issue.level} {issue.rule_id} [{issue.layer}]: {loc}: {issue.message}")
+        impact.append("没有发现必须修复或建议处理的结构问题。")
+        return UserFeedback(
+            status="completed",
+            result="这个 Skill 的工程检查已经通过。",
+            impact=impact,
+            next_action="进入真实行为测试；如需审计明细，请使用 JSON 输出。",
+            technical_details=[f"target={result.target}", f"profile={result.profile}"],
+        ).render()
+
+    if result.fail_count:
+        summary = f"发现 {result.fail_count} 个必须修复的问题"
+        status = "incomplete"
+        next_action = "先修复下列阻断问题，再重新运行检查。"
+    else:
+        summary = f"没有阻断问题，但有 {result.warn_count} 个改进建议"
+        status = "completed"
+        next_action = "处理下列建议，或记录暂不处理的原因后进入真实行为测试。"
+    impact.append(f"检查结果：{summary}。")
+    for issue in result.issues[:3]:
+        detail = issue.message
         if issue.hint:
-            lines.append(f"  hint: {issue.hint}")
-    lines.append(f"{result.fail_count} fail, {result.warn_count} warn")
-    return "\n".join(lines)
+            detail = f"{detail} 建议：{issue.hint}"
+        impact.append(detail)
+    if len(result.issues) > 3:
+        impact.append(f"另外还有 {len(result.issues) - 3} 项；完整明细可通过 JSON 输出查看。")
+    return UserFeedback(
+        status=status,
+        result="这个 Skill 的工程检查尚未完全通过。" if result.fail_count else "这个 Skill 可以继续测试，但仍有改进空间。",
+        impact=impact,
+        next_action=next_action,
+        technical_details=[f"target={result.target}", f"profile={result.profile}"],
+    ).render()
 
 
 def format_json(result: DoctorResult) -> str:

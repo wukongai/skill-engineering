@@ -34,6 +34,10 @@ inputs:
     default: personal
 
 outputs:
+  - name: user_status_summary
+    type: text
+    required: true
+    contract: "默认只说明结果、用户影响和下一步;内部记录放在可选技术详情。"
   - name: journey_session
     type: json-or-text
     required: false
@@ -164,6 +168,9 @@ forbidden:
   - unapproved_canary_or_active_release
   - automatic_global_release
   - release_apply_without_same_plan_id
+  - raw_tool_output_as_default_user_feedback
+  - approval_request_using_only_internal_release_terms
+  - claiming_overall_success_when_any_required_cleanup_record_failed
 
 state:
   files:
@@ -216,6 +223,7 @@ tests:
   regression_cases:
     - tests/test_skill_doctor.py
     - tests/test_evolution.py
+    - tests/user-feedback-cases.yaml
 
 evaluation:
   score_scope: structural_readiness

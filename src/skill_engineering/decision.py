@@ -12,6 +12,7 @@ from typing import Any
 
 import yaml
 
+from .interaction import UserFeedback
 from .journey import DecisionReport, new_id
 
 
@@ -275,20 +276,30 @@ def format_decision(report: DecisionReport) -> str:
         "archive_or_replace": "归档或替换旧入口",
         "no_new_artifact": "不新增产物",
     }
-    lines = [f"推荐:{labels.get(report.verdict, report.verdict)}", f"置信度:{report.confidence}"]
+    confidence_labels = {"high": "高", "medium": "中", "low": "低"}
+    scope_labels = {
+        "project": "当前项目",
+        "profile": "指定项目组",
+        "global": "全局",
+        "one_project": "当前项目",
+        "project_set": "指定项目组",
+        "most_projects": "多数项目",
+    }
+    impact = list(report.reasons)
+    impact.append(f"判断把握：{confidence_labels.get(report.confidence, report.confidence)}。")
     if report.recommended_scope:
-        lines.append(f"建议范围:{report.recommended_scope}")
-    lines.append("")
-    lines.append("为什么:")
-    lines.extend(f"- {reason}" for reason in report.reasons)
+        impact.append(f"建议使用范围：{scope_labels.get(report.recommended_scope, report.recommended_scope)}。")
     if report.alternatives:
-        lines.append("")
-        lines.append("为什么不是其他选项:")
-        lines.extend(
-            f"- {item['option']}:{item['rejected_because']}" for item in report.alternatives
-        )
+        impact.append("其他产物形态暂不推荐，因为它们不能同时满足当前触发、复用和运行要求。")
+    next_action = report.next_actions[0]["label"] if report.next_actions else "继续补齐必要信息。"
+    decision = ""
     if report.unknowns:
-        lines.append("")
-        lines.append("还需要确认:")
-        lines.extend(f"- {question}" for question in report.unknowns)
-    return "\n".join(lines)
+        decision = "还需要你确认：\n" + "\n".join(f"- {question}" for question in report.unknowns)
+    return UserFeedback(
+        status="awaiting-approval" if report.unknowns else "completed",
+        result=f"建议：{labels.get(report.verdict, report.verdict)}。",
+        impact=impact,
+        next_action=next_action,
+        decision=decision,
+        technical_details=[f"decision={report.id}", f"verdict={report.verdict}"],
+    ).render()

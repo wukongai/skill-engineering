@@ -31,6 +31,7 @@ decide -> create -> audit -> evaluate -> improve -> evolve -> shadow -> approve 
 - Generate isolated evolution candidates from repeated failures and user corrections.
 - Select Pareto-efficient candidates across utility, risk, latency, cost, and complexity.
 - Create immutable versions, automatic Shadow state, approved Canary/Active releases, verification, and rollback.
+- Present default human feedback as result, real-world impact, and one clear next action while preserving complete JSON evidence for automation and audit.
 
 Doctor scores structural readiness. It never presents an unmeasured downstream utility claim as a score.
 
@@ -54,7 +55,7 @@ skill-engineering evaluate \
   --candidate-results candidate.json
 ```
 
-Creation and improvement commands are preview-first. Writing requires `--apply` and an immutable plan id where applicable. Canary and Active releases also require explicit approval.
+Creation and improvement commands are preview-first. Writing requires `--apply` and an immutable plan id where applicable. Test and active releases also require explicit approval. Default text describes the actual action, scope, impact, and rollback boundary; internal release terms remain available in JSON and technical output.
 
 ## Repository layout
 
@@ -84,8 +85,9 @@ python3 /path/to/skill-creator/scripts/quick_validate.py skills/skill-guide
 bash scripts/credential-lint.sh --all
 ```
 
-The latest full workflow evidence is documented in
-[`docs/testing/2026-07-11-real-e2e.md`](docs/testing/2026-07-11-real-e2e.md).
+The full lifecycle evidence is documented in
+[`docs/testing/2026-07-11-real-e2e.md`](docs/testing/2026-07-11-real-e2e.md). The latest interaction and handoff evidence is documented in
+[`docs/testing/2026-07-12-interaction-e2e.md`](docs/testing/2026-07-12-interaction-e2e.md).
 
 ## License
 

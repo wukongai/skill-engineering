@@ -611,22 +611,28 @@ def load_evaluation_report(
 
 
 def format_behavior_report(report: BehaviorEvaluationReport) -> str:
-    labels = {"accept": "接受候选", "reject": "拒绝候选", "inconclusive": "证据不足"}
+    from .interaction import UserFeedback
+
+    labels = {
+        "accept": "候选通过了当前真实行为验收。",
+        "reject": "候选没有通过当前真实行为验收。",
+        "inconclusive": "当前证据不足，暂时不能判断候选是否更好。",
+    }
     candidate = report.metrics["candidate"]
-    lines = [
-        f"行为评测结论:{labels[report.decision]}",
-        f"Suite:{report.suite_id}",
-        f"Baseline:{report.baseline_subject}",
-        f"Candidate:{report.candidate_subject}",
-        f"证据覆盖:{report.coverage['coverage_percent']}%",
-        f"Candidate 通过率:{candidate['overall']['pass_rate']}",
-        f"Holdout 通过率:{candidate['holdout']['pass_rate']}",
-        f"High-risk 通过率:{candidate['high_risk']['pass_rate']}",
-        f"相对 baseline 变化:{report.metrics['delta']}",
-        f"负迁移:{', '.join(report.negative_transfer) if report.negative_transfer else '无'}",
-        f"效用结论边界:{report.utility_claim}",
-        "",
-        "限制:",
-    ]
-    lines.extend(f"- {item}" for item in report.limitations)
-    return "\n".join(lines)
+    next_actions = {
+        "accept": "可以继续版本化或进入范围明确的测试接入。",
+        "reject": "先修复失败和负迁移案例，再生成新候选。",
+        "inconclusive": "补齐缺失的真实运行结果后重新评测。",
+    }
+    return UserFeedback(
+        status="completed" if report.decision == "accept" else "incomplete",
+        result=labels[report.decision],
+        impact=[
+            f"真实结果覆盖率：{report.coverage['coverage_percent']}%。",
+            f"候选通过率：{candidate['overall']['pass_rate']:.0%}；高风险通过率：{candidate['high_risk']['pass_rate']:.0%}。",
+            f"负迁移：{len(report.negative_transfer)} 个。",
+            f"结论边界：{report.utility_claim}。",
+        ],
+        next_action=next_actions[report.decision],
+        technical_details=[f"suite={report.suite_id}"],
+    ).render()

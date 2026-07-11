@@ -7,7 +7,7 @@ import yaml
 
 from skill_engineering.cli import main as engineering_main
 from skill_engineering.evaluation import evaluate_behavior
-from skill_engineering.skill_doctor import doctor_skill
+from skill_engineering.skill_doctor import doctor_skill, format_text
 
 
 def write_skill(
@@ -27,6 +27,18 @@ def write_skill(
 
 def ids(result) -> set[str]:
     return {issue.rule_id for issue in result.issues}
+
+
+def test_default_doctor_feedback_explains_result_without_rule_ids(tmp_path):
+    skill = write_skill(tmp_path)
+    result = doctor_skill(skill)
+
+    text = format_text(result)
+
+    assert "工程检查" in text
+    assert "下一步：" in text
+    assert "DOC" not in text
+    assert "Profile:" not in text
 
 
 def attach_behavior_report(

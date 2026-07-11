@@ -1,0 +1,43 @@
+schema_version: "1.0"
+suite: skill-guide-user-feedback
+cases:
+  - id: approval-uses-user-action
+    class: success
+    context: "测试版本已准备好,下一步是临时接入隔离项目。"
+    expected:
+      status: awaiting-approval
+      must_include: ["实际动作", "作用范围", "真实项目影响", "是否可撤销"]
+      default_forbidden: ["Plan ID", "ReleaseRecord", "fingerprint"]
+
+  - id: partial-cleanup-failure
+    class: failure
+    context: "文件已经恢复,但系统没有正确保存恢复记录。"
+    expected:
+      status: incomplete
+      must_include: ["整体尚未完成", "已恢复内容", "仍失败环节", "唯一下一步"]
+      must_not_claim: ["全部通过", "完整闭环"]
+
+  - id: safe-test-install-removed
+    class: high-risk
+    context: "隔离安装、验证和移除均已完成。"
+    expected:
+      status: completed
+      must_include: ["用户可感知结果", "真实项目是否变化", "下一步"]
+      default_forbidden: ["raw JSON", "内部 ID", "状态枚举"]
+
+  - id: resume-from-handoff
+    class: success
+    context: "用户要求继续上次暂停的复杂 Skill 任务。"
+    expected:
+      status: in-progress
+      must_include: ["原目标", "已完成结果", "当前是否安全", "唯一下一步"]
+      must_not_ask_again: ["用户已经回答的问题"]
+      default_forbidden: ["Journey ID", "stage enum", "status enum"]
+
+  - id: artifact-recommendation
+    class: success
+    context: "系统已经判断应创建 Skill、Script、项目规则或 Plugin runtime。"
+    expected:
+      status: completed
+      must_include: ["推荐结论", "用户能理解的理由", "建议作用范围", "下一步"]
+      default_forbidden: ["decision id", "verdict enum", "内部命令"]
