@@ -403,7 +403,7 @@ def build_dataset(root: Path, proposal_id: str) -> EvolutionDataset:
     cases: list[dict[str, Any]] = []
     for run in runs:
         category = (
-            "high-risk" if run.high_risk else ("success" if run.outcome == "success" else "failure")
+            "high_risk" if run.high_risk else ("success" if run.outcome == "success" else "failure")
         )
         cases.append(
             {
@@ -574,6 +574,13 @@ def submit_results(
     dataset = _load(root, "datasets-meta", str(proposal.dataset_id), EvolutionDataset)
     if fingerprint_path(Path(job.source_path)) != job.source_fingerprint:
         raise SystemExit("候选 source 已漂移,请重新登记。")
+    suite, _ = load_evaluation_suite(Path(dataset.suite_path), production=False)
+    baseline_runs, _ = load_behavior_results(baseline_results, suite)
+    candidate_runs, _ = load_behavior_results(candidate_results, suite)
+    if baseline_runs.subject_fingerprint != proposal.baseline_fingerprint:
+        raise SystemExit("baseline results 指纹与 Proposal baseline 不匹配。")
+    if candidate_runs.subject_fingerprint != job.source_fingerprint:
+        raise SystemExit("candidate results 指纹与候选 source 不匹配。")
     report = evaluate_behavior(
         root,
         Path(dataset.suite_path),
@@ -581,8 +588,6 @@ def submit_results(
         candidate_results,
         production=False,
     )
-    suite, _ = load_evaluation_suite(Path(dataset.suite_path), production=False)
-    candidate_runs, _ = load_behavior_results(candidate_results, suite)
     durations = [
         run.duration_ms for run in candidate_runs.runs.values() if run.duration_ms is not None
     ]

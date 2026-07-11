@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+from skill_engineering.evaluation import load_evaluation_suite
 from skill_engineering.evolution import (
     apply_release_plan,
     build_dataset,
@@ -85,7 +86,14 @@ def prepare_proposal(env: dict[str, Path]):
     return propose_evolution(env["root"], env["skill"])
 
 
-def write_results(root: Path, suite_path: Path, name: str, *, pass_all: bool) -> Path:
+def write_results(
+    root: Path,
+    suite_path: Path,
+    name: str,
+    *,
+    pass_all: bool,
+    fingerprint: str,
+) -> Path:
     suite = yaml.safe_load(suite_path.read_text(encoding="utf-8"))
     runs = {}
     for index, case in enumerate(suite["cases"]):
@@ -107,7 +115,7 @@ def write_results(root: Path, suite_path: Path, name: str, *, pass_all: bool) ->
                 "schema_version": "1",
                 "suite_id": suite["id"],
                 "subject": name,
-                "subject_fingerprint": f"fingerprint-{name}",
+                "subject_fingerprint": fingerprint,
                 "runs": runs,
             },
             ensure_ascii=False,
@@ -123,8 +131,20 @@ def validated_candidate(env: dict[str, Path], *, description: str = "用于修�
     job = prepare_candidates(env["root"], proposal.id)[0]
     (Path(job.source_path) / "SKILL.md").write_text(skill_text(description), encoding="utf-8")
     registered = register_candidate(env["root"], job.id)
-    baseline = write_results(env["root"], Path(dataset.suite_path), "baseline", pass_all=False)
-    candidate = write_results(env["root"], Path(dataset.suite_path), "candidate", pass_all=True)
+    baseline = write_results(
+        env["root"],
+        Path(dataset.suite_path),
+        "baseline",
+        pass_all=False,
+        fingerprint=proposal.baseline_fingerprint,
+    )
+    candidate = write_results(
+        env["root"],
+        Path(dataset.suite_path),
+        "candidate",
+        pass_all=True,
+        fingerprint=registered.source_fingerprint,
+    )
     submit_results(env["root"], registered.id, baseline, candidate)
     selected = select_candidates(env["root"], proposal.id)
     return proposal, dataset, selected[0]
@@ -199,6 +219,26 @@ def test_dataset_keeps_leakage_groups_together_and_requires_two_groups(env):
         build_dataset(isolated_env["root"], isolated_proposal.id)
 
 
+def test_high_risk_dataset_uses_evaluator_category_schema(env):
+    record_run(env["root"], write_run(env, "success", outcome="success"))
+    for index in range(3):
+        record_run(
+            env["root"],
+            write_run(
+                env,
+                f"risk-{index}",
+                outcome="failure",
+                tag="approval-bypass",
+                high_risk=index == 0,
+            ),
+        )
+    proposal = propose_evolution(env["root"], env["skill"])
+    dataset = build_dataset(env["root"], proposal.id)
+    suite, _ = load_evaluation_suite(Path(dataset.suite_path), production=False)
+
+    assert any(case.category == "high_risk" for case in suite.cases)
+
+
 def test_candidate_jobs_are_isolated_and_brief_does_not_expose_holdout(env):
     proposal = prepare_proposal(env)
     dataset = build_dataset(env["root"], proposal.id)
@@ -226,11 +266,13 @@ def test_evaluation_pareto_selection_and_immutable_shadow_version(env):
     proposal = prepare_proposal(env)
     dataset = build_dataset(env["root"], proposal.id)
     jobs = prepare_candidates(env["root"], proposal.id)[:2]
-    baseline = write_results(env["root"], Path(dataset.suite_path), "baseline", pass_all=False)
-    candidate_results = write_results(
-        env["root"], Path(dataset.suite_path), "candidate", pass_all=True
+    baseline = write_results(
+        env["root"],
+        Path(dataset.suite_path),
+        "baseline",
+        pass_all=False,
+        fingerprint=proposal.baseline_fingerprint,
     )
-
     compact = register_candidate(env["root"], jobs[0].id)
     verbose_path = Path(jobs[1].source_path) / "SKILL.md"
     verbose_path.write_text(
@@ -238,10 +280,24 @@ def test_evaluation_pareto_selection_and_immutable_shadow_version(env):
         encoding="utf-8",
     )
     verbose = register_candidate(env["root"], jobs[1].id)
+    candidate_results = write_results(
+        env["root"],
+        Path(dataset.suite_path),
+        "candidate",
+        pass_all=True,
+        fingerprint=compact.source_fingerprint,
+    )
     compact_result = submit_results(
         env["root"], compact.id, baseline, candidate_results, candidate_cost=0.25
     )
-    submit_results(env["root"], verbose.id, baseline, candidate_results, candidate_cost=0.5)
+    verbose_results = write_results(
+        env["root"],
+        Path(dataset.suite_path),
+        "verbose-candidate",
+        pass_all=True,
+        fingerprint=verbose.source_fingerprint,
+    )
+    submit_results(env["root"], verbose.id, baseline, verbose_results, candidate_cost=0.5)
     assert compact_result.fitness["cost"] == 0.25
     assert compact_result.fitness["latency_ms"] > 0
 
@@ -257,6 +313,29 @@ def test_evaluation_pareto_selection_and_immutable_shadow_version(env):
         env["root"] / ".skill-engineering" / "evolution" / "channels" / "demo-skill" / "shadow.json"
     )
     assert json.loads(shadow.read_text(encoding="utf-8"))["version_id"] == version.id
+
+
+def test_submit_results_rejects_subject_fingerprint_mismatch(env):
+    proposal = prepare_proposal(env)
+    dataset = build_dataset(env["root"], proposal.id)
+    job = register_candidate(env["root"], prepare_candidates(env["root"], proposal.id)[0].id)
+    baseline = write_results(
+        env["root"],
+        Path(dataset.suite_path),
+        "baseline",
+        pass_all=False,
+        fingerprint=proposal.baseline_fingerprint,
+    )
+    candidate = write_results(
+        env["root"],
+        Path(dataset.suite_path),
+        "candidate",
+        pass_all=True,
+        fingerprint="a-different-candidate",
+    )
+
+    with pytest.raises(SystemExit, match="candidate results 指纹"):
+        submit_results(env["root"], job.id, baseline, candidate)
 
 
 def test_active_release_requires_approval_verifies_and_rolls_back(env):

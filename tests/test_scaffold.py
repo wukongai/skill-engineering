@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+import yaml
 
 from skill_engineering.scaffold import (
     apply_build_plan,
@@ -10,6 +11,7 @@ from skill_engineering.scaffold import (
     create_improvement_plan,
     format_build_plan,
 )
+from skill_engineering.skill_doctor import doctor_skill
 
 
 def make_root(tmp_path: Path) -> Path:
@@ -75,6 +77,32 @@ def test_side_effect_plan_has_contract_and_three_cases(tmp_path):
     assert "apply_requires_explicit_user_approval" in next(
         item.content for item in plan.files if item.relative_path == "skill.contract.yaml"
     )
+
+
+def test_production_orchestrator_scaffold_emits_complete_evaluation_contract(tmp_path):
+    root = make_root(tmp_path)
+    target = tmp_path / "release-review"
+    plan = create_build_plan(
+        root,
+        target,
+        name="release-review",
+        description="用于明确请求的发布前审查。",
+        kind="orchestrator",
+        side_effect=True,
+        production=True,
+    )
+    apply_build_plan(root, plan)
+
+    result = doctor_skill(target, profile="production")
+    ids = {item.rule_id for item in result.issues}
+    assert ids == {"EVAL107"}
+    assert "EVAL103" not in ids
+    assert "EVAL104" not in ids
+    assert (target / "tests" / "cases" / "holdout.yaml").is_file()
+    contract = yaml.safe_load((target / "skill.contract.yaml").read_text(encoding="utf-8"))
+    assert contract["evaluation"]["behavioral_results"] == {
+        "report": "artifacts/evaluation-report.json"
+    }
 
 
 def test_stale_or_existing_target_is_rejected(tmp_path):

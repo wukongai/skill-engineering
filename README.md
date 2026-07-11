@@ -64,6 +64,7 @@ src/skill_engineering/    deterministic engineering and release core
 tests/                    behavior and safety regression suite
 docs/guides/              public engineering standards
 docs/references/          evaluation and contract templates
+docs/testing/             real end-to-end test reports
 ```
 
 ## Boundaries
@@ -82,6 +83,9 @@ python3 -m ruff check src tests
 python3 /path/to/skill-creator/scripts/quick_validate.py skills/skill-guide
 bash scripts/credential-lint.sh --all
 ```
+
+The latest full workflow evidence is documented in
+[`docs/testing/2026-07-11-real-e2e.md`](docs/testing/2026-07-11-real-e2e.md).
 
 ## License
 

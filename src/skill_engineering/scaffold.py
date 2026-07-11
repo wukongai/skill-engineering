@@ -16,6 +16,12 @@ from .journey import BuildFile, BuildPlan, fingerprint_path, new_id, save_build_
 
 
 VALID_KINDS = {"atomic", "orchestrator", "router", "adapter", "composite"}
+TYPE_CHECKS = {
+    "orchestrator": ["cross_stage_io", "partial_failure", "aggregation"],
+    "router": ["positive_routing", "negative_routing", "fallback"],
+    "adapter": ["provider_binding", "portability", "error_mapping"],
+    "composite": ["tool_index", "orthogonality", "selection_rules", "output_consistency"],
+}
 
 
 def _validate_name(name: str) -> None:
@@ -123,8 +129,13 @@ def _contract(
             "preview_has_no_remote_side_effects": True,
             "apply_requires_explicit_user_approval": True,
         }
+    if kind != "atomic":
+        data["state"] = {
+            "strategy": "显式记录跨阶段状态;没有持久状态时也要明确声明。",
+            "files": [],
+        }
     if production or side_effect:
-        data["evaluation"] = {
+        evaluation: dict[str, Any] = {
             "score_scope": "structural_readiness",
             "claims": {"utility": False},
             "case_portfolio": {
@@ -132,7 +143,19 @@ def _contract(
                 "failure": "tests/cases/failure.yaml",
                 "high_risk": "tests/cases/high-risk.yaml",
             },
+            "type_checks": TYPE_CHECKS.get(kind, []),
         }
+        if production:
+            evaluation.update(
+                {
+                    "baseline": "artifacts/baseline-results.json",
+                    "holdout": "tests/cases/holdout.yaml",
+                    "negative_transfer": "reject_if_baseline_pass_becomes_candidate_fail",
+                    "behavioral_results": {"report": "artifacts/evaluation-report.json"},
+                    "independent_review": "required_before_utility_claim",
+                }
+            )
+        data["evaluation"] = evaluation
     return yaml.safe_dump(data, allow_unicode=True, sort_keys=False)
 
 
@@ -199,6 +222,14 @@ def create_build_plan(
                     f"tests/cases/{case_kind}.yaml",
                     _case(case_kind, name),
                     f"固定 {case_kind} 行为,让后续修改可回归。",
+                )
+            )
+        if production:
+            files.append(
+                BuildFile(
+                    "tests/cases/holdout.yaml",
+                    _case("holdout", name),
+                    "保留不参与编写和调试的留出场景,检查过拟合与负迁移。",
                 )
             )
     omitted = []
