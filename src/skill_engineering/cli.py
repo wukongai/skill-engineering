@@ -95,9 +95,9 @@ def build_parser() -> argparse.ArgumentParser:
         doctor.add_argument("--json", action="store_true")
 
     create = sub.add_parser("create", help="生成 Skill 创建计划")
-    create.add_argument("--name", required=True)
-    create.add_argument("--description", required=True)
-    create.add_argument("--target", type=Path, required=True)
+    create.add_argument("--name")
+    create.add_argument("--description")
+    create.add_argument("--target", type=Path)
     create.add_argument(
         "--kind",
         choices=["atomic", "orchestrator", "router", "adapter", "composite"],
@@ -110,6 +110,7 @@ def build_parser() -> argparse.ArgumentParser:
     create.add_argument("--side-effect", action="store_true")
     create.add_argument("--production", action="store_true")
     create.add_argument("--scope", choices=["project", "profile", "global"], default="project")
+    create.add_argument("--plan", dest="plan_id")
     create.add_argument("--apply", action="store_true")
     create.add_argument("--json", action="store_true")
 
@@ -363,8 +364,31 @@ def main(argv: list[str] | None = None) -> int:
         print(format_json(value) if args.json else format_text(value))
         return value.exit_code()
     if args.cmd == "create":
+        from .journey import load_build_plan
         from .scaffold import apply_build_plan, create_build_plan, format_build_plan
 
+        if args.plan_id:
+            value = load_build_plan(root, args.plan_id)
+            if value.operation != "create":
+                raise SystemExit("--plan 必须引用 Skill 创建计划。")
+            created = apply_build_plan(root, value) if args.apply else []
+            payload = asdict(value)
+            payload["created"] = [str(item) for item in created]
+            _emit(payload, format_build_plan(value), args.json)
+            return 0
+        if args.apply:
+            raise SystemExit("先生成并预览创建计划;应用时使用 create --plan ID --apply。")
+        missing = [
+            name
+            for name, value in (
+                ("--name", args.name),
+                ("--description", args.description),
+                ("--target", args.target),
+            )
+            if not value
+        ]
+        if missing:
+            raise SystemExit(f"生成创建计划需要参数:{', '.join(missing)}")
         value = create_build_plan(
             root,
             args.target,
@@ -379,7 +403,7 @@ def main(argv: list[str] | None = None) -> int:
             production=args.production,
             recommended_scope=args.scope,
         )
-        created = apply_build_plan(root, value) if args.apply else []
+        created: list[Path] = []
         payload = asdict(value)
         payload["created"] = [str(item) for item in created]
         _emit(payload, format_build_plan(value), args.json)

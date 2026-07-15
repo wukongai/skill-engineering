@@ -4,15 +4,17 @@ owner: self
 status: active
 
 purpose: >-
-  为普通用户提供可恢复的对话式引导,自动完成 Skill 选择、创建计划、体检、
-  自进化候选与评测、安装或发布推荐、确认执行、验证与安全撤销。
+  为普通用户提供可恢复的对话式引导,快速生成从第一版开始就符合工程规范的 Skill,
+  并自动完成选择、体检、持续维护、自进化评测、发布、验证与安全撤销。
 
 triggers:
   use_when:
+    - "用户希望快速生成从第一版开始就边界清楚、架构合理且可验证的 Skill。"
     - "用户想创建、更新、重构、review、安装或体检 skill。"
     - "用户希望 skill 根据失败、纠正或运行证据自动生成候选并进化。"
     - "用户需要判断某个能力应该做成 skill、plugin、script、project doc 还是 profile entry。"
     - "用户想检查 global/project/plugin/direct skill 暴露和路由成本。"
+    - "AI 正在创建、修改或重构复杂/商业 skill,需要防止架构漂移并管理版本。"
   do_not_use_when:
     - "任务只是普通应用开发,没有可复用 skill 或安装治理问题。"
     - "用户要执行某个领域 skill 的业务流程,而不是工程化这个 skill。"
@@ -44,9 +46,18 @@ outputs:
   - name: selection_recommendation
     type: text
     required: false
+  - name: discovery_summary
+    type: text
+    required: false
+    contract: "先汇总机器自查事实和用户已确认的真实任务,信息不足时保持 needs_discovery。"
+  - name: artifact_options
+    type: text
+    required: false
+    contract: "信息足够后比较最相关的 2-3 个产物方案,并给出推荐与取舍。"
   - name: skill_scaffold
     type: files
     required: false
+    contract: "根据已确认架构生成最小但完整的可用候选,不得只创建空目录或无边界 Prompt。"
   - name: doctor_report
     type: json-or-text
     required: false
@@ -83,6 +94,10 @@ outputs:
   - name: release_record
     type: json-or-text
     required: false
+  - name: governance_plan
+    type: files-or-text
+    required: false
+    contract: "只为复杂、生产、商业或多版本 Skill 补齐必要的产品与开发事实源。"
 
 stops:
   - name: awaiting_scope_confirmation
@@ -99,6 +114,9 @@ delegates:
   - name: skill-engineering decide
     kind: cli
     when: "判断能力应该做成 Skill、Plugin/runtime、Script、项目文档、Profile entry 或不新增产物。"
+  - name: capability discovery stage
+    kind: workflow
+    when: "新需求尚未确认真实任务、复用价值、AI 判断价值、触发边界或已有能力复用关系。"
   - name: official skill-creator
     kind: skill
     when: "官方 skill-creator 可用且需要创建或更新标准 Skill 内容。"
@@ -147,6 +165,9 @@ delegates:
   - name: skill-engineering release-rollback
     kind: cli
     when: "按 ReleaseRecord 安全回滚且 channel/target 未漂移。"
+  - name: project governance stage
+    kind: workflow
+    when: "复杂、生产、商业或多版本 Skill 需要 Product、Backlog、Spec/Plan、ADR、Sprint、Daily Log 和版本治理。"
 
 forbidden:
   - global_enable_without_scope_review
@@ -171,6 +192,12 @@ forbidden:
   - raw_tool_output_as_default_user_feedback
   - approval_request_using_only_internal_release_terms
   - claiming_overall_success_when_any_required_cleanup_record_failed
+  - complex_or_commercial_feature_without_spec_and_plan
+  - product_history_or_incident_log_inside_root_skill_md
+  - version_or_release_claim_without_matching_evidence
+  - default_create_skill_with_blocking_unknowns
+  - artifact_creation_before_discovery_decision
+  - product_or_version_scaffold_before_skill_decision_for_new_request
 
 state:
   files:
@@ -224,6 +251,7 @@ tests:
     - tests/test_skill_doctor.py
     - tests/test_evolution.py
     - tests/user-feedback-cases.yaml
+    - tests/product-positioning.yaml
 
 evaluation:
   score_scope: structural_readiness
@@ -250,3 +278,5 @@ review:
     - "根 SKILL.md 必须保持轻薄,只路由到 references 或内部 workflow step。"
     - "创建/选择治理和安装治理是同一个 meta skill 下的两条独立流程。"
     - "安装第三方 skill 前必须检查 prompt injection、凭证访问、网络传输和数据外传组合风险。"
+    - "复杂或商业 Skill 使用渐进式治理;简单 atomic Skill 不复制完整项目管理模板。"
+    - "快速生成与全生命周期架构保护是同一个承诺;不得把任一方降为事后补救。"

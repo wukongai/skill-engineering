@@ -24,8 +24,9 @@ PATTERNS=(
   '(password|passwd|secret)\s*[:=]\s*["'"'"'][^"'"'"']{8,}' # 明文密码赋值
 )
 
-# 这些路径不扫（特征库自身 / 文档里的脱敏示例）
-EXCLUDE_RE='(scripts/credential-lint\.sh|docs/research/|\.git/)'
+# 这些路径不扫（特征库自身 / 文档里的脱敏示例）。Git 仓库内的 --all
+# 模式优先使用 git ls-files,自动遵守 .gitignore,避免扫描 .venv 或构建产物。
+EXCLUDE_RE='(scripts/credential-lint\.sh|docs/research/|\.git/|\.venv/|dist/|build/)'
 
 MODE="${1:-staged}"
 FOUND=0
@@ -43,12 +44,23 @@ scan_content() {
   done
 }
 
+list_all_files() {
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    git ls-files --cached --others --exclude-standard
+  else
+    find . -type f -size -1M ! -path './.git/*' ! -path './node_modules/*' -exec grep -Il '' {} \; 2>/dev/null
+  fi
+}
+
 if [ "$MODE" = "--all" ]; then
-  # 全目录模式：扫所有 1MB 以下文本文件
+  # 全目录模式：Git 仓库扫描 tracked + 未忽略的 untracked 文件；非 Git 目录回退 find。
   while IFS= read -r f; do
+    [ -f "$f" ] || continue
+    [ "$(wc -c < "$f")" -lt 1048576 ] || continue
+    grep -Iq '' "$f" || continue
     echo "$f" | grep -qE "$EXCLUDE_RE" && continue
     scan_content "$f" < "$f"
-  done < <(find . -type f -size -1M ! -path './.git/*' ! -path './node_modules/*' -exec grep -Il '' {} \; 2>/dev/null)
+  done < <(list_all_files)
 else
   # 暂存区模式（pre-commit 默认）：只扫 git add 过的增量内容
   while IFS= read -r f; do

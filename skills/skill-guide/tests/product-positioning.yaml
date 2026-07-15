@@ -1,0 +1,21 @@
+cases:
+  - id: architecture-first-fast-creation
+    source: README.md
+    must_include:
+      - rapidly create Agent Skills that are engineered from the first version
+      - architecture-first rapid generation
+  - id: product-lifecycle-promise
+    source: docs/PRODUCT.md
+    must_include:
+      - 架构优先的快速生成 + 全生命周期抗腐化
+      - 不是等 Skill 变乱后再补治理
+  - id: spec-lifecycle-promise
+    source: docs/specs/2026-07-13-v0.1-public-beta-spec.md
+    must_include:
+      - 快速生成、从第一次生成开始工程化
+      - 同一个生命周期承诺
+  - id: skill-trigger-promise
+    source: skills/skill-guide/SKILL.md
+    must_include:
+      - 快速生成并全生命周期维护
+      - 快速交付最小但完整的可用候选

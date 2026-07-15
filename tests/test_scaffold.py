@@ -52,6 +52,43 @@ def test_apply_creates_planned_files_only(tmp_path):
     assert created == [target / "SKILL.md"]
     assert (target / "SKILL.md").is_file()
     assert not (target / "skill.contract.yaml").exists()
+    assert plan.postflight["status"] == "pass"
+    assert plan.postflight["release_readiness"]["ready"] is True
+    result = doctor_skill(target, profile="team")
+    assert result.fail_count == 0
+    assert result.warn_count == 0
+
+
+def test_apply_rejects_plan_content_drift(tmp_path):
+    root = make_root(tmp_path)
+    target = tmp_path / "demo-skill"
+    plan = create_build_plan(
+        root,
+        target,
+        name="demo-skill",
+        description="用于重复执行一个清楚的任务。",
+    )
+    plan.files[0].content += "\n未预览的变化\n"
+
+    with pytest.raises(SystemExit, match="计划内容已漂移"):
+        apply_build_plan(root, plan)
+    assert not target.exists()
+
+
+def test_structural_postflight_failure_cleans_new_target(tmp_path):
+    root = make_root(tmp_path)
+    target = tmp_path / "broken-skill"
+    plan = create_build_plan(
+        root,
+        target,
+        name="broken-skill",
+        description="",
+    )
+
+    with pytest.raises(SystemExit, match="结构验证失败"):
+        apply_build_plan(root, plan)
+    assert not target.exists()
+    assert plan.postflight["status"] == "failed_rolled_back"
 
 
 def test_side_effect_plan_has_contract_and_three_cases(tmp_path):
@@ -92,6 +129,10 @@ def test_production_orchestrator_scaffold_emits_complete_evaluation_contract(tmp
         production=True,
     )
     apply_build_plan(root, plan)
+
+    assert plan.postflight["status"] == "pass"
+    assert plan.postflight["release_readiness"]["ready"] is False
+    assert "EVAL107" in plan.postflight["release_readiness"]["issue_ids"]
 
     result = doctor_skill(target, profile="production")
     ids = {item.rule_id for item in result.issues}

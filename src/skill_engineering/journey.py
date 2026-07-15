@@ -12,7 +12,7 @@ import os
 import re
 import uuid
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, TypeVar
 
@@ -30,11 +30,11 @@ IGNORED_FINGERPRINT_PARTS = {
 
 
 def now_iso() -> str:
-    return datetime.now(UTC).isoformat(timespec="seconds")
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
 def new_id(prefix: str) -> str:
-    stamp = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
     return f"{prefix}-{stamp}-{uuid.uuid4().hex[:8]}"
 
 
@@ -176,6 +176,7 @@ class BuildPlan:
     complexity: dict[str, Any] = field(default_factory=dict)
     findings: list[dict[str, Any]] = field(default_factory=list)
     preflight: dict[str, Any] = field(default_factory=dict)
+    postflight: dict[str, Any] = field(default_factory=dict)
     plan_hash: str = ""
     record_id: str | None = None
     schema_version: str = SCHEMA_VERSION

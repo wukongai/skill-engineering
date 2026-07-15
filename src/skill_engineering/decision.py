@@ -17,9 +17,9 @@ from .journey import DecisionReport, new_id
 
 
 CRITICAL_QUESTIONS = {
-    "repeatability": "这个流程是一次性任务,还是会重复使用?",
-    "agent_facing": "核心价值来自 Agent 判断/编排,还是纯确定性处理?",
-    "trigger_separable": "能否清楚描述什么时候触发、什么时候不触发?",
+    "repeatability": "请举一个最近的真实例子：这是一次性任务，还是以后会重复发生？",
+    "agent_facing": "最难的部分需要 AI 判断/解释/编排，还是普通脚本就能稳定完成？",
+    "trigger_separable": "请各给一个应该触发和不应该触发的相似请求。",
     "deterministic_core": "核心工作是否可以完全由普通脚本稳定完成?",
     "runtime_required": "是否必须依赖 MCP、浏览器、鉴权或专用 App runtime?",
     "reuse_scope": "它只服务一个项目、一个项目集,还是多数项目?",
@@ -133,6 +133,10 @@ def decide_capability(
     overlaps = find_overlap_candidates(root, brief)
     unknown_keys = [key for key in CRITICAL_QUESTIONS if key not in answers]
     unknowns = [CRITICAL_QUESTIONS[key] for key in unknown_keys[:3]]
+    overlap_unknown = bool(overlaps) and "distinct_from_existing" not in answers
+    if overlap_unknown:
+        unknowns.insert(0, "发现了相似 Skill：它们为什么不能直接复用或扩展？")
+        unknowns = unknowns[:3]
 
     repeatability = _answer(answers, "repeatability")
     agent_facing = _truthy(_answer(answers, "agent_facing", False))
@@ -170,6 +174,18 @@ def decide_capability(
         verdict = "install_plugin_runtime"
         kind = "adapter" if agent_facing else None
         reasons.append("能力必须依赖 MCP、鉴权、浏览器或专用 runtime,不能伪装成纯目录 Skill。")
+    elif any(key not in answers for key in ("repeatability", "agent_facing", "trigger_separable")) or overlap_unknown:
+        verdict = "needs_discovery"
+        kind = None
+        reasons.append("真实任务、复用频率或触发边界还不清楚,现在创建 Skill 容易制造错误抽象。")
+        reasons.append("先完成现有能力自查和一轮逐步澄清,再比较不新增、扩展已有和创建新产物。")
+        alternatives.extend(
+            [
+                {"option": "no_new_artifact", "rejected_because": "等待确认是否只是一次性任务。"},
+                {"option": "extend_existing_skill", "rejected_because": "等待确认现有能力是否足够接近。"},
+                {"option": "create_skill", "rejected_because": "等待确认触发边界和复用价值。"},
+            ]
+        )
     elif deterministic_core and not agent_facing:
         verdict = "create_script"
         kind = None
@@ -226,7 +242,7 @@ def decide_capability(
         scope = "profile"
     else:
         scope = "project"
-    if verdict in {"no_new_artifact", "archive_or_replace"}:
+    if verdict in {"needs_discovery", "no_new_artifact", "archive_or_replace"}:
         scope = None
 
     answered = len(CRITICAL_QUESTIONS) - len(unknown_keys)
@@ -238,6 +254,7 @@ def decide_capability(
         evidence.append(f"发现 {len(overlaps)} 个可能重叠的已登记 Skill。")
 
     next_action_map = {
+        "needs_discovery": ("继续需求探索", "skill-engineering decide"),
         "create_skill": ("生成创建计划", "skill-engineering create"),
         "extend_existing_skill": ("审计并生成改进计划", "skill-engineering audit"),
         "create_script": ("创建普通脚本方案", "project implementation"),
@@ -267,6 +284,7 @@ def decide_capability(
 
 def format_decision(report: DecisionReport) -> str:
     labels = {
+        "needs_discovery": "继续需求探索,暂不创建 Skill",
         "create_skill": "创建 Skill",
         "extend_existing_skill": "扩展已有 Skill",
         "create_script": "创建 Script",
@@ -289,12 +307,14 @@ def format_decision(report: DecisionReport) -> str:
     impact.append(f"判断把握：{confidence_labels.get(report.confidence, report.confidence)}。")
     if report.recommended_scope:
         impact.append(f"建议使用范围：{scope_labels.get(report.recommended_scope, report.recommended_scope)}。")
-    if report.alternatives:
+    if report.verdict == "needs_discovery":
+        impact.append("当前保留三个方向：不新增产物、扩展已有能力、创建新的工程化产物。")
+    elif report.alternatives:
         impact.append("其他产物形态暂不推荐，因为它们不能同时满足当前触发、复用和运行要求。")
     next_action = report.next_actions[0]["label"] if report.next_actions else "继续补齐必要信息。"
     decision = ""
     if report.unknowns:
-        decision = "还需要你确认：\n" + "\n".join(f"- {question}" for question in report.unknowns)
+        decision = f"还需要你确认一个问题：\n- {report.unknowns[0]}"
     return UserFeedback(
         status="awaiting-approval" if report.unknowns else "completed",
         result=f"建议：{labels.get(report.verdict, report.verdict)}。",

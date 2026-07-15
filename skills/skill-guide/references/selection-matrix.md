@@ -2,6 +2,8 @@
 
 创建 skill 之前,先判断这个能力是否真的需要一个可复用的 agent 入口。很多问题更适合 script、project doc、profile 或 plugin。
 
+先按 `capability-brainstorming.md` 自查已有能力并逐步澄清。信息不足时保持 `needs_discovery`,不要把“还没想清楚”解释成“先创建再说”。
+
 ## 决策表
 
 | 选择 | 适合什么时候用 | 什么时候不要用 |
@@ -14,17 +16,19 @@
 | Profile entry | skill 已经稳定存在,只是需要按项目/agent 暴露。 | skill 还不稳定或触发词过宽。 |
 | 不新增产物 | 需求一次性,或基础模型和项目上下文已经足够。 | 流程会重复,或步骤脆弱。 |
 
-## 必答问题
+## 决策信息
 
-落脚手架前先回答:
+由 Agent 先自查可见事实,再一次向用户确认一个缺失信息:
 
-1. 哪些用户说法应该触发这个能力?
-2. 哪些相似说法不应该触发?
-3. 哪些 agent 入口需要它: Codex、Claude Code、两者都要,还是默认都不要?
-4. 它应该是 global、project-only、profile-managed、direct/manual、plugin-backed,还是 archived?
-5. 哪些部分必须确定性执行,因此应该放进 script?
-6. 哪些状态或审批必须跨 turn 留存?
-7. 哪个失败不能再发生,对应 regression case 放在哪里?
+1. 最近的真实任务、目标和输入输出是什么?
+2. 是一次性还是会重复?
+3. 核心是否需要 AI 判断、解释、路由或编排?
+4. 哪些说法应该触发,哪些相似说法不应该触发?
+5. 已有 Skill、Script、Plugin 或项目规则为什么不能复用?
+6. 哪些部分必须确定性执行,因此应该放进 Script?
+7. 哪些状态或审批必须跨 turn 留存?
+8. 哪个失败不能再发生,对应 regression case 放在哪里?
+9. 确认需要 Skill 后,再判断 agent 入口和 project/profile/global 范围。
 
 ## 红旗
 

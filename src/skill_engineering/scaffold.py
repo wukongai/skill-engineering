@@ -7,12 +7,20 @@ deterministic, cross-agent fallback and never writes unless apply is explicit.
 from __future__ import annotations
 
 import re
+from dataclasses import asdict
 from pathlib import Path, PurePosixPath
 from typing import Any
 
 import yaml
 
-from .journey import BuildFile, BuildPlan, fingerprint_path, new_id, save_build_plan
+from .journey import (
+    BuildFile,
+    BuildPlan,
+    fingerprint_path,
+    new_id,
+    payload_hash,
+    save_build_plan,
+)
 
 
 VALID_KINDS = {"atomic", "orchestrator", "router", "adapter", "composite"}
@@ -22,6 +30,13 @@ TYPE_CHECKS = {
     "adapter": ["provider_binding", "portability", "error_mapping"],
     "composite": ["tool_index", "orthogonality", "selection_rules", "output_consistency"],
 }
+
+
+def _build_plan_hash(plan: BuildPlan) -> str:
+    return payload_hash(
+        asdict(plan),
+        exclude={"plan_hash", "applied", "record_id", "postflight"},
+    )
 
 
 def _validate_name(name: str) -> None:
@@ -52,7 +67,10 @@ def _skill_markdown(
     )
     lines.extend(["", "## 输入", ""])
     lines.extend(f"- `{item}`" for item in (inputs or ["用户明确提供的任务信息"]))
-    lines.extend(["", "## 工作流", "", "1. 读取并校验输入。"])
+    execution_heading = (
+        "工作流" if kind in {"orchestrator", "router", "adapter", "composite"} else "执行"
+    )
+    lines.extend(["", f"## {execution_heading}", "", "1. 读取并校验输入。"])
     if kind in {"orchestrator", "router"}:
         lines.extend(
             [
@@ -75,16 +93,12 @@ def _skill_markdown(
         )
     lines.extend(["", "## 输出", ""])
     lines.extend(f"- `{item}`" for item in (outputs or ["完成结果和必要的验证信息"]))
-    lines.extend(
-        [
-            "",
-            "## 停止点",
-            "",
-            "- 缺少会改变结果的必要输入时停止并提问。",
-            "- 需要新增全局能力、Plugin 或不可逆操作时停止并确认。",
-            "",
-        ]
-    )
+    lines.extend(["", "## 停止点", "", "- 缺少会改变结果的必要输入时停止并提问。"])
+    if side_effect:
+        lines.append("- 需要执行未预览的写入、外部操作或不可逆动作时停止并确认。")
+    else:
+        lines.append("- 请求超出这个 Skill 的单一职责时停止,不要擅自扩大能力边界。")
+    lines.append("")
     return "\n".join(lines)
 
 
@@ -266,7 +280,9 @@ def create_build_plan(
             f"skill-engineering doctor {target} --profile {'production' if production else 'team'}",
         ],
         target_fingerprint=fingerprint_path(target),
+        profile="production" if production else "team",
     )
+    plan.plan_hash = _build_plan_hash(plan)
     save_build_plan(root, plan)
     return plan
 
@@ -284,6 +300,13 @@ def apply_build_plan(root: Path, plan: BuildPlan) -> list[Path]:
 
         record = apply_improvement_plan(root, plan)
         return [Path(record.target) / action["path"] for action in record.actions]
+    if plan.operation != "create":
+        raise SystemExit("这不是 Skill 创建计划,不能用 create apply 执行。")
+    if not plan.plan_hash or _build_plan_hash(plan) != plan.plan_hash:
+        raise SystemExit("创建计划内容已漂移,请重新生成并预览计划。")
+    if plan.applied:
+        raise SystemExit("创建计划已经应用,不会重复执行。")
+
     target = Path(plan.target)
     if fingerprint_path(target) != plan.target_fingerprint:
         raise SystemExit("变更计划已过期:目标路径状态发生变化,请重新生成计划。")
@@ -309,6 +332,43 @@ def apply_build_plan(root: Path, plan: BuildPlan) -> list[Path]:
             created_dirs.extend(reversed(missing_parents))
             destination.write_text(item.content, encoding="utf-8")
             created_files.append(destination)
+
+        from .skill_doctor import doctor_skill
+        from .skill_lint import lint_skill
+
+        lint_result = lint_skill(target)
+        team_result = doctor_skill(target, profile="team")
+        structural_pass = lint_result.exit_code() == 0 and team_result.fail_count == 0
+        release_result = doctor_skill(target, profile="production") if plan.profile == "production" else None
+        plan.postflight = {
+            "status": "pass" if structural_pass else "failed_rolled_back",
+            "structural": {
+                "lint_errors": sum(issue.severity == "error" for issue in lint_result.issues),
+                "doctor_profile": "team",
+                "doctor_failures": team_result.fail_count,
+                "doctor_warnings": team_result.warn_count,
+                "issue_ids": sorted({issue.rule_id for issue in team_result.issues}),
+            },
+            "release_readiness": (
+                {
+                    "profile": "production",
+                    "ready": release_result.fail_count == 0,
+                    "doctor_failures": release_result.fail_count,
+                    "doctor_warnings": release_result.warn_count,
+                    "issue_ids": sorted({issue.rule_id for issue in release_result.issues}),
+                }
+                if release_result
+                else {
+                    "profile": "team",
+                    "ready": structural_pass and team_result.warn_count == 0,
+                    "doctor_warnings": team_result.warn_count,
+                    "issue_ids": sorted({issue.rule_id for issue in team_result.issues}),
+                }
+            ),
+        }
+        if not structural_pass:
+            save_build_plan(root, plan)
+            raise SystemExit("创建后的结构验证失败,已清理本次新建目标。")
     except BaseException:
         for path in reversed(created_files):
             if path.is_file():
@@ -328,6 +388,43 @@ def format_build_plan(plan: BuildPlan) -> str:
 
         return format_improvement_plan(plan)
     from .interaction import UserFeedback
+
+    if plan.applied:
+        release = plan.postflight.get("release_readiness", {})
+        release_ready = bool(release.get("ready"))
+        if plan.profile == "production" and not release_ready:
+            return UserFeedback(
+                status="incomplete",
+                result=f"{plan.skill_name} 已创建并通过结构验证,但尚未具备生产发布证据。",
+                impact=[
+                    f"已在 {plan.target} 创建 {len(plan.files)} 个计划内文件。",
+                    "lint 和 team Doctor 已通过。",
+                    "production Doctor 仍要求补齐真实行为评测或独立证据。",
+                ],
+                next_action="补充真实用例和行为结果后,再进行 production 发布检查。",
+                technical_details=[f"plan={plan.id}"],
+            ).render()
+        if not release_ready:
+            return UserFeedback(
+                status="incomplete",
+                result=f"{plan.skill_name} 已创建并通过结构验证,但仍有共享前建议需要处理。",
+                impact=[
+                    f"已在 {plan.target} 创建 {len(plan.files)} 个计划内文件。",
+                    "结构没有阻断问题,但 Doctor 仍有 warning。",
+                ],
+                next_action="先处理 Doctor 建议,再将这个 Skill 分享给其他用户。",
+                technical_details=[f"plan={plan.id}"],
+            ).render()
+        return UserFeedback(
+            status="completed",
+            result=f"{plan.skill_name} 已按预览方案创建并通过结构验证。",
+            impact=[
+                f"已在 {plan.target} 创建 {len(plan.files)} 个计划内文件。",
+                "lint 和 team Doctor 已通过。",
+            ],
+            next_action="使用真实任务试运行这个 Skill,再决定是否进入共享或发布流程。",
+            technical_details=[f"plan={plan.id}"],
+        ).render()
 
     return UserFeedback(
         status="awaiting-approval",

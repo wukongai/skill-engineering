@@ -29,7 +29,7 @@ def test_lint_clean_skill(tmp_path: Path):
 def test_lint_frontmatter_name_and_absolute_path_errors(tmp_path: Path):
     skill = write_skill(
         tmp_path,
-        "Run /Users/aim5/Documents/CodingProject/foo/scripts/run.py",
+        "Run /Users/example/Documents/CodingProject/foo/scripts/run.py",
         frontmatter="name: Bad Name\ndescription: Bad naming.\n",
     )
     ids = issue_ids(skill)
