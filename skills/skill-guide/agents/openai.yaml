@@ -1,6 +1,0 @@
-interface:
-  display_name: "Skill Guide"
-  short_description: "一步步创建、评测、自进化和发布 Agent Skill"
-  default_prompt: "使用 $skill-guide 创建、持续改进或自进化 Skill,自动生成隔离候选并评测;正式发布前让我确认,发布后保留验证与安全回滚。"
-policy:
-  allow_implicit_invocation: true

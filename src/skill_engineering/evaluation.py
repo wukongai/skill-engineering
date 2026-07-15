@@ -1,4 +1,4 @@
-"""Deterministic behavior-evidence evaluator for Skill Guide.
+"""Deterministic behavior-evidence evaluator for Skill Engineering.
 
 This module never executes commands from a suite. It validates already produced
 baseline/candidate run artifacts, applies deterministic assertions, and emits a

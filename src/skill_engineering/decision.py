@@ -1,4 +1,4 @@
-"""Deterministic capability selection for Skill Guide.
+"""Deterministic capability selection for Skill Engineering.
 
 The engine decides the engineering artifact shape. It does not estimate market
 size, monetization, or domain-specific commercial value.
@@ -174,7 +174,10 @@ def decide_capability(
         verdict = "install_plugin_runtime"
         kind = "adapter" if agent_facing else None
         reasons.append("能力必须依赖 MCP、鉴权、浏览器或专用 runtime,不能伪装成纯目录 Skill。")
-    elif any(key not in answers for key in ("repeatability", "agent_facing", "trigger_separable")) or overlap_unknown:
+    elif (
+        any(key not in answers for key in ("repeatability", "agent_facing", "trigger_separable"))
+        or overlap_unknown
+    ):
         verdict = "needs_discovery"
         kind = None
         reasons.append("真实任务、复用频率或触发边界还不清楚,现在创建 Skill 容易制造错误抽象。")
@@ -182,7 +185,10 @@ def decide_capability(
         alternatives.extend(
             [
                 {"option": "no_new_artifact", "rejected_because": "等待确认是否只是一次性任务。"},
-                {"option": "extend_existing_skill", "rejected_because": "等待确认现有能力是否足够接近。"},
+                {
+                    "option": "extend_existing_skill",
+                    "rejected_because": "等待确认现有能力是否足够接近。",
+                },
                 {"option": "create_skill", "rejected_because": "等待确认触发边界和复用价值。"},
             ]
         )
@@ -306,7 +312,9 @@ def format_decision(report: DecisionReport) -> str:
     impact = list(report.reasons)
     impact.append(f"判断把握：{confidence_labels.get(report.confidence, report.confidence)}。")
     if report.recommended_scope:
-        impact.append(f"建议使用范围：{scope_labels.get(report.recommended_scope, report.recommended_scope)}。")
+        impact.append(
+            f"建议使用范围：{scope_labels.get(report.recommended_scope, report.recommended_scope)}。"
+        )
     if report.verdict == "needs_discovery":
         impact.append("当前保留三个方向：不新增产物、扩展已有能力、创建新的工程化产物。")
     elif report.alternatives:

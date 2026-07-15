@@ -27,4 +27,4 @@
 - 类型专属失败面;
 - production 或高风险 Skill 额外要求 baseline、holdout、negative-transfer、behavioral results、independent review;普通 personal/team Skill 保持轻量。
 
-详细标准与类型矩阵见 `../../skills/skill-guide/references/evaluation-standard.md`。
+详细标准与类型矩阵见 `../../skills/skill-engineering/references/evaluation-standard.md`。

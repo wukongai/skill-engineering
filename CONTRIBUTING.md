@@ -16,7 +16,7 @@ python3 -m pip install -e ".[dev]"
 python3 -m pytest -q
 python3 -m ruff check src tests
 bash scripts/credential-lint.sh --all
-skill-engineering doctor skills/skill-guide --profile production
+skill-engineering doctor skills/skill-engineering --profile production
 git diff --check
 ```
 

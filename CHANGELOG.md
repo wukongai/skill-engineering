@@ -10,6 +10,7 @@
 - Doctor/audit 的 SARIF 2.1.0 输出，供 CI、代码扫描和 IDE 消费。
 - 版本管理规范、功能总表、发布日志，以及 1.0/2.0 的 Spec、Plan 和 Sprint 事实源。
 - Architecture Guardian Blueprint schema v1、Python 数据模型、确定性 fingerprint、unknown/legacy 保留和敏感扩展字段门禁。
+- 统一用户可见 Agent Skill 身份为 `skill-engineering`，移除 `skill-guide` 顶层暴露，并加入隔离全局安装到创建/Doctor 的回归 smoke。
 
 ### Planning
 

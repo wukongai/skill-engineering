@@ -1,6 +1,6 @@
 # Security Doctor Regression Fixture
 
-Expected behavior for the maintained Skill Guide contract:
+Expected behavior for the maintained Skill Engineering contract:
 
 - A Python script using `eval(input())` is reported as `SEC108` and `SEC111`.
 - `doctor --format sarif` emits SARIF 2.1.0 with `error` level, file URI, line, layer, and profile.

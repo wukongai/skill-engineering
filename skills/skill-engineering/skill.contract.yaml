@@ -1,4 +1,4 @@
-name: skill-guide
+name: skill-engineering
 kind: orchestrator
 owner: self
 status: active
@@ -9,6 +9,7 @@ purpose: >-
 
 triggers:
   use_when:
+    - "用户明确提到 skill-engineering 或 Skill Engineering,并要求测试、创建、检查、维护或发布它。"
     - "用户希望快速生成从第一版开始就边界清楚、架构合理且可验证的 Skill。"
     - "用户想创建、更新、重构、review、安装或体检 skill。"
     - "用户希望 skill 根据失败、纠正或运行证据自动生成候选并进化。"
@@ -18,6 +19,7 @@ triggers:
   do_not_use_when:
     - "任务只是普通应用开发,没有可复用 skill 或安装治理问题。"
     - "用户要执行某个领域 skill 的业务流程,而不是工程化这个 skill。"
+    - "任务只做项目 harness 初始化、Claude/Codex 入口对齐、tmux 项目墙或开工自检。"
 
 inputs:
   - name: capability_brief
@@ -273,8 +275,9 @@ evaluation:
 
 review:
   lint:
-    command: "skill-engineering doctor skills/skill-guide --profile team"
+    command: "skill-engineering doctor skills/skill-engineering --profile team"
   notes:
+    - "用户-facing canonical identity 是 skill-engineering; 旧别名不得作为顶层 active Skill 暴露。"
     - "根 SKILL.md 必须保持轻薄,只路由到 references 或内部 workflow step。"
     - "创建/选择治理和安装治理是同一个 meta skill 下的两条独立流程。"
     - "安装第三方 skill 前必须检查 prompt injection、凭证访问、网络传输和数据外传组合风险。"

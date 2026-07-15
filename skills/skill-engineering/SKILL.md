@@ -1,9 +1,9 @@
 ---
-name: skill-guide
-description: 快速生成并全生命周期维护 Codex、Claude Code 等 Agent Skill。用户说“帮我做/改一个 skill”“从一开始按软件工程规范创建”“AI 修改时保持架构优雅”“这个 skill 越改越乱”“做成商业或工业级 skill”“体检、评测、安装或继续上次任务”时使用。自动判断是否需要 Skill、选择最小架构、生成完整候选、检查安全和回归边界，并在确认后安全应用。
+name: skill-engineering
+description: Skill Engineering：快速生成并全生命周期维护 Codex、Claude Code 等 Agent Skill。用户明确提到“skill-engineering”或“Skill Engineering”，或说“帮我做/改一个 skill”“从一开始按软件工程规范创建”“AI 修改时保持架构优雅”“这个 skill 越改越乱”“做成商业或工业级 skill”“从远程安装后测试创建到检查闭环”“体检、评测、安装或继续上次任务”时使用。不要把仅限项目 harness、Claude/Codex 入口、tmux 或开工自检的请求路由到本 Skill。自动判断是否需要 Skill、选择最小架构、生成完整候选、检查安全和回归边界，并在确认后安全应用。
 ---
 
-# Skill Guide
+# Skill Engineering
 
 把用户当作只需要描述目标的使用者。不要要求用户先理解 Skill Engineering、Profile、Contract 或 CLI。
 

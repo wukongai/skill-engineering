@@ -4,7 +4,7 @@
 
 Skill Engineering helps users rapidly create Agent Skills that are engineered from the first version, then keeps them clear, testable, safe, and extensible through every later change.
 
-It provides one conversational entry, **Skill Guide**, for creating, auditing, evaluating, improving, evolving, and safely releasing Skills for Codex, Claude Code, and compatible agents.
+It provides one conversational entry, **Skill Engineering**, for creating, auditing, evaluating, improving, evolving, and safely releasing Skills for Codex, Claude Code, and compatible agents.
 
 ## Why
 
@@ -78,7 +78,7 @@ Doctor scores structural readiness. It never presents an unmeasured downstream u
 python3 -m pip install -e ".[dev]"
 ```
 
-The Agent Skill source is at `skills/skill-guide/`. Install or link that directory using your agent's Skill mechanism or Agent Skill Hub.
+The Agent Skill source is at `skills/skill-engineering/`. Install or link that directory using your agent's Skill mechanism or Agent Skill Hub.
 
 ## Quick start
 
@@ -101,7 +101,7 @@ Doctor keeps `--json` as a compatibility alias and also accepts `--format text|j
 ## Repository layout
 
 ```text
-skills/skill-guide/       conversational Agent Skill entry
+skills/skill-engineering/       conversational Agent Skill entry
 src/skill_engineering/    deterministic engineering and release core
 tests/                    behavior and safety regression suite
 docs/guides/              public engineering standards
@@ -132,7 +132,7 @@ The latest external comparison and adoption boundaries are recorded in
 ```bash
 python3 -m pytest -q
 python3 -m ruff check src tests
-python3 /path/to/skill-creator/scripts/quick_validate.py skills/skill-guide
+python3 /path/to/skill-creator/scripts/quick_validate.py skills/skill-engineering
 bash scripts/credential-lint.sh --all
 ```
 

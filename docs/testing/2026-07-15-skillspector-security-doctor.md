@@ -11,7 +11,7 @@
 
 - 定向 pytest：38 passed。
 - 定向 Ruff：passed。
-- Skill Guide maintenance plan：`improve-20260715151728-b2bdb77e`。
+- Skill Engineering maintenance plan：`improve-20260715151728-b2bdb77e`。
 - Maintenance record：`maintenance-20260715151737-2007651c`。
 - `verify-improvement`：passed，target 未漂移，postflight Doctor 100/A、零 FAIL/WARN。
 

@@ -1,4 +1,4 @@
-"""Preview-first fallback scaffolding for Skill Guide.
+"""Preview-first fallback scaffolding for Skill Engineering.
 
 The official skill-creator can own richer generation. This module provides a
 deterministic, cross-agent fallback and never writes unless apply is explicit.
@@ -339,7 +339,9 @@ def apply_build_plan(root: Path, plan: BuildPlan) -> list[Path]:
         lint_result = lint_skill(target)
         team_result = doctor_skill(target, profile="team")
         structural_pass = lint_result.exit_code() == 0 and team_result.fail_count == 0
-        release_result = doctor_skill(target, profile="production") if plan.profile == "production" else None
+        release_result = (
+            doctor_skill(target, profile="production") if plan.profile == "production" else None
+        )
         plan.postflight = {
             "status": "pass" if structural_pass else "failed_rolled_back",
             "structural": {

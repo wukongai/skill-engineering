@@ -31,7 +31,7 @@ Product and version management are downstream of the artifact decision for a new
 
 ## Conversational layer
 
-`skills/skill-guide/` is the Agent-facing entry. It routes user intent, loads only the needed reference or stage instructions, and stops at approval boundaries.
+`skills/skill-engineering/` is the Agent-facing entry. It routes user intent, loads only the needed reference or stage instructions, and stops at approval boundaries.
 
 It does not duplicate deterministic implementation in prose. Commands delegate to the Python core.
 

@@ -1,6 +1,6 @@
 # Skill Engineering
 
-Skill Engineering is the standalone source of truth for Skill Guide, Doctor, behavior evaluation, continuous maintenance, self-evolution, and release safety.
+Skill Engineering is the standalone source of truth for Agent Skill creation, Doctor, behavior evaluation, continuous maintenance, self-evolution, and release safety.
 
 ## Rules
 
@@ -22,5 +22,5 @@ Skill Engineering is the standalone source of truth for Skill Guide, Doctor, beh
 5. New ideas that are not part of the active Sprint go to `docs/BACKLOG.md`; do not silently expand the current version.
 6. Record daily facts and blockers under `docs/logs/daily/`; promote stable rules into formal docs instead of citing the log forever.
 7. Update README, Changelog, Roadmap, Task, Sprint, version sources, tests, and release evidence together before a release claim.
-8. Use an isolated candidate and the maintenance engine for changes to Skill Guide; do not edit maintained Skill source as an experiment.
+8. Use an isolated candidate and the maintenance engine for changes to Skill Engineering; do not edit maintained Skill source as an experiment.
 9. Commit and push are separate approval points. Never auto-publish, auto-tag, or auto-enable Global scope.

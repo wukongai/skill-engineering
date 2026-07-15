@@ -1,6 +1,6 @@
-"""Shared versioned contracts and local journey persistence for Skill Guide.
+"""Shared versioned contracts and local journey persistence for Skill Engineering.
 
-This module intentionally contains no product decision logic. Skill Guide, CLI,
+This module intentionally contains no product decision logic. Skill Engineering, CLI,
 and Workbench exchange these contracts so the behavior is implemented once.
 """
 

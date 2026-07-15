@@ -15,7 +15,7 @@ cases:
       - 快速生成、从第一次生成开始工程化
       - 同一个生命周期承诺
   - id: skill-trigger-promise
-    source: skills/skill-guide/SKILL.md
+    source: skills/skill-engineering/SKILL.md
     must_include:
       - 快速生成并全生命周期维护
       - 快速交付最小但完整的可用候选

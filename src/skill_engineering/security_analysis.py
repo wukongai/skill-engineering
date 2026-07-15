@@ -212,7 +212,9 @@ class _SecurityVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
 
-def analyze_python_security(source: str, filename: str = "script.py") -> list[PythonSecurityFinding]:
+def analyze_python_security(
+    source: str, filename: str = "script.py"
+) -> list[PythonSecurityFinding]:
     """Return deterministic AST findings; syntax errors yield no speculative finding."""
     try:
         tree = ast.parse(source, filename=filename)

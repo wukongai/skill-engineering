@@ -12,6 +12,7 @@
 
 ## v1.0 Stable Contract Planned
 
+- [x] 统一用户可见 Agent Skill 身份为 `skill-engineering`，移除 `skill-guide` 顶层暴露并增加隔离安装/创建/Doctor 回归。
 - [ ] 冻结 CLI/API/JSON/contract schema 与兼容策略。
 - [ ] 完成 wheel、安装 smoke、Python 支持矩阵和迁移文档。
 - [ ] 固定 release evidence、独立评审、回滚和废弃周期。
@@ -19,7 +20,7 @@
 - [x] 对比 NVIDIA SkillSpector，并固定可复核的上游 commit 与采用矩阵。
 - [x] Doctor 增加 Python AST 动态执行、不安全 shell 和外部输入到执行 sink 检查。
 - [x] Doctor/audit 增加 SARIF 2.1.0 输出，同时保持默认文本和 `--json` 兼容。
-- [x] 通过独立候选和同一 maintenance plan 更新 Skill Guide Doctor 规则参考。
+- [x] 通过独立候选和同一 maintenance plan 更新 Skill Engineering Doctor 规则参考。
 - [x] 完成 v0.1.1 pytest、Ruff、Skill validation、credential lint 和 diff check。
 
 ## SkillSpector Review / v0.1.1 收口
@@ -64,7 +65,7 @@
 - [x] 创建后结构验证，失败自动清理。
 - [x] production 创建区分结构完成与发布证据完成。
 - [x] 对齐“快速生成 + 从第一版工程化 + 全生命周期保持”的产品承诺并增加回归门禁。
-- [x] Skill Guide 增加复杂/商业 Skill 工程治理路由。
+- [x] Skill Engineering 增加复杂/商业 Skill 工程治理路由。
 - [x] 更新 README、贡献、安全和 CI。
 - [x] 完整门禁与隔离 E2E。
 
@@ -72,7 +73,7 @@
 
 - [x] pytest 全通过。
 - [x] Ruff 全通过。
-- [x] Skill Guide production Doctor 零 FAIL/WARN。
+- [x] Skill Engineering production Doctor 零 FAIL/WARN。
 - [x] 凭证 lint 通过。
 - [x] `git diff --check` 通过。
 - [x] README、版本、Changelog、Roadmap、Task 和 Sprint 一致。
@@ -83,7 +84,7 @@
 
 - [x] SkillSpector 对比证据固定到公开仓库 commit。
 - [x] AST 安全规则、SARIF 输出和旧 CLI 兼容回归通过。
-- [x] Skill Guide 同一 maintenance plan Apply、postflight、verify 通过。
+- [x] Skill Engineering 同一 maintenance plan Apply、postflight、verify 通过。
 - [x] pytest 116 passed。
 - [x] Ruff、官方 Skill validation、production Doctor 100/A、凭证 lint、diff check 通过。
 - [x] commit、push 已完成：`c58d389` / `codex/version-roadmap` / Draft PR #2。

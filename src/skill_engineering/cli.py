@@ -52,7 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
     decide.add_argument("--answers", type=Path)
     decide.add_argument("--json", action="store_true")
 
-    journey = sub.add_parser("journey", help="创建和恢复 Skill Guide 任务")
+    journey = sub.add_parser("journey", help="创建和恢复 Skill Engineering 任务")
     journey_sub = journey.add_subparsers(dest="journey_cmd", required=True)
     start = journey_sub.add_parser("start")
     start.add_argument("--intent", required=True)
@@ -363,9 +363,7 @@ def main(argv: list[str] | None = None) -> int:
 
         value = doctor_skill(args.target, profile=args.profile)
         output_format = "json" if args.json else args.format
-        formatter = {"text": format_text, "json": format_json, "sarif": format_sarif}[
-            output_format
-        ]
+        formatter = {"text": format_text, "json": format_json, "sarif": format_sarif}[output_format]
         print(formatter(value))
         return value.exit_code()
     if args.cmd == "create":

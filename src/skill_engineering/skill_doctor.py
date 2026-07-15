@@ -1177,9 +1177,7 @@ def _check_security(
         if script.suffix.lower() == ".py":
             for finding in analyze_python_security(script_text, filename=str(script)):
                 level = (
-                    _profile_level(
-                        profile, personal="WARN", team="WARN", commercial="FAIL"
-                    )
+                    _profile_level(profile, personal="WARN", team="WARN", commercial="FAIL")
                     if finding.rule_id == "SEC109"
                     else "FAIL"
                 )
@@ -1787,7 +1785,9 @@ def format_text(result: DoctorResult) -> str:
         impact.append(f"另外还有 {len(result.issues) - 3} 项；完整明细可通过 JSON 输出查看。")
     return UserFeedback(
         status=status,
-        result="这个 Skill 的工程检查尚未完全通过。" if result.fail_count else "这个 Skill 可以继续测试，但仍有改进空间。",
+        result="这个 Skill 的工程检查尚未完全通过。"
+        if result.fail_count
+        else "这个 Skill 可以继续测试，但仍有改进空间。",
         impact=impact,
         next_action=next_action,
         technical_details=[f"target={result.target}", f"profile={result.profile}"],

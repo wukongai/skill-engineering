@@ -26,9 +26,9 @@
 - 改进计划默认说明问题、文件动作、风险和下一步，不默认打印 unified diff。
 - 维护结果区分成功、部分失败和可撤销状态。
 
-## 5. 对齐 Skill Guide
+## 5. 对齐 Skill Engineering
 
-- 将内部规范链接到 Skill Guide 参考层。
+- 将内部规范链接到 Skill Engineering 参考层。
 - 扩充交互 fixture：推荐、审批、完成、部分失败、恢复。
 - 保持根 `SKILL.md` 轻量。
 

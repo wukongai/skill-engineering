@@ -13,7 +13,7 @@
 3. 部分成功明确为整体未完成，不制造假完成。
 4. Journey 跨窗口恢复不暴露内部 stage/status，且不要求用户重述。
 5. JSON 和持久化 schema 保持兼容，继续服务自动化、审计和恢复。
-6. Skill Guide 的自然语言规则与 Python 核心的确定性输出遵守同一规范。
+6. Skill Engineering 的自然语言规则与 Python 核心的确定性输出遵守同一规范。
 
 ## 非目标
 

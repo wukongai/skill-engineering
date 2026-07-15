@@ -1,5 +1,5 @@
 schema_version: "1.0"
-suite: skill-guide-user-feedback
+suite: skill-engineering-user-feedback
 cases:
   - id: approval-uses-user-action
     class: success

@@ -73,7 +73,7 @@ eval(input())
 
 def test_doctor_sarif_maps_rules_levels_locations_and_properties(tmp_path):
     skill = write_skill(tmp_path)
-    write_python_script(skill, 'eval(input())\n')
+    write_python_script(skill, "eval(input())\n")
 
     result = doctor_skill(skill, profile="team")
     report = json.loads(format_sarif(result))
@@ -83,13 +83,12 @@ def test_doctor_sarif_maps_rules_levels_locations_and_properties(tmp_path):
     assert run["tool"]["driver"]["name"] == "skill-engineering"
     sarif_results = {item["ruleId"]: item for item in run["results"]}
     assert sarif_results["SEC108"]["level"] == "error"
-    assert sarif_results["SEC108"]["locations"][0]["physicalLocation"]["region"] == {
-        "startLine": 1
-    }
+    assert sarif_results["SEC108"]["locations"][0]["physicalLocation"]["region"] == {"startLine": 1}
     assert sarif_results["SEC108"]["properties"]["layer"] == "security"
-    assert sarif_results["SEC108"]["locations"][0]["physicalLocation"][
-        "artifactLocation"
-    ]["uri"] == "scripts/runner.py"
+    assert (
+        sarif_results["SEC108"]["locations"][0]["physicalLocation"]["artifactLocation"]["uri"]
+        == "scripts/runner.py"
+    )
 
 
 def test_doctor_sarif_empty_report_is_valid_shape(tmp_path):

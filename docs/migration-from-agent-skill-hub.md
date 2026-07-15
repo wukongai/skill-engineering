@@ -4,7 +4,7 @@ Skill Engineering originally lived inside Agent Skill Hub. The repositories now 
 
 ## New source of truth
 
-- Skill source:`skills/skill-guide/`
+- Skill source:`skills/skill-engineering/`
 - Python package:`skill_engineering`
 - CLI:`skill-engineering`
 - local state:`.skill-engineering/`

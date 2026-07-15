@@ -6,10 +6,10 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILL_DIR = ROOT / "skills" / "skill-guide"
+SKILL_DIR = ROOT / "skills" / "skill-engineering"
 
 
-def test_skill_guide_requires_plain_language_user_summary():
+def test_skill_engineering_requires_plain_language_user_summary():
     skill_text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
     feedback_text = (SKILL_DIR / "references" / "user-feedback-standard.md").read_text(
         encoding="utf-8"
@@ -33,10 +33,8 @@ def test_skill_guide_requires_plain_language_user_summary():
     }
 
 
-def test_skill_guide_contract_blocks_internal_tool_output_as_default_feedback():
-    contract = yaml.safe_load(
-        (SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8")
-    )
+def test_skill_engineering_contract_blocks_internal_tool_output_as_default_feedback():
+    contract = yaml.safe_load((SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8"))
 
     output_names = {item["name"] for item in contract["outputs"]}
     forbidden = set(contract["forbidden"])
@@ -49,14 +47,12 @@ def test_skill_guide_contract_blocks_internal_tool_output_as_default_feedback():
     assert "tests/user-feedback-cases.yaml" in regression_cases
 
 
-def test_skill_guide_routes_complex_and_commercial_skill_governance():
+def test_skill_engineering_routes_complex_and_commercial_skill_governance():
     skill_text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
     governance = (SKILL_DIR / "references" / "development-governance.md").read_text(
         encoding="utf-8"
     )
-    contract = yaml.safe_load(
-        (SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8")
-    )
+    contract = yaml.safe_load((SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8"))
 
     assert "references/development-governance.md" in skill_text
     assert "stages/project-governance/INSTRUCTIONS.md" in skill_text
@@ -66,19 +62,15 @@ def test_skill_guide_routes_complex_and_commercial_skill_governance():
     assert "ADR" in governance
     assert "Daily Log" in governance
     assert "governance_plan" in {item["name"] for item in contract["outputs"]}
-    assert "complex_or_commercial_feature_without_spec_and_plan" in set(
-        contract["forbidden"]
-    )
+    assert "complex_or_commercial_feature_without_spec_and_plan" in set(contract["forbidden"])
 
 
-def test_skill_guide_discovers_before_creating_or_governing_new_skill():
+def test_skill_engineering_discovers_before_creating_or_governing_new_skill():
     skill_text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
     discovery = (SKILL_DIR / "references" / "capability-brainstorming.md").read_text(
         encoding="utf-8"
     )
-    contract = yaml.safe_load(
-        (SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8")
-    )
+    contract = yaml.safe_load((SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8"))
 
     assert "references/capability-brainstorming.md" in skill_text
     assert "needs_discovery" in skill_text
@@ -101,8 +93,6 @@ def test_product_positioning_keeps_fast_creation_and_lifecycle_together():
         for phrase in case["must_include"]:
             assert phrase in source, f"{case['id']} missing: {phrase}"
 
-    contract = yaml.safe_load(
-        (SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8")
-    )
+    contract = yaml.safe_load((SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8"))
     assert "快速生成从第一版开始就符合工程规范" in contract["purpose"]
     assert "tests/product-positioning.yaml" in contract["tests"]["regression_cases"]

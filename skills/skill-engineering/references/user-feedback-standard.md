@@ -1,6 +1,6 @@
 # 用户反馈标准
 
-Skill Guide 面向只想完成任务的普通用户。工具记录用于审计和恢复,不能直接充当用户反馈。
+Skill Engineering 面向只想完成任务的普通用户。工具记录用于审计和恢复,不能直接充当用户反馈。
 
 项目内所有确定性反馈格式以 `docs/guides/skill-interaction-design.md` 为实现规范;本文件负责 Skill 对话层的摘要约束。
 

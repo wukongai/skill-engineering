@@ -31,7 +31,9 @@ _SENSITIVE_KEY_RE = re.compile(
     r"(^|_)(api_?key|access_?token|refresh_?token|token|secret|password|private_?key|credential)s?($|_)",
     re.IGNORECASE,
 )
-_PLACEHOLDER_RE = re.compile(r"example|dummy|fake|test|redacted|placeholder|your|xxx|none|null|<[^>]+>", re.IGNORECASE)
+_PLACEHOLDER_RE = re.compile(
+    r"example|dummy|fake|test|redacted|placeholder|your|xxx|none|null|<[^>]+>", re.IGNORECASE
+)
 
 
 @dataclass(frozen=True)
@@ -155,9 +157,7 @@ def blueprint_from_dict(data: dict[str, Any]) -> SkillBlueprint:
         kind=str(skill.get("kind") or "unknown"),
         source=str(skill.get("source") or ""),
         legacy=bool(skill.get("legacy", False)),
-        skill_extensions=_extensions(
-            skill, {"name", "kind", "source", "legacy", "extensions"}
-        ),
+        skill_extensions=_extensions(skill, {"name", "kind", "source", "legacy", "extensions"}),
         components=components,
         topology=BlueprintTopology(
             entrypoints=_strings(topology.get("entrypoints"), "entrypoints"),

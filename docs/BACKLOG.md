@@ -15,7 +15,7 @@ Blueprint/IR 与 Architecture Guardian 已经从 Backlog 升级到当前 `v2.0 P
 - 创建成功记录、历史和安全撤销；
 - v2.0 之后的跨版本 Blueprint schema migration；
 - v2.0 之后的多仓库架构适应度和语义 Diff 扩展；
-- Skill Guide 自身的固定 baseline/candidate 行为报告；
+- Skill Engineering 自身的固定 baseline/candidate 行为报告；
 - GitHub 发布、wheel 构建和安装 smoke 自动化；
 - 修复/验证非 production suite 无 high-risk case 的报告格式边界。
 
