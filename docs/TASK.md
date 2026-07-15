@@ -31,6 +31,29 @@
 - [x] 变更已提交为 `c58d389`，推送到 `codex/version-roadmap`，并建立 Draft PR #2。
 - [ ] tag、公开发布和从 Draft PR 转为正式发布（保留为独立发布门禁，不在本次 review 自动执行）。
 
+## OB Task 对齐：SkillSpector Review 与 2.0 启动
+
+> 本节是可直接同步到 Obsidian/OB 的任务摘要；项目仓库的正式事实源仍是本文件、当前 Sprint 和 Handoff。
+
+- **任务名称**：Skill Engineering：对比 NVIDIA SkillSpector，吸收安全能力并启动 2.0 Architecture Guardian。
+- **任务状态**：SkillSpector review 已完成；2.0 Phase 1 开发中。
+- **版本范围**：`0.1.1` Security Doctor 收口、`1.0.0` 稳定化规划、`2.0.0` Architecture Guardian Phase 1。
+- **任务目标**：在不破坏现有 CLI、JSON、contract 和发布边界的前提下，引入 AST 行为检查、局部 source-to-sink 风险关联、SARIF 输出，并建立可继续开发的 Blueprint/IR 架构事实层。
+- **已完成交付**：
+  - 固定 NVIDIA/SkillSpector 上游 commit `8f534e2951e0b7d0b8fb8e84832cd3605f95c032` 与采用矩阵；
+  - 完成 AST 动态执行、不安全 shell、外部输入到执行 sink 的 Doctor 规则；
+  - 完成 SARIF 2.1.0 输出，并保留默认文本与 `--json` 兼容；
+  - 完成 Blueprint schema/model、canonical JSON、SHA-256 fingerprint、unknown/legacy、敏感扩展字段门禁和基础 migration/rollback 回归；
+  - 完成 pytest 116、Ruff、官方 Skill validation、production Doctor、credential lint、diff check 和文档/schema 检查；
+  - 变更已提交为 `c12f6b0`；前序实现提交为 `c58d389`。
+- **当前待办**：
+  - 为 atomic/router/orchestrator/adapter 建立最小 Blueprint fixture 与负例；
+  - 实现真实 1.x Skill/contract 的只读 Blueprint inventory；
+  - 补齐真实 inventory 的 schema、migration、rollback、敏感信息和 0.1.x 回归 evidence；
+  - 不接入 apply，不创建 tag，不进行公开发布或 Global enable。
+- **验收依据**：[`SkillSpector 测试证据`](testing/2026-07-15-skillspector-security-doctor.md)、[`v2 Phase 1 Handoff`](handoffs/2026-07-16-v2-phase1-next.md)、[`当前 Sprint`](sprints/2026-07-v2.0-architecture-guardian.md)。
+- **OB 后续动作**：下一次从 fixture 开始；完成后同步更新本 Task、Sprint、Daily Log、测试 evidence 和 Handoff，再讨论 1.0 push/release。
+
 ## v0.1.x Done / Baseline
 
 - [x] 新需求先自查和逐步澄清,信息不足保持 `needs_discovery`。
