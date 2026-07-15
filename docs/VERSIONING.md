@@ -32,6 +32,7 @@ Skill Engineering 使用语义化版本 `MAJOR.MINOR.PATCH`：
 4. `docs/ROADMAP.md`、`docs/TASK.md`、当前 Sprint；
 5. 对应 `docs/specs/`、`docs/plans/` 和 `docs/testing/`；
 6. README 的安装、能力和限制描述。
+7. `LICENSE`、版权与安装指南以及许可证/安装范围的营销表述。
 
 ## 发布阶段
 
@@ -52,6 +53,7 @@ Unreleased -> Preview -> Release Candidate -> Stable -> Maintenance -> End of Su
 - Doctor 新规则默认应先作为 WARN，只有误报边界和 regression 充分时才升级为 FAIL。
 - 2.0 必须提供 1.x contract/plan 的只读导入或明确迁移错误，不能直接把旧 Skill 判定为不可用。
 - 破坏性迁移必须包含 before/after 示例、自动检查和回滚入口。
+- 许可证变化不是补丁级修复；必须通过 ADR、迁移说明、贡献者沟通和新的版本门禁。稳定发布必须同时冻结 CLI 包与 Agent Skill 的安装入口。
 
 ## 发布授权边界
 

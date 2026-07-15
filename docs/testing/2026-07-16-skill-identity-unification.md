@@ -32,6 +32,7 @@
 
 ## 已知边界
 
-- GitHub 远程当前只有 `v0.1.0`，因此尚未执行“从远程 `v1.0.0` tag 安装”的真实证据。
+- GitHub 远程 `v0.1.0` 真实克隆结果仍只有 `skills/skill-guide/`；统一后的用户指南会查找 `skills/skill-engineering/`，因此该旧 tag 的远程安装回归被正确阻断。
+- 当前统一候选已在一次性 HOME 中通过 `uv tool install`、Codex 全局 symlink、production Doctor、create preview、同一 plan apply 和新建 Skill Doctor；新版本推送后仍需从远程 tag 原样复验一次。
 - 1.0 Stable Contract 的 schema/兼容/发布证据任务尚未全部完成，不能把本轮身份统一单独宣称为 1.0 Stable。
 - 本机旧全局 symlink 已因源目录迁移变成断链；替换为 `skill-engineering` 属于真实全局状态变更，必须单独确认后执行。

@@ -9,6 +9,10 @@
 | `1.0.0` | Planned | Stable Lifecycle Contract | 先冻结契约，再进入 RC |
 | `2.0.0` | In Development | Architecture Guardian | 当前开发主线 |
 
+## Unreleased 文档治理
+
+2026-07-16：新增 MIT 版权范围、第三方/用户内容/商标边界和 CLI/Agent Skill 双轨安装指南。该文档治理不等于 1.0 稳定包已发布；wheel、干净环境和远程 tag 安装 smoke 仍是独立门禁。
+
 ## `0.1.0` — Public Beta
 
 日期：2026-07-15

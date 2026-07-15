@@ -2,6 +2,24 @@
 
 skill 本身写得好只解决一半问题。另一个关键是:它在哪里被暴露、是否值得一直参与路由、会不会拖慢 agent 判断。
 
+## 普通用户的标准安装入口
+
+对外发布的目录型 Agent Skill，普通用户优先使用标准 `skills` CLI，而不是克隆源码仓库：
+
+```bash
+npx skills add <owner>/<repo> --skill <skill-name> -g -a <agent> -y
+```
+
+`-g` 表示用户级全局范围；省略它表示当前项目范围。`-a` 可指定 `codex`、`claude-code` 等宿主；省略时由安装器检测。等价的 npm 入口是 `npm exec --yes skills -- add ...`。
+
+源码仓库的 `git clone` 或 fork 只用于源码学习、二次开发、开发测试和贡献 PR，不应出现在直接使用者的首选安装步骤中。安装文档必须把这两类路径分开。
+
+对于 Skill Engineering，普通用户命令固定为：
+
+```bash
+npx skills add wukongai/skill-engineering --skill skill-engineering -g -a codex -y
+```
+
 ## 暴露通道
 
 | 通道 | 含义 | 治理问题 |

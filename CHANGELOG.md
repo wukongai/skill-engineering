@@ -11,6 +11,8 @@
 - 版本管理规范、功能总表、发布日志，以及 1.0/2.0 的 Spec、Plan 和 Sprint 事实源。
 - Architecture Guardian Blueprint schema v1、Python 数据模型、确定性 fingerprint、unknown/legacy 保留和敏感扩展字段门禁。
 - 统一用户可见 Agent Skill 身份为 `skill-engineering`，移除 `skill-guide` 顶层暴露，并加入隔离全局安装到创建/Doctor 的回归 smoke。
+- 明确 MIT 对原创代码、Agent Skill、references、schemas、tests、examples 和文档的默认覆盖范围，并区分第三方材料、用户生成内容与商标边界。
+- 新增标准 `npx skills add` / `npm exec` 直接安装说明；普通用户不需要 clone，源码仓库只用于学习、二次开发和贡献。
 
 ### Planning
 

@@ -8,6 +8,7 @@
 - 长期原则：[`constitution.md`](constitution.md)
 - 当前架构：[`architecture.md`](architecture.md)
 - 版本规则：[`VERSIONING.md`](VERSIONING.md)
+- 版权与安装：[`guides/licensing-and-installation.md`](guides/licensing-and-installation.md)
 - 功能总表：[`FEATURE-MATRIX.md`](FEATURE-MATRIX.md)
 - 发布日志：[`releases/RELEASE-LOG.md`](releases/RELEASE-LOG.md)
 - 当前任务：[`TASK.md`](TASK.md)
@@ -19,6 +20,8 @@
 - V0.1 Plan：[`plans/2026-07-13-v0.1-public-beta-plan.md`](plans/2026-07-13-v0.1-public-beta-plan.md)
 - V1.0 Spec/Plan：[`specs/2026-07-16-v1.0-stable-contract-spec.md`](specs/2026-07-16-v1.0-stable-contract-spec.md) / [`plans/2026-07-16-v1.0-stable-contract-plan.md`](plans/2026-07-16-v1.0-stable-contract-plan.md)
 - V2.0 Spec/Plan：[`specs/2026-07-16-v2.0-architecture-guardian-spec.md`](specs/2026-07-16-v2.0-architecture-guardian-spec.md) / [`plans/2026-07-16-v2.0-architecture-guardian-plan.md`](plans/2026-07-16-v2.0-architecture-guardian-plan.md)
+- 版权与安装 Spec/Plan：[`specs/2026-07-16-licensing-installation-policy-spec.md`](specs/2026-07-16-licensing-installation-policy-spec.md) / [`plans/2026-07-16-licensing-installation-policy-plan.md`](plans/2026-07-16-licensing-installation-policy-plan.md)
+- 版权与安装决策：[`adr/0005-mit-license-and-installation-boundaries.md`](adr/0005-mit-license-and-installation-boundaries.md)（安装器入口见 [`adr/0004-standard-skill-cli-install.md`](adr/0004-standard-skill-cli-install.md)）
 
 ## 长期记录
 

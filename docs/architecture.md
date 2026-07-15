@@ -56,6 +56,8 @@ The host Agent generates candidate content inside an isolated CandidateJob works
 
 Agent Skill Hub remains the owner of registry, Profile, Adapter, Global, and multi-project distribution. Skill Engineering only creates a narrow project Canary during a release.
 
+Python CLI packaging and Agent Skill exposure are separate delivery surfaces. Installing the package does not expose `skills/skill-engineering/`, and installing the Agent Skill does not install Python dependencies. Project-only exposure is the default; Profile/Global distribution remains an Agent Skill Hub responsibility.
+
 ## Release flow
 
 ```text

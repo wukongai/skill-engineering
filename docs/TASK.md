@@ -13,9 +13,11 @@
 ## v1.0 Stable Contract Planned
 
 - [x] 统一用户可见 Agent Skill 身份为 `skill-engineering`，移除 `skill-guide` 顶层暴露并增加隔离安装/创建/Doctor 回归。
+- [x] 将普通用户安装入口统一为标准 `npx skills add` / `npm exec`，并把 clone/fork 限定为源码学习与二次开发路径。
 - [ ] 冻结 CLI/API/JSON/contract schema 与兼容策略。
 - [ ] 完成 wheel、安装 smoke、Python 支持矩阵和迁移文档。
 - [ ] 固定 release evidence、独立评审、回滚和废弃周期。
+- [ ] 固定 MIT 版权范围、第三方材料和用户生成内容边界，并在 README 提供 CLI/Agent Skill 双轨安装矩阵。
 
 - [x] 对比 NVIDIA SkillSpector，并固定可复核的上游 commit 与采用矩阵。
 - [x] Doctor 增加 Python AST 动态执行、不安全 shell 和外部输入到执行 sink 检查。

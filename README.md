@@ -72,13 +72,50 @@ The standalone, detailed release plan and exit gates live in [docs/ROADMAP.md](d
 
 Doctor scores structural readiness. It never presents an unmeasured downstream utility claim as a score.
 
+## Install and choose the right artifact
+
+Skill Engineering 有两个独立交付物：Python CLI 和 Agent Skill。安装一个不会自动安装另一个。普通用户不需要克隆仓库，统一使用标准 `skills` CLI，并显式选择当前项目或全局范围；全局暴露需先完成审计、备份并确认影响范围。
+
+| 目标 | 推荐路径 |
+|---|---|
+| 贡献或修改仓库代码 | `python3 -m pip install -e ".[dev]"` |
+| 试用 Agent Skill | `npx skills add ... --skill skill-engineering`；去掉 `-g` 为当前项目 |
+| 使用稳定 CLI | 1.0 发布后固定版本：`uv tool install skill-engineering==1.0.0` 或 `pipx install skill-engineering==1.0.0` |
+| 多项目/全局暴露 | `npx skills add ... -g`；组织化 Profile/台账再交给 Agent Skill Hub |
+
+当前仓库仍处于 2.0 开发、1.0 稳定化规划阶段，未发布版本不得被表述为公开 PyPI 稳定包。
+
+完整的版权范围、第三方材料、用户生成内容、升级、卸载和回滚边界见[版权与安装指南](docs/guides/licensing-and-installation.md)。
+
+### Agent Skill 安装（标准安装器）
+
+只安装到所有项目可用的全局范围时，使用：
+
+```bash
+npx skills add wukongai/skill-engineering --skill skill-engineering -g -a codex -y
+```
+
+在 Claude Code 中将 `-a codex` 换成 `-a claude-code`；只想让当前项目使用时去掉 `-g`。不确定宿主时可省略 `-a`，让安装器自动检测。等价的 npm 写法是：
+
+```bash
+npm exec --yes skills -- add wukongai/skill-engineering --skill skill-engineering -g -a codex -y
+```
+
+安装完成后，在对应项目中直接提出创建、检查、评测或维护 Skill 的请求即可。升级和移除使用同一个 `skills` CLI（例如 `npx skills update`、`npx skills remove`）。Python 包安装不会自动暴露这个 Agent Skill。
+
 ## Install for development
 
 ```bash
 python3 -m pip install -e ".[dev]"
 ```
 
-The Agent Skill source is at `skills/skill-engineering/`. Install or link that directory using your agent's Skill mechanism or Agent Skill Hub.
+维护者和贡献者才需要克隆或 fork 源码仓库：
+
+```bash
+git clone https://github.com/wukongai/skill-engineering.git
+```
+
+这条路径用于源码学习、二次开发、运行开发测试和提交 PR，不是普通用户使用 Agent Skill 的前置条件。源码中的 Agent Skill 入口位于 `skills/skill-engineering/`。如果只想手动 project-only 接入，可将该目录链接到 `.agents/skills/skill-engineering/` 或 `.claude/skills/skill-engineering/`。
 
 ## Quick start
 
@@ -140,9 +177,9 @@ The full lifecycle evidence is documented in
 [`docs/testing/2026-07-11-real-e2e.md`](docs/testing/2026-07-11-real-e2e.md). The latest interaction and handoff evidence is documented in
 [`docs/testing/2026-07-12-interaction-e2e.md`](docs/testing/2026-07-12-interaction-e2e.md).
 
-## License
+## License and copyright
 
-MIT
+Original source code, Agent Skill instructions, references, schemas, tests, examples, and documentation are MIT (`SPDX-License-Identifier: MIT`) unless a file says otherwise. Third-party material keeps its original license; user prompts, private data, generated Skills, and runtime outputs are not claimed by this project. The `Skill Engineering` name and logo are not licensed as trademarks by MIT. See the [copyright and installation policy](docs/guides/licensing-and-installation.md) and the full [MIT License](LICENSE).
 
 ## Contributing and security
 

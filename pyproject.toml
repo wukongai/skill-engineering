@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Evidence-driven engineering, evaluation, maintenance, and evolution for Agent Skills"
 readme = "README.md"
 requires-python = ">=3.10"
+# SPDX-License-Identifier: MIT
 license = { text = "MIT" }
 authors = [{ name = "m-dj" }]
 dependencies = ["pyyaml>=6.0"]
