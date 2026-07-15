@@ -7,7 +7,8 @@
 - [x] 定义 Blueprint/IR schema version、三轴字段、unknown/legacy 和 fingerprint。
 - [ ] 为 atomic/router/orchestrator/adapter 建立最小 Blueprint fixture 与负例。
 - [ ] 实现只读 Blueprint inventory，不接入 apply。
-- [ ] 运行 2.0 Phase 1 schema、migration、rollback 和敏感信息门禁。
+- [x] 完成 Blueprint schema、migration、rollback 和敏感信息基础门禁回归。
+- [ ] 补齐真实 Skill inventory 的 schema/迁移/rollback evidence，并保持不接入 apply。
 
 ## v1.0 Stable Contract Planned
 
@@ -20,6 +21,15 @@
 - [x] Doctor/audit 增加 SARIF 2.1.0 输出，同时保持默认文本和 `--json` 兼容。
 - [x] 通过独立候选和同一 maintenance plan 更新 Skill Guide Doctor 规则参考。
 - [x] 完成 v0.1.1 pytest、Ruff、Skill validation、credential lint 和 diff check。
+
+## SkillSpector Review / v0.1.1 收口
+
+- [x] 核对用户所称 “Skill Spectre” 实际对应的 NVIDIA/SkillSpector，并固定公开仓库 commit `8f534e2951e0b7d0b8fb8e84832cd3605f95c032`。
+- [x] 吸收 AST 行为规则、局部 source-to-sink 风险关联和 SARIF 2.1.0 输出；保留原有文本与 `--json` 兼容。
+- [x] 完成对比证据、README、Roadmap、功能矩阵、发布日志和测试记录的同步。
+- [x] 完成全量验证：pytest 116 passed、Ruff、官方 Skill validation、production Doctor 100/A、credential lint、diff check 和文档/schema 检查。
+- [x] 变更已提交为 `c58d389`，推送到 `codex/version-roadmap`，并建立 Draft PR #2。
+- [ ] tag、公开发布和从 Draft PR 转为正式发布（保留为独立发布门禁，不在本次 review 自动执行）。
 
 ## v0.1.x Done / Baseline
 
@@ -51,9 +61,10 @@
 - [x] SkillSpector 对比证据固定到公开仓库 commit。
 - [x] AST 安全规则、SARIF 输出和旧 CLI 兼容回归通过。
 - [x] Skill Guide 同一 maintenance plan Apply、postflight、verify 通过。
-- [x] pytest 110 passed。
+- [x] pytest 116 passed。
 - [x] Ruff、官方 Skill validation、production Doctor 100/A、凭证 lint、diff check 通过。
-- [ ] 用户确认 commit、push、tag 或公开发布（本轮不请求，也不自动执行）。
+- [x] commit、push 已完成：`c58d389` / `codex/version-roadmap` / Draft PR #2。
+- [ ] 用户确认 tag 或公开发布（不自动执行）。
 
 ## Done
 

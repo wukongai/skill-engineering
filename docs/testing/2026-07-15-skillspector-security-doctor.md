@@ -17,10 +17,11 @@
 
 ## 完整门禁结果
 
-- 全量 pytest：110 passed。
+- 全量 pytest：116 passed（包含 Blueprint/IR 回归）。
 - 全量 Ruff：passed。
 - 官方 Skill validation：passed。
 - production Doctor：0 FAIL、0 WARN、100/A。
 - credential lint：passed。
 - `git diff --check`：passed。
-- 本轮不执行 commit、push、tag 或公开发布。
+- commit、push 已完成：`c58d389` / `codex/version-roadmap` / Draft PR #2。
+- tag 和公开发布未执行，仍需独立用户授权。

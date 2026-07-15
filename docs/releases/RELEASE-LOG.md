@@ -41,7 +41,7 @@ pytest、Ruff、production Doctor、凭证 lint、diff check、隔离 E2E 均通
 
 ### 当前状态
 
-实现和验证已完成，但未执行 commit、push、tag 或公开发布。因此 0.1.1 仍然是 Unreleased。
+实现、验证、commit 和 push 已完成：变更位于 `c58d389` / `codex/version-roadmap`，并已建立 Draft PR #2。因此 0.1.1 仍然是 Unreleased，待用户单独确认 tag、公开发布或将 PR 转为正式发布。
 
 ## `1.0.0` — Stable Lifecycle Contract（计划）
 

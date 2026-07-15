@@ -14,6 +14,7 @@
 - 路线图：[`ROADMAP.md`](ROADMAP.md)
 - 后续候选：[`BACKLOG.md`](BACKLOG.md)
 - 当前 Sprint：[`sprints/2026-07-v2.0-architecture-guardian.md`](sprints/2026-07-v2.0-architecture-guardian.md)
+- 当前 Handoff：[`handoffs/2026-07-16-v2-phase1-next.md`](handoffs/2026-07-16-v2-phase1-next.md)
 - V0.1 Spec：[`specs/2026-07-13-v0.1-public-beta-spec.md`](specs/2026-07-13-v0.1-public-beta-spec.md)
 - V0.1 Plan：[`plans/2026-07-13-v0.1-public-beta-plan.md`](plans/2026-07-13-v0.1-public-beta-plan.md)
 - V1.0 Spec/Plan：[`specs/2026-07-16-v1.0-stable-contract-spec.md`](specs/2026-07-16-v1.0-stable-contract-spec.md) / [`plans/2026-07-16-v1.0-stable-contract-plan.md`](plans/2026-07-16-v1.0-stable-contract-plan.md)
