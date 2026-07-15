@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 
 import pytest
 
@@ -10,8 +11,16 @@ from skill_engineering.journey import (
     list_journeys,
     load_journey,
     new_id,
+    now_iso,
     save_journey,
 )
+
+
+def test_now_iso_is_timezone_aware_utc():
+    timestamp = datetime.fromisoformat(now_iso())
+
+    assert timestamp.utcoffset() is not None
+    assert timestamp.utcoffset().total_seconds() == 0
 
 
 def test_journey_round_trip_and_handoff(tmp_path):
