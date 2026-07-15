@@ -92,5 +92,5 @@
 
 ## Done
 
-- [x] 完成 Yao Meta Skill、Superpowers 和本地能力审计。
+- [x] 完成 Yao Meta Skill、Superpowers 和本地能力审计，并建立可复核研究与采用矩阵：[`Yao/Superpowers 研究`](research/2026-07-16-yao-meta-superpowers-architecture-adoption.md)。
 - [x] 明确 V1 核心是创建 + 防架构腐化维护 + 检查 + 自进化 + 友好交互。

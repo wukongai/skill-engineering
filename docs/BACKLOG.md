@@ -29,6 +29,7 @@ Blueprint/IR 与 Architecture Guardian 已经从 Backlog 升级到当前 `v2.0 P
 - provider-neutral rollout runner；
 - pressure/rationalization 和 multi-turn eval；
 - state schema migration、并发锁、retention 和 export/import；
+- Yao Meta/Superpowers pinned-source 复核与本地五模式清单维护（`2.1+`，仅研究维护，不重复承诺当前 Guardian Sprint）；
 - Skill dependency graph、owner、stale 和冲突检测的多项目/Portfolio 扩展；
 - metadata-only telemetry 与 adoption drift；
 - 安装模拟、包校验和升级兼容。
