@@ -1,4 +1,6 @@
-# Skill Engineering 远程用户全流程回归：从安装到创建、检查与结构化修改
+# Skill Engineering 远程工程回归证据：安装、创建、检查与维护门禁
+
+> 本文是内部工程证据，包含安装器、Doctor 和维护门禁输出，不是普通用户体验主文。面向用户的完整创建过程请阅读 [`2026-07-16-user-creation-journey-article.md`](2026-07-16-user-creation-journey-article.md)。
 
 日期：2026-07-16
 
