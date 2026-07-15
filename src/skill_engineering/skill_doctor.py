@@ -11,8 +11,10 @@ from typing import Any
 
 import yaml
 
+from . import __version__
 from .evaluation import load_evaluation_report
 from .interaction import UserFeedback
+from .security_analysis import analyze_python_security
 from .skill_lint import lint_skill
 
 
@@ -1172,6 +1174,25 @@ def _check_security(
 
     for script in _iter_script_files(skill_dir):
         script_text = _read_text(script)
+        if script.suffix.lower() == ".py":
+            for finding in analyze_python_security(script_text, filename=str(script)):
+                level = (
+                    _profile_level(
+                        profile, personal="WARN", team="WARN", commercial="FAIL"
+                    )
+                    if finding.rule_id == "SEC109"
+                    else "FAIL"
+                )
+                _issue(
+                    issues,
+                    finding.rule_id,
+                    level,
+                    "security",
+                    script,
+                    finding.message,
+                    line=finding.line,
+                    hint=finding.hint,
+                )
         credential_access = CREDENTIAL_ACCESS_RE.search(script_text)
         network_transfer = NETWORK_TRANSFER_RE.search(script_text)
         upload_transfer = UPLOAD_TRANSFER_RE.search(script_text)
@@ -1520,6 +1541,10 @@ SCORE_DEDUCTIONS: dict[str, dict[str, int]] = {
     "SEC105": {"stability": 10, "security": 90, "engineering": 10},
     "SEC106": {"stability": 18, "security": 35, "engineering": 8},
     "SEC107": {"stability": 10, "security": 25, "engineering": 8},
+    "SEC108": {"stability": 15, "security": 75, "engineering": 12},
+    "SEC109": {"stability": 10, "security": 35, "engineering": 8},
+    "SEC110": {"stability": 18, "security": 80, "engineering": 15},
+    "SEC111": {"stability": 20, "security": 90, "engineering": 15},
     "EVAL101": {"functional_value": 8, "stability": 12, "engineering": 10},
     "EVAL102": {"stability": 12, "engineering": 5},
     "EVAL103": {"functional_value": 12, "stability": 25, "engineering": 8},
@@ -1785,18 +1810,90 @@ def format_json(result: DoctorResult) -> str:
     )
 
 
+def _sarif_level(level: str) -> str:
+    return "error" if level == "FAIL" else "warning"
+
+
+def _sarif_artifact_uri(result: DoctorResult, issue_path: str) -> str:
+    path = Path(issue_path)
+    target = Path(result.target)
+    root = target if target.is_dir() else target.parent
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except (OSError, ValueError):
+        return path.as_posix()
+
+
+def format_sarif(result: DoctorResult) -> str:
+    """Render Doctor issues as a SARIF 2.1.0 log for CI and IDE consumers."""
+    descriptions: dict[str, str] = {}
+    levels: dict[str, str] = {}
+    results: list[dict[str, Any]] = []
+    for issue in result.issues:
+        descriptions.setdefault(issue.rule_id, issue.message)
+        levels.setdefault(issue.rule_id, _sarif_level(issue.level))
+        physical_location: dict[str, Any] = {
+            "artifactLocation": {"uri": _sarif_artifact_uri(result, issue.path)}
+        }
+        if issue.line and issue.line > 0:
+            physical_location["region"] = {"startLine": issue.line}
+        results.append(
+            {
+                "ruleId": issue.rule_id,
+                "level": _sarif_level(issue.level),
+                "message": {"text": issue.message},
+                "locations": [{"physicalLocation": physical_location}],
+                "properties": {
+                    "layer": issue.layer,
+                    "profile": result.profile,
+                    "doctorLevel": issue.level,
+                    **({"hint": issue.hint} if issue.hint else {}),
+                },
+            }
+        )
+    rules = [
+        {
+            "id": rule_id,
+            "shortDescription": {"text": descriptions[rule_id]},
+            "defaultConfiguration": {"level": levels[rule_id]},
+        }
+        for rule_id in sorted(descriptions)
+    ]
+    payload = {
+        "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+        "version": "2.1.0",
+        "runs": [
+            {
+                "tool": {
+                    "driver": {
+                        "name": "skill-engineering",
+                        "version": __version__,
+                        "informationUri": "https://github.com/wukongai/skill-engineering",
+                        "rules": rules,
+                    }
+                },
+                "results": results,
+            }
+        ],
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Skill Engineering Doctor.")
     parser.add_argument("target", type=Path)
     parser.add_argument("--profile", choices=sorted(PROFILE_INPUTS), default="personal")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--format", choices=("text", "json", "sarif"), default="text")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     result = doctor_skill(args.target.expanduser(), profile=args.profile)
-    print(format_json(result) if args.json else format_text(result))
+    output_format = "json" if args.json else args.format
+    formatter = {"text": format_text, "json": format_json, "sarif": format_sarif}[output_format]
+    print(formatter(result))
     return result.exit_code()
 
 

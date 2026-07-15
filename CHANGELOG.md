@@ -4,6 +4,18 @@
 
 ## Unreleased
 
+### Added
+
+- Doctor 的 Python AST 行为风险检查，覆盖动态执行、不安全 shell 和外部输入到执行 sink。
+- Doctor/audit 的 SARIF 2.1.0 输出，供 CI、代码扫描和 IDE 消费。
+- 版本管理规范、功能总表、发布日志，以及 1.0/2.0 的 Spec、Plan 和 Sprint 事实源。
+- Architecture Guardian Blueprint schema v1、Python 数据模型、确定性 fingerprint、unknown/legacy 保留和敏感扩展字段门禁。
+
+### Planning
+
+- `1.0.0` 进入 Stable Lifecycle Contract 规划，重点是兼容、安装、证据和发布门禁。
+- `2.0.0` 进入 Architecture Guardian Phase 1，先实现 Blueprint/IR 契约与只读 inventory。
+
 ## 0.1.0 - 2026-07-15
 
 ### Added

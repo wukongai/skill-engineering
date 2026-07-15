@@ -7,13 +7,17 @@
 - 产品定位：[`PRODUCT.md`](PRODUCT.md)
 - 长期原则：[`constitution.md`](constitution.md)
 - 当前架构：[`architecture.md`](architecture.md)
+- 版本规则：[`VERSIONING.md`](VERSIONING.md)
+- 功能总表：[`FEATURE-MATRIX.md`](FEATURE-MATRIX.md)
+- 发布日志：[`releases/RELEASE-LOG.md`](releases/RELEASE-LOG.md)
 - 当前任务：[`TASK.md`](TASK.md)
 - 路线图：[`ROADMAP.md`](ROADMAP.md)
 - 后续候选：[`BACKLOG.md`](BACKLOG.md)
-- 版本规则：[`VERSIONING.md`](VERSIONING.md)
-- 当前 Sprint：[`sprints/2026-07-v0.1-public-beta.md`](sprints/2026-07-v0.1-public-beta.md)
+- 当前 Sprint：[`sprints/2026-07-v2.0-architecture-guardian.md`](sprints/2026-07-v2.0-architecture-guardian.md)
 - V0.1 Spec：[`specs/2026-07-13-v0.1-public-beta-spec.md`](specs/2026-07-13-v0.1-public-beta-spec.md)
 - V0.1 Plan：[`plans/2026-07-13-v0.1-public-beta-plan.md`](plans/2026-07-13-v0.1-public-beta-plan.md)
+- V1.0 Spec/Plan：[`specs/2026-07-16-v1.0-stable-contract-spec.md`](specs/2026-07-16-v1.0-stable-contract-spec.md) / [`plans/2026-07-16-v1.0-stable-contract-plan.md`](plans/2026-07-16-v1.0-stable-contract-plan.md)
+- V2.0 Spec/Plan：[`specs/2026-07-16-v2.0-architecture-guardian-spec.md`](specs/2026-07-16-v2.0-architecture-guardian-spec.md) / [`plans/2026-07-16-v2.0-architecture-guardian-plan.md`](plans/2026-07-16-v2.0-architecture-guardian-plan.md)
 
 ## 长期记录
 

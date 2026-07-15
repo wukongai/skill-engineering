@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/wukongai/skill-engineering/schemas/blueprint-1.0.0.json",
+  "title": "Skill Engineering Blueprint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "skill",
+    "components",
+    "execution_topology",
+    "governance",
+    "dependencies",
+    "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "kind", "source", "legacy", "extensions"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "kind": {
+          "enum": ["atomic", "router", "orchestrator", "adapter", "composite", "unknown", "legacy"]
+        },
+        "source": {"type": "string"},
+        "legacy": {"type": "boolean"},
+        "extensions": {"type": "object"}
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "role", "path", "responsibilities", "evidence", "extensions"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "role": {
+            "enum": ["entry", "router", "orchestrator", "adapter", "reference", "script", "test", "asset", "unknown", "legacy"]
+          },
+          "path": {"type": "string", "minLength": 1},
+          "responsibilities": {"type": "array", "items": {"type": "string"}},
+          "evidence": {"type": "array", "items": {"type": "string"}},
+          "extensions": {"type": "object"}
+        }
+      }
+    },
+    "execution_topology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entrypoints", "stages", "delegates", "state_keys", "side_effects", "rollback", "unknown", "extensions"],
+      "properties": {
+        "entrypoints": {"type": "array", "items": {"type": "string"}},
+        "stages": {"type": "array", "items": {"type": "string"}},
+        "delegates": {"type": "array", "items": {"type": "string"}},
+        "state_keys": {"type": "array", "items": {"type": "string"}},
+        "side_effects": {"type": "array", "items": {"type": "string"}},
+        "rollback": {"type": "string"},
+        "unknown": {"type": "array", "items": {"type": "string"}},
+        "extensions": {"type": "object"}
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "evidence", "approvals", "unknown", "extensions"],
+      "properties": {
+        "level": {"enum": ["personal", "team", "production", "commercial", "unknown", "legacy"]},
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "approvals": {"type": "array", "items": {"type": "string"}},
+        "unknown": {"type": "array", "items": {"type": "string"}},
+        "extensions": {"type": "object"}
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "kind", "source", "required", "extensions"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "kind": {"enum": ["skill", "script", "plugin", "provider", "resource", "unknown", "legacy"]},
+          "source": {"type": "string"},
+          "required": {"type": "boolean"},
+          "extensions": {"type": "object"}
+        }
+      }
+    },
+    "extensions": {"type": "object"}
+  }
+}

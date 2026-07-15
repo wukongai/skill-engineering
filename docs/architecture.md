@@ -4,6 +4,12 @@ Product intent and long-term invariants live in `PRODUCT.md` and `constitution.m
 
 Skill Engineering has three layers.
 
+Versioned architecture direction:
+
+- `0.1.x` supplies the local deterministic lifecycle baseline.
+- `1.0` freezes the CLI/JSON/contract/release evidence interfaces.
+- `2.0` adds a separate Blueprint/IR fact layer and Architecture Guardian checks; it does not replace Doctor or Agent Skill Hub.
+
 ## Two entry flows
 
 New capability discovery and existing-project development are different flows.
@@ -80,6 +86,10 @@ Product / Constitution
 ```
 
 This governance layer is not injected into every generated Skill. Simple Skills stay minimal; production and commercial Skills progressively adopt the artifacts justified by their risk and expected lifetime.
+
+## 2.0 Blueprint boundary
+
+The first 2.0 slice introduces a versioned, read-only Blueprint/IR with three axes: component role, execution topology, and governance level. Inventory may report `unknown` or `legacy`; it must not invent missing facts. Guardian findings become preview inputs for `create`/`improve`, while existing immutable plans, approval, postflight, verify, and undo remain the write boundary.
 
 ## Creation flow
 

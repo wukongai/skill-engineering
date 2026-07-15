@@ -34,7 +34,7 @@ Doctor 报告必须确定、可 review,并且跨 agent 稳定。
 - Static: frontmatter、description、根入口长度、硬编码路径、prompt debt 词。
 - Structure: references、scripts、assets、stages、agents metadata、contract。
 - Behavior-risk: dry-run/apply、approval state、隐式日期 fallback、timeout/logging。
-- Security: prompt-injection 型指令、凭证/环境读取、外联传输、数据外传组合风险。
+- Security: prompt-injection 型指令、凭证/环境读取、外联传输、数据外传组合风险、Python AST 动态执行和外部输入到执行 sink。
 - Install: global/project/profile/direct/plugin/archive 分类。
 - Governance: 重复宽泛触发、陈旧入口、regression cases、suppression。
 - Evaluation: skill type、case portfolio、baseline/holdout、negative transfer、独立评审和证据 coverage。
@@ -50,6 +50,10 @@ Doctor 报告必须确定、可 review,并且跨 agent 稳定。
 | `SEC105` | Security | skill 目录、docs、examples、tests 或 logs 中出现真实 secret-like 字面量。 | FAIL。 |
 | `SEC106` | Security | credentialed provider 缺少 security regression 覆盖:missing credentials、redaction、blocked non-allowlisted host、no secret JSON output。 | personal/team WARN, production FAIL。 |
 | `SEC107` | Security | credentialed provider 缺少 revoke/rotate/delete credentials 安装文档。 | personal/team WARN, production FAIL。 |
+| `SEC108` | Security | Python 脚本调用 `exec` 或 `eval` 动态执行代码。 | FAIL。 |
+| `SEC109` | Security | Python 脚本用非静态值调用 `compile`、`__import__` 或 `importlib.import_module`。 | personal/team WARN, production FAIL。 |
+| `SEC110` | Security | Python 脚本调用 `os.system`、`os.popen`,或 `subprocess` 配合 `shell=True`。 | FAIL。 |
+| `SEC111` | Security | 用户输入、环境变量、网络输入或文件内容流入代码/命令执行 sink。 | FAIL。 |
 
 credentialed provider contract 允许四类合规来源:
 
@@ -59,6 +63,8 @@ credentialed provider contract 允许四类合规来源:
 - `commercial_saas`:优先 OAuth、官方授权流或 server-side secret manager。
 
 命中安全规则时,不要只在 `SKILL.md` 里追加“不要做坏事”。优先拆清楚脚本职责、允许的网络目的地、凭证边界、redaction、dry-run/apply 和 regression cases。
+
+Doctor 默认输出面向普通用户的文本；审计使用 JSON 或 SARIF 2.1.0。三种格式必须来自同一个 DoctorResult,`FAIL` 在 SARIF 映射为 `error`,`WARN` 映射为 `warning`。
 
 ## 评测规则
 

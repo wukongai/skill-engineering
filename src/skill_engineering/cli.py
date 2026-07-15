@@ -93,6 +93,7 @@ def build_parser() -> argparse.ArgumentParser:
             default="team" if name == "audit" else "personal",
         )
         doctor.add_argument("--json", action="store_true")
+        doctor.add_argument("--format", choices=("text", "json", "sarif"), default="text")
 
     create = sub.add_parser("create", help="生成 Skill 创建计划")
     create.add_argument("--name")
@@ -358,10 +359,14 @@ def main(argv: list[str] | None = None) -> int:
         print(format_json(value) if args.json else format_text(value))
         return value.exit_code(fail_on_warn=args.fail_on_warn)
     if args.cmd in {"doctor", "audit"}:
-        from .skill_doctor import doctor_skill, format_json, format_text
+        from .skill_doctor import doctor_skill, format_json, format_sarif, format_text
 
         value = doctor_skill(args.target, profile=args.profile)
-        print(format_json(value) if args.json else format_text(value))
+        output_format = "json" if args.json else args.format
+        formatter = {"text": format_text, "json": format_json, "sarif": format_sarif}[
+            output_format
+        ]
+        print(formatter(value))
         return value.exit_code()
     if args.cmd == "create":
         from .journey import load_build_plan

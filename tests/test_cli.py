@@ -26,6 +26,27 @@ def test_public_cli_contains_engineering_commands_not_hub_distribution():
     assert {"apply", "status", "forget", "serve", "doctor-install"}.isdisjoint(commands)
 
 
+def test_doctor_cli_supports_sarif_and_keeps_json_alias(tmp_path: Path, capsys):
+    skill = tmp_path / "demo-skill"
+    skill.mkdir()
+    (skill / "SKILL.md").write_text(
+        "---\nname: demo-skill\ndescription: Demo skill for one task.\n---\n",
+        encoding="utf-8",
+    )
+
+    assert main(["doctor", str(skill), "--format", "sarif"]) == 0
+    sarif = json.loads(capsys.readouterr().out)
+    assert sarif["version"] == "2.1.0"
+
+    assert main(["doctor", str(skill), "--json"]) == 0
+    legacy = json.loads(capsys.readouterr().out)
+    assert legacy["target"] == str(skill)
+
+    assert main(["doctor", str(skill), "--format", "json"]) == 0
+    explicit = json.loads(capsys.readouterr().out)
+    assert explicit == legacy
+
+
 def test_create_cli_requires_previewed_plan_before_apply(tmp_path: Path, capsys):
     target = tmp_path / "demo-skill"
     code = main(

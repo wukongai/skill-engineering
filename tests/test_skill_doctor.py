@@ -7,7 +7,7 @@ import yaml
 
 from skill_engineering.cli import main as engineering_main
 from skill_engineering.evaluation import evaluate_behavior
-from skill_engineering.skill_doctor import doctor_skill, format_text
+from skill_engineering.skill_doctor import doctor_skill, format_sarif, format_text
 
 
 def write_skill(
@@ -29,6 +29,14 @@ def ids(result) -> set[str]:
     return {issue.rule_id for issue in result.issues}
 
 
+def write_python_script(skill: Path, source: str, name: str = "runner.py") -> Path:
+    scripts = skill / "scripts"
+    scripts.mkdir(exist_ok=True)
+    path = scripts / name
+    path.write_text(source, encoding="utf-8")
+    return path
+
+
 def test_default_doctor_feedback_explains_result_without_rule_ids(tmp_path):
     skill = write_skill(tmp_path)
     result = doctor_skill(skill)
@@ -39,6 +47,58 @@ def test_default_doctor_feedback_explains_result_without_rule_ids(tmp_path):
     assert "下一步：" in text
     assert "DOC" not in text
     assert "Profile:" not in text
+
+
+def test_doctor_reports_ast_security_findings_with_profile_levels(tmp_path):
+    skill = write_skill(tmp_path)
+    write_python_script(
+        skill,
+        """import importlib
+name = "plugins." + input()
+importlib.import_module(name)
+eval(input())
+""",
+    )
+
+    personal = doctor_skill(skill, profile="personal")
+    production = doctor_skill(skill, profile="production")
+
+    personal_by_id = {issue.rule_id: issue for issue in personal.issues}
+    production_by_id = {issue.rule_id: issue for issue in production.issues}
+    assert personal_by_id["SEC109"].level == "WARN"
+    assert production_by_id["SEC109"].level == "FAIL"
+    assert production_by_id["SEC108"].level == "FAIL"
+    assert production_by_id["SEC111"].line == 4
+
+
+def test_doctor_sarif_maps_rules_levels_locations_and_properties(tmp_path):
+    skill = write_skill(tmp_path)
+    write_python_script(skill, 'eval(input())\n')
+
+    result = doctor_skill(skill, profile="team")
+    report = json.loads(format_sarif(result))
+
+    assert report["version"] == "2.1.0"
+    run = report["runs"][0]
+    assert run["tool"]["driver"]["name"] == "skill-engineering"
+    sarif_results = {item["ruleId"]: item for item in run["results"]}
+    assert sarif_results["SEC108"]["level"] == "error"
+    assert sarif_results["SEC108"]["locations"][0]["physicalLocation"]["region"] == {
+        "startLine": 1
+    }
+    assert sarif_results["SEC108"]["properties"]["layer"] == "security"
+    assert sarif_results["SEC108"]["locations"][0]["physicalLocation"][
+        "artifactLocation"
+    ]["uri"] == "scripts/runner.py"
+
+
+def test_doctor_sarif_empty_report_is_valid_shape(tmp_path):
+    skill = write_skill(tmp_path)
+
+    report = json.loads(format_sarif(doctor_skill(skill)))
+
+    assert report["runs"][0]["results"] == []
+    assert report["runs"][0]["tool"]["driver"]["rules"] == []
 
 
 def attach_behavior_report(
