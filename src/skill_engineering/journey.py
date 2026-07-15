@@ -176,6 +176,7 @@ class BuildPlan:
     complexity: dict[str, Any] = field(default_factory=dict)
     findings: list[dict[str, Any]] = field(default_factory=list)
     preflight: dict[str, Any] = field(default_factory=dict)
+    postflight: dict[str, Any] = field(default_factory=dict)
     plan_hash: str = ""
     record_id: str | None = None
     schema_version: str = SCHEMA_VERSION

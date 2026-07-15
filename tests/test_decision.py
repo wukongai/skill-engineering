@@ -61,6 +61,7 @@ def test_decides_archive_replace(tmp_path):
 
 def test_unknowns_are_questions_not_zero_score(tmp_path):
     report = decide_capability(make_root(tmp_path), "模糊想法", {})
+    assert report.verdict == "needs_discovery"
     assert report.confidence == "low"
     assert 1 <= len(report.unknowns) <= 3
     assert not hasattr(report, "score")
@@ -71,8 +72,29 @@ def test_default_decision_feedback_is_user_readable(tmp_path):
 
     text = format_decision(report)
 
-    assert "建议：" in text
+    assert "继续需求探索" in text
     assert "下一步：" in text
-    assert "还需要你确认" in text
+    assert "还需要你确认一个问题" in text
+    assert text.count("- 请") == 1
     assert report.id not in text
     assert "create_skill" not in text
+
+
+def test_one_off_can_be_rejected_before_full_discovery(tmp_path):
+    report = decide_capability(
+        make_root(tmp_path),
+        "帮我临时处理一次文件",
+        {"repeatability": "one_off"},
+    )
+
+    assert report.verdict == "no_new_artifact"
+
+
+def test_runtime_requirement_can_route_before_full_discovery(tmp_path):
+    report = decide_capability(
+        make_root(tmp_path),
+        "需要浏览器工具和账号鉴权",
+        {"runtime_required": True},
+    )
+
+    assert report.verdict == "install_plugin_runtime"
