@@ -13,6 +13,7 @@ Blueprint/IR 与 Architecture Guardian 已经从 Backlog 升级到当前 `v2.0 P
 
 ## P0：Public Beta 后立即评估
 
+- Agent Skill-only 安装后的 runtime 自检与 bootstrap：明确 `doctor_skill.py` 在未安装 Python CLI 时的行为，选择自包含实现、依赖检测与友好提示或双轨一键安装；进入实现前另建 Spec/Plan，不重新打开已完成的标准安装文档任务；
 - 创建成功记录、历史和安全撤销；
 - v2.0 之后的跨版本 Blueprint schema migration；
 - v2.0 之后的多仓库架构适应度和语义 Diff 扩展；

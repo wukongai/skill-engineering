@@ -15,10 +15,11 @@
 - [x] 统一用户可见 Agent Skill 身份为 `skill-engineering`，移除 `skill-guide` 顶层暴露并增加隔离安装/创建/Doctor 回归。
 - [x] 将普通用户安装入口统一为标准 `npx skills add` / `npm exec`，并把 clone/fork 限定为源码学习与二次开发路径。
 - [x] 冻结 CLI/API/JSON/contract schema 与兼容策略。
-- [x] 完成 wheel 门禁、Python 支持矩阵和迁移/回滚文档；远程默认分支安装 smoke 待首次 push 后执行。
+- [x] 完成 wheel 门禁、Python 支持矩阵、迁移/回滚文档和远程默认分支安装 smoke。
 - [x] 固定 release evidence、独立评审入口、回滚和废弃周期。
 - [x] 在同一 1.0.0 候选上完成四个 Use Case 和全量质量门禁（128 pytest、Ruff、Skill validation、Doctor 100/A、credential lint、diff、wheel 和干净环境 smoke）。
 - [x] 推送默认分支并通过远程标准安装 smoke；只发现并安装 `skill-engineering`，安装副本 Skill validation 与 production Doctor 通过。
+- [ ] 补齐 Agent Skill-only 干净环境的 Python runtime 依赖检测/bootstrap，并完成 create → apply → doctor 复验；这是 1.0 正式发布阻断。
 - [ ] 获得 `v1.0.0` tag 与 GitHub Release 的单独授权。
 - [x] 固定 MIT 版权范围、第三方材料和用户生成内容边界，并在 README 提供 CLI/Agent Skill 双轨安装矩阵。
 
