@@ -8,7 +8,7 @@
 |---|---|---|---|
 | `0.1.0` | 已发布基线 | Public Beta 本地生命周期闭环 | 已发布 |
 | `0.1.1` | 已并入 1.0 | Security Doctor：AST、source-to-sink、SARIF | 不单独发布 |
-| `1.0.0` | Release Candidate | Stable Lifecycle Contract | 本地门禁执行中 |
+| `1.0.0` | Release Candidate | Stable Lifecycle Contract | 本地与远程安装门禁通过，等待 tag |
 | `2.0.0` | 当前开发 | Architecture Guardian | Phase 1 进行中 |
 
 当前代码包版本已进入 `1.0.0` RC；只有 tag、GitHub Release 和远程默认分支安装验证完成后才标记 Stable。“2.0 开发中”不表示 2.0 已发布或可以替代 1.x 稳定契约。

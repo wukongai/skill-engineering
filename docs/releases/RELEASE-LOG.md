@@ -6,7 +6,7 @@
 |---|---|---|---|
 | `0.1.0` | Stable baseline | Public Beta 本地闭环 | 已发布基线 |
 | `0.1.1` | Folded into 1.0 | Security Doctor 强化 | 不单独发布 |
-| `1.0.0` | Release Candidate | Stable Lifecycle Contract | 本地门禁执行中 |
+| `1.0.0` | Release Candidate | Stable Lifecycle Contract | 本地与远程安装门禁通过，等待 tag |
 | `2.0.0` | In Development | Architecture Guardian | 当前开发主线 |
 
 ## Unreleased 文档治理
@@ -76,7 +76,8 @@ pytest、Ruff、production Doctor、凭证 lint、diff check、隔离 E2E 均通
 - 1.x 公开契约、0.1.x schema 兼容和升级/回滚指南已完成；
 - 版本源已切换为 `1.0.0`，自动一致性检查已加入 CI；
 - 四个 Use Case 和完整本地门禁已在同一候选上通过；
-- tag 和 GitHub Release 尚未执行，必须在远程默认分支安装通过后单独批准。
+- 默认分支已推送，标准安装器只发现并安装一个 `skill-engineering`；远程副本 Skill validation 与 production Doctor 通过；
+- tag 和 GitHub Release 尚未执行，等待用户单独批准。
 
 ## `2.0.0` — Architecture Guardian（当前开发）
 
