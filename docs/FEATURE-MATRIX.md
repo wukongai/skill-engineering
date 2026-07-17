@@ -16,7 +16,7 @@
 | Evolve | 脱敏 run、候选、Pareto、Shadow/Canary/Active | 已交付 | 1.0 稳定 | evolution/release plan |
 | Release | 预览、审批、验证、回滚证据 | 部分交付 | 1.0 完整冻结 | release plan、release installer |
 | Governance | Product/Architecture/Spec/Plan/ADR/Sprint/Changelog | 已交付 | 1.0 稳定 | `docs/` |
-| Packaging | wheel、安装 smoke、版本兼容矩阵 | 待开发 | 1.0 必须完成 | 1.0 spec/plan |
+| Packaging | wheel、安装 smoke、版本兼容矩阵 | 1.0 RC 已实现 | 1.0 稳定 | 1.0 spec/plan、兼容指南、RC evidence |
 | Contract | 稳定 CLI、JSON、contract schema 与迁移 | 待开发 | 1.0 必须完成 | 1.0 spec/plan |
 | Blueprint | 组件角色、执行拓扑、治理等级三轴描述 | Schema/模型已交付，inventory 待开发 | 2.0.0 | `blueprint.py`、schema、2.0 spec/plan |
 | Architecture Guardian | 依赖、冲突、重复职责、context budget、route collision | 2.0 计划 | 2.0.x | 2.0 spec/plan |

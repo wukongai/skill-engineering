@@ -5,8 +5,8 @@
 | 版本 | 阶段 | 核心定位 | 当前结论 |
 |---|---|---|---|
 | `0.1.0` | Stable baseline | Public Beta 本地闭环 | 已发布基线 |
-| `0.1.1` | Unreleased | Security Doctor 强化 | 已实现，等待独立发布确认 |
-| `1.0.0` | Planned | Stable Lifecycle Contract | 先冻结契约，再进入 RC |
+| `0.1.1` | Folded into 1.0 | Security Doctor 强化 | 不单独发布 |
+| `1.0.0` | Release Candidate | Stable Lifecycle Contract | 本地门禁执行中 |
 | `2.0.0` | In Development | Architecture Guardian | 当前开发主线 |
 
 ## Unreleased 文档治理
@@ -45,9 +45,11 @@ pytest、Ruff、production Doctor、凭证 lint、diff check、隔离 E2E 均通
 
 ### 当前状态
 
-实现、验证、commit 和 push 已完成：变更位于 `c58d389` / `codex/version-roadmap`，并已建立 Draft PR #2。因此 0.1.1 仍然是 Unreleased，待用户单独确认 tag、公开发布或将 PR 转为正式发布。
+实现、验证、commit 和 push 已完成：变更位于 `c58d389` / `codex/version-roadmap`，并已建立 Draft PR #2。该增量后来并入 `1.0.0` RC，不再创建单独的 `v0.1.1` tag。
 
-## `1.0.0` — Stable Lifecycle Contract（计划）
+## `1.0.0` — Stable Lifecycle Contract（Release Candidate）
+
+日期：2026-07-18
 
 ### 版本目标
 
@@ -67,6 +69,14 @@ pytest、Ruff、production Doctor、凭证 lint、diff check、隔离 E2E 均通
 不引入新的 Blueprint/IR 主架构、不做云端协作、不自动 Global 发布、不把静态分数当作真实效用。
 
 对应工件：[`1.0 Spec`](../specs/2026-07-16-v1.0-stable-contract-spec.md)、[`1.0 Plan`](../plans/2026-07-16-v1.0-stable-contract-plan.md)。
+
+### RC 实施状态
+
+- 唯一身份和远程安装命令已冻结；
+- 1.x 公开契约、0.1.x schema 兼容和升级/回滚指南已完成；
+- 版本源已切换为 `1.0.0`，自动一致性检查已加入 CI；
+- 四个 Use Case 和完整本地门禁已在同一候选上通过；
+- tag 和 GitHub Release 尚未执行，必须在远程默认分支安装通过后单独批准。
 
 ## `2.0.0` — Architecture Guardian（当前开发）
 

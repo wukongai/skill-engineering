@@ -1,12 +1,12 @@
 [project]
 name = "skill-engineering"
-version = "0.1.0"
+version = "1.0.0"
 description = "Evidence-driven engineering, evaluation, maintenance, and evolution for Agent Skills"
 readme = "README.md"
 requires-python = ">=3.10"
 # SPDX-License-Identifier: MIT
 license = { text = "MIT" }
-authors = [{ name = "m-dj" }]
+authors = [{ name = "艾笑" }]
 dependencies = ["pyyaml>=6.0"]
 
 [project.scripts]
@@ -24,6 +24,7 @@ packages = ["src/skill_engineering"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 
 [tool.ruff]
 line-length = 100

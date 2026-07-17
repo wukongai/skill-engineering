@@ -16,11 +16,11 @@ Skill Engineering 使用语义化版本 `MAJOR.MINOR.PATCH`：
 ## 当前版本状态
 
 - 已发布基线：`0.1.0` Public Beta。
-- 已实现但尚未发布：`0.1.1` Security Doctor（AST 安全规则、SARIF）。
-- 当前稳定化目标：`1.0.0` Stable Lifecycle Contract。
+- `0.1.1` Security Doctor 增量已并入 `1.0.0`，不再单独发布。
+- 当前发布候选：`1.0.0` Stable Lifecycle Contract。
 - 当前开发目标：`2.0.0` Architecture Guardian；第一阶段为 Blueprint/IR 契约设计。
 
-代码包版本在正式发布前保持与已发布版本一致；`Unreleased` 的功能不得被文档表述成已发布能力。
+代码包版本在 RC 阶段与候选版本一致；只有 tag、GitHub Release 和远程安装门禁完成后才能标记 Stable。`Unreleased` 或 2.0 Preview 功能不得被文档表述成 1.0 已发布能力。
 
 ## 版本事实源
 

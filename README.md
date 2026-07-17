@@ -1,6 +1,6 @@
 # Skill Engineering
 
-> Current development: `2.0.0` Architecture Guardian · baseline `0.1.x` · local-first · provider-neutral · MIT
+> Current stable candidate: `1.0.0` · next development: `2.0.0` Architecture Guardian · local-first · provider-neutral · MIT
 
 Skill Engineering helps users rapidly create Agent Skills that are engineered from the first version, then keeps them clear, testable, safe, and extensible through every later change.
 
@@ -27,9 +27,9 @@ discover -> decide artifact -> design -> create -> audit -> evaluate -> improve 
 
 Its advantage is combining architecture-first rapid generation with lifecycle protection, so the first usable version and the 10th or 100th change follow the same engineering standard.
 
-## Public Beta scope
+## 1.0 stable scope
 
-The first public version focuses on a complete local workflow:
+Version 1.0 freezes the complete local lifecycle that was validated during the public beta:
 
 - decide whether a new Skill is justified;
 - self-check existing capabilities and clarify the real task one question at a time before deciding;
@@ -43,7 +43,7 @@ The first public version focuses on a complete local workflow:
 - evolve candidates into immutable versions and approval-gated releases;
 - guide non-expert users with result, impact, and one clear next action.
 
-The project does not yet claim universal cross-model utility, native client permission enforcement, hosted collaboration, or automatic global publishing. See [Roadmap](docs/ROADMAP.md) and [Backlog](docs/BACKLOG.md).
+The project does not claim universal cross-model utility, native client permission enforcement, hosted collaboration, or automatic global publishing. Static Doctor scores remain structural readiness evidence, not downstream utility. See [Roadmap](docs/ROADMAP.md), the [1.x public contract](docs/references/v1-public-contract.md), and [Backlog](docs/BACKLOG.md).
 
 For the version strategy, feature inventory, release history, and active 2.0 work, see [VERSIONING](docs/VERSIONING.md), [FEATURE-MATRIX](docs/FEATURE-MATRIX.md), [RELEASE-LOG](docs/releases/RELEASE-LOG.md), and the [v2.0 Sprint](docs/sprints/2026-07-v2.0-architecture-guardian.md).
 
@@ -52,8 +52,8 @@ For the version strategy, feature inventory, release history, and active 2.0 wor
 | Version | Status | Focus |
 |---|---|---|
 | `0.1.0` | Released baseline | Local create, Doctor, evaluate, improve, evolve, and release governance |
-| `0.1.1` | Unreleased | AST security checks, source-to-sink analysis, and SARIF |
-| `1.0.0` | Stabilization planned | Stable CLI/JSON/contract, packaging, migration, and release evidence |
+| `0.1.1` | Folded into 1.0 | AST security checks, source-to-sink analysis, and SARIF |
+| `1.0.0` | Release candidate | Stable identity, CLI/JSON/contract, packaging, migration, and release evidence |
 | `2.0.0` | In development | Blueprint/IR, Architecture Guardian, semantic diff, and migration plans |
 
 The standalone, detailed release plan and exit gates live in [docs/ROADMAP.md](docs/ROADMAP.md). The first 2.0 slice—Blueprint schema, data models, deterministic fingerprinting, unknown/legacy preservation, and sensitive-value checks—is implemented; real Skill inventory and guardian checks remain in progress.
@@ -80,10 +80,10 @@ Skill Engineering 有两个独立交付物：Python CLI 和 Agent Skill。安装
 |---|---|
 | 贡献或修改仓库代码 | `python3 -m pip install -e ".[dev]"` |
 | 试用 Agent Skill | `npx skills add ... --skill skill-engineering`；去掉 `-g` 为当前项目 |
-| 使用稳定 CLI | 1.0 发布后固定版本：`uv tool install skill-engineering==1.0.0` 或 `pipx install skill-engineering==1.0.0` |
+| 使用稳定 CLI | 从 GitHub 固定版本安装：`uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"` |
 | 多项目/全局暴露 | `npx skills add ... -g`；组织化 Profile/台账再交给 Agent Skill Hub |
 
-当前仓库仍处于 2.0 开发、1.0 稳定化规划阶段，未发布版本不得被表述为公开 PyPI 稳定包。
+`1.0.0` 的 GitHub 源码、Agent Skill 和 Python wheel 使用同一版本事实源。本项目当前没有宣称已发布 PyPI 包；2.0 Blueprint/Architecture Guardian 仍是 Preview，不属于 1.0 稳定契约。
 
 完整的版权范围、第三方材料、用户生成内容、升级、卸载和回滚边界见[版权与安装指南](docs/guides/licensing-and-installation.md)。
 
@@ -176,6 +176,8 @@ bash scripts/credential-lint.sh --all
 The full lifecycle evidence is documented in
 [`docs/testing/2026-07-11-real-e2e.md`](docs/testing/2026-07-11-real-e2e.md). The latest interaction and handoff evidence is documented in
 [`docs/testing/2026-07-12-interaction-e2e.md`](docs/testing/2026-07-12-interaction-e2e.md).
+The four public 1.0 user journeys and their release-candidate rerun are indexed in
+[`docs/testing/2026-07-18-v1-use-cases.md`](docs/testing/2026-07-18-v1-use-cases.md).
 
 ## License and copyright
 

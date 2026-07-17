@@ -7,11 +7,11 @@
 | 版本 | 状态 | 核心定位 | 发布结论 |
 |---|---|---|---|
 | `0.1.0` | 已发布基线 | Public Beta 本地生命周期闭环 | 已发布 |
-| `0.1.1` | 实现完成 | Security Doctor：AST、source-to-sink、SARIF | Unreleased |
-| `1.0.0` | 稳定化规划 | Stable Lifecycle Contract | 未进入 RC |
+| `0.1.1` | 已并入 1.0 | Security Doctor：AST、source-to-sink、SARIF | 不单独发布 |
+| `1.0.0` | Release Candidate | Stable Lifecycle Contract | 本地门禁执行中 |
 | `2.0.0` | 当前开发 | Architecture Guardian | Phase 1 进行中 |
 
-当前代码包版本在正式发布前仍保持已发布版本；“2.0 开发中”不表示 2.0 已发布或可以替代 1.x 稳定契约。
+当前代码包版本已进入 `1.0.0` RC；只有 tag、GitHub Release 和远程默认分支安装验证完成后才标记 Stable。“2.0 开发中”不表示 2.0 已发布或可以替代 1.x 稳定契约。
 
 ## `0.1.x`：本地生命周期基线
 
@@ -31,10 +31,10 @@
 - `doctor/audit --format sarif`；
 - SkillSpector 对比、规则 fixture 和安全回归。
 
-### 当前限制
+### 已由 1.0 收口的限制
 
-- CLI/JSON/contract/record 尚未冻结为长期兼容接口；
-- wheel、干净环境安装和升级 smoke 尚未形成稳定门禁；
+- CLI/JSON/contract/record 已冻结为 1.x 兼容接口；
+- wheel、干净环境安装和升级/回滚说明已进入 1.0 发布门禁；
 - 静态结构健康不等于真实任务效用；
 - 不自动 Global 安装或公开发布。
 
@@ -68,6 +68,8 @@
 - production evidence 不只是声明，而是可重算的行为报告；
 - pytest、Ruff、Skill validation、production Doctor、credential lint、diff check 全通过；
 - commit、push、tag 和公开发布分别获得授权。
+
+当前 RC 事实源：[`v1.0 Sprint`](sprints/2026-07-v1.0-stable-contract.md)、[`1.x 公开契约`](references/v1-public-contract.md)、[`兼容与回滚`](guides/v1-compatibility.md)、[`四个 Use Case`](testing/2026-07-18-v1-use-cases.md)。
 
 ### 不进入 1.0
 

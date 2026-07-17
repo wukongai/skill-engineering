@@ -1,6 +1,6 @@
 # 当前任务
 
-当前版本：`2.0.0` Architecture Guardian Phase 1 开发中；`0.1.x` 为基线，`1.0.0` 进入稳定化规划。
+当前版本：`1.0.0` Stable Lifecycle Contract 发布候选收口中；`2.0.0` Architecture Guardian Phase 1 保持开发预览。
 
 ## In Progress
 
@@ -14,10 +14,13 @@
 
 - [x] 统一用户可见 Agent Skill 身份为 `skill-engineering`，移除 `skill-guide` 顶层暴露并增加隔离安装/创建/Doctor 回归。
 - [x] 将普通用户安装入口统一为标准 `npx skills add` / `npm exec`，并把 clone/fork 限定为源码学习与二次开发路径。
-- [ ] 冻结 CLI/API/JSON/contract schema 与兼容策略。
-- [ ] 完成 wheel、安装 smoke、Python 支持矩阵和迁移文档。
-- [ ] 固定 release evidence、独立评审、回滚和废弃周期。
-- [ ] 固定 MIT 版权范围、第三方材料和用户生成内容边界，并在 README 提供 CLI/Agent Skill 双轨安装矩阵。
+- [x] 冻结 CLI/API/JSON/contract schema 与兼容策略。
+- [x] 完成 wheel 门禁、Python 支持矩阵和迁移/回滚文档；远程默认分支安装 smoke 待首次 push 后执行。
+- [x] 固定 release evidence、独立评审入口、回滚和废弃周期。
+- [x] 在同一 1.0.0 候选上完成四个 Use Case 和全量质量门禁（128 pytest、Ruff、Skill validation、Doctor 100/A、credential lint、diff、wheel 和干净环境 smoke）。
+- [ ] 推送默认分支并通过远程标准安装 smoke。
+- [ ] 获得 `v1.0.0` tag 与 GitHub Release 的单独授权。
+- [x] 固定 MIT 版权范围、第三方材料和用户生成内容边界，并在 README 提供 CLI/Agent Skill 双轨安装矩阵。
 
 - [x] 对比 NVIDIA SkillSpector，并固定可复核的上游 commit 与采用矩阵。
 - [x] Doctor 增加 Python AST 动态执行、不安全 shell 和外部输入到执行 sink 检查。
