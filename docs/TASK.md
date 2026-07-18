@@ -19,7 +19,7 @@
 - [x] 固定 release evidence、独立评审入口、回滚和废弃周期。
 - [x] 在同一 1.0.0 候选上完成四个 Use Case 和全量质量门禁（128 pytest、Ruff、Skill validation、Doctor 100/A、credential lint、diff、wheel 和干净环境 smoke）。
 - [x] 推送默认分支并通过远程标准安装 smoke；只发现并安装 `skill-engineering`，安装副本 Skill validation 与 production Doctor 通过。
-- [ ] 补齐 Agent Skill-only 干净环境的 Python runtime 依赖检测/bootstrap，并完成 create → apply → doctor 复验；这是 1.0 正式发布阻断。
+- [x] 补齐 Agent Skill-only 干净环境的 Python runtime 依赖检测，并从远程同一候选完成 create preview → apply → doctor 复验。
 - [ ] 获得 `v1.0.0` tag 与 GitHub Release 的单独授权。
 - [x] 在 v1.0 tag 前迁移到 Apache-2.0，版权人为“艾笑”；补齐 NOTICE、citation、品牌边界，并在 README 提供 CLI/Agent Skill 双轨安装矩阵。
 

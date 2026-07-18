@@ -1,6 +1,6 @@
 # Skill Engineering 标准安装体验实施计划
 
-状态：Installer entry completed；Agent Skill-only runtime/bootstrap 验收待完成
+状态：Completed；正式 tag 与 GitHub Release 待独立授权
 
 对应 Spec：`docs/specs/2026-07-16-standard-skill-install-spec.md`
 
@@ -26,4 +26,4 @@
 - 远程 `main` 安装只发现并安装唯一的 `skill-engineering`；
 - 验收证据归档在 `docs/testing/2026-07-18-v1-use-cases.md` 和 `docs/testing/2026-07-16-standard-skill-install.md`；
 - `v1.0.0` tag、GitHub Release、Global/Profile 变更不属于本计划的自动完成动作；
-- Agent Skill-only 环境下 Python runtime 的依赖检测或 bootstrap 另立 Spec/Plan，并作为正式发布前的未完成验收项；完成后回填本计划、Spec 和安装证据。
+- Agent Skill-only runtime 依赖检测已通过独立 Spec/Plan 完成：缺 CLI 时给出确定性安装指引，同一远程候选安装 CLI 后 create preview/apply 与 Doctor 闭环通过。

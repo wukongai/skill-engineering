@@ -1,6 +1,6 @@
 # Skill Engineering 标准安装体验 Spec
 
-状态：Partially accepted in `1.0.0` RC；标准安装器入口通过，Agent Skill-only runtime 验收未通过并保留为发布阻断
+状态：Accepted in `1.0.0` RC；标准安装器与 Agent Skill-only runtime 指引均通过
 
 日期：2026-07-16
 
@@ -62,10 +62,10 @@ git clone https://github.com/wukongai/skill-engineering.git
 
 ## 验收结论（2026-07-18）
 
-- 远程默认分支 `main` 与 `1.0.0` 候选提交 `df6d106` 一致；
+- 远程默认分支 `main` 已更新到包含 runtime 依赖检测的 `1.0.0` 候选提交 `086457c`；
 - 标准远程命令在一次性 HOME 中完成安装，输出 `Found 1 skill`、`Selected 1 skill: skill-engineering` 和 `Installation complete`；
 - 安装目标只包含 `skill-engineering`，没有重新暴露 `skill-guide`；
 - README、安装指南和安装治理 reference 均以 `npx skills add` / `npm exec` 作为普通用户入口，clone/fork 仅保留在源码学习与二次开发路径；
-- 安装器发现、canonical identity、文档拆分和远程默认分支 smoke 已完成；`v1.0.0` tag、GitHub Release 和真实 Global/Profile 变更仍需分别授权。
-
-验收标准 4 尚未整体验收：Agent Skill 与 Python CLI 是两个独立交付面，只安装 Agent Skill 不会安装 Python 包；随 Skill 分发的 `doctor_skill.py` 在干净环境中会因缺少 `skill_engineering` 模块而失败。runtime 自检/bootstrap 必须通过独立 Spec/Plan 补齐，并在正式发布前回到本 Spec 完成最终验收；在此之前不得宣称 Agent Skill-only 环境已完成 create → apply → doctor 闭环。
+- Skill-only 环境运行随包 wrapper 时会明确说明 Python CLI 尚未安装、给出固定版本安装命令并以非零状态停止，不再输出 traceback 或误报成功；
+- 从同一远程提交安装 Python CLI 后，create preview → 同一 plan apply → team Doctor 完整通过；
+- 安装器发现、canonical identity、文档拆分、runtime 依赖检测和远程默认分支闭环已完成；`v1.0.0` tag、GitHub Release 和真实 Global/Profile 变更仍需分别授权。

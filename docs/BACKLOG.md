@@ -10,10 +10,10 @@ Blueprint/IR 与 Architecture Guardian 已经从 Backlog 升级到当前 `v2.0 P
 - 2.0 Phase 1 尚未完成的 fixture、只读 inventory 和 evidence 收口属于当前 Sprint，已记录在 [`v2 Phase 1 Handoff`](handoffs/2026-07-16-v2-phase1-next.md)，不重复塞入 Backlog。
 - tag、公开发布、1.0 稳定契约和更远期架构扩展仍保留各自的发布门禁或下方候选，不视为本次 review 已完成。
 - 版权与安装边界已升级为 v1.0 发布前置项，事实源为 `docs/guides/licensing-and-installation.md`、2026-07-18 Apache-2.0 Spec/Plan 和 ADR 0006；不在 Backlog 重复拆分。
+- Agent Skill-only runtime 依赖检测已通过独立 Spec/Plan 和远程闭环完成，不再作为 Backlog 候选。
 
 ## P0：Public Beta 后立即评估
 
-- Agent Skill-only 安装后的 runtime 自检与 bootstrap：明确 `doctor_skill.py` 在未安装 Python CLI 时的行为，选择自包含实现、依赖检测与友好提示或双轨一键安装；进入实现前另建 Spec/Plan，不重新打开已完成的标准安装文档任务；
 - 创建成功记录、历史和安全撤销；
 - v2.0 之后的跨版本 Blueprint schema migration；
 - v2.0 之后的多仓库架构适应度和语义 Diff 扩展；
