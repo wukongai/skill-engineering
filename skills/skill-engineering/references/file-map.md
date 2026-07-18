@@ -59,5 +59,5 @@ flowchart TD
 | `stages/review/INSTRUCTIONS.md` | 内部 workflow step:审核一次 skill 变更。 | 接受修复或 PR 前读。 |
 | `stages/evaluate/INSTRUCTIONS.md` | 内部 workflow step:区分静态 readiness 与真实 utility。 | 评测、打分或比较 skill 时读。 |
 | `stages/evolve/INSTRUCTIONS.md` | 内部 workflow step:自动形成候选并推进到 Shadow/Release Plan。 | 自进化或周期性优化 Skill 时读。 |
-| `scripts/doctor_skill.py` | 对仓库 Doctor v2 的薄包装。 | 需要从 skill 内直接跑单 skill 体检时用。 |
+| `scripts/doctor_skill.py` | 对 Python CLI Doctor 的薄包装；缺少 CLI 时停止并给出安装指引。 | 需要从 skill 内直接跑单 skill 体检时用。 |
 | `scripts/render_report.py` | 把 JSON doctor 报告渲染成 Markdown。 | 需要分享审计报告时用。 |
