@@ -49,6 +49,6 @@ npx --yes skills add /Users/aim5/Documents/CodingProject/skill-engineering \
 - 在一次性 HOME 和 npm cache 中执行 `npx --yes skills add wukongai/skill-engineering --skill skill-engineering -g -a codex -y`；
 - 安装器输出 `Repository cloned`、`Found 1 skill`、`Selected 1 skill: skill-engineering`、`Installation complete`；
 - 安装目录仅为一次性 HOME 下的 `~/.agents/skills/skill-engineering`，真实用户全局目录未修改；
-- 远程默认分支安装门禁通过。`v1.0.0` tag 与 GitHub Release 尚未创建，继续作为独立授权点。
+- 远程默认分支安装门禁通过。后续 `v1.0.0` tag 与 GitHub Release 已单独授权并正式发布。
 
-边界说明：标准安装器只安装 Agent Skill，不会同时安装 Python CLI。安装副本的结构验证和 production Doctor 由已经安装并验证过的 `1.0.0` CLI 执行；Agent Skill-only 环境中随包脚本的依赖检测或 bootstrap 尚未完成，是正式发布前需要回填本 Spec 的阻断项。
+边界说明：标准安装器只安装 Agent Skill，不会同时安装 Python CLI。Agent Skill-only 环境的依赖检测已在后续独立 Spec/Plan 中完成：缺 CLI 时给出固定版本安装指引，安装同版 CLI 后 create → apply → doctor 闭环通过。

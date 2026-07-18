@@ -2,6 +2,8 @@
 
 > Current stable release: `1.0.0` · next development: `2.0.0` Architecture Guardian · local-first · provider-neutral · Apache-2.0
 
+Official release: [Skill Engineering v1.0.0 — Stable Lifecycle Contract](https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0).
+
 Skill Engineering helps users rapidly create Agent Skills that are engineered from the first version, then keeps them clear, testable, safe, and extensible through every later change.
 
 It provides one conversational entry, **Skill Engineering**, for creating, auditing, evaluating, improving, evolving, and safely releasing Skills for Codex, Claude Code, and compatible agents.
@@ -53,7 +55,7 @@ For the version strategy, feature inventory, release history, and active 2.0 wor
 |---|---|---|
 | `0.1.0` | Released baseline | Local create, Doctor, evaluate, improve, evolve, and release governance |
 | `0.1.1` | Folded into 1.0 | AST security checks, source-to-sink analysis, and SARIF |
-| `1.0.0` | Release candidate | Stable identity, CLI/JSON/contract, packaging, migration, and release evidence |
+| `1.0.0` | Stable | Stable identity, CLI/JSON/contract, packaging, migration, and release evidence |
 | `2.0.0` | In development | Blueprint/IR, Architecture Guardian, semantic diff, and migration plans |
 
 The standalone, detailed release plan and exit gates live in [docs/ROADMAP.md](docs/ROADMAP.md). The first 2.0 slice—Blueprint schema, data models, deterministic fingerprinting, unknown/legacy preservation, and sensitive-value checks—is implemented; real Skill inventory and guardian checks remain in progress.
@@ -80,7 +82,7 @@ Skill Engineering 有两个独立交付物：Python CLI 和 Agent Skill。安装
 |---|---|
 | 贡献或修改仓库代码 | `python3 -m pip install -e ".[dev]"` |
 | 试用 Agent Skill | `npx skills add ... --skill skill-engineering`；去掉 `-g` 为当前项目 |
-| 使用稳定 CLI（正式 `v1.0.0` tag 后） | 从 GitHub 固定版本安装：`uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"` |
+| 使用稳定 CLI | 从 GitHub 固定版本安装：`uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"` |
 | 多项目/全局暴露 | `npx skills add ... -g`；组织化 Profile/台账再交给 Agent Skill Hub |
 
 `1.0.0` 的 GitHub 源码、Agent Skill 和 Python wheel 使用同一版本事实源。固定 tag 的 CLI 安装命令用于稳定版本；本项目没有宣称已发布 PyPI 包。2.0 Blueprint/Architecture Guardian 仍是 Preview，不属于 1.0 稳定契约。
@@ -176,7 +178,7 @@ bash scripts/credential-lint.sh --all
 The full lifecycle evidence is documented in
 [`docs/testing/2026-07-11-real-e2e.md`](docs/testing/2026-07-11-real-e2e.md). The latest interaction and handoff evidence is documented in
 [`docs/testing/2026-07-12-interaction-e2e.md`](docs/testing/2026-07-12-interaction-e2e.md).
-The four public 1.0 user journeys and their release-candidate rerun are indexed in
+The four public 1.0 user journeys and their stable-release rerun are indexed in
 [`docs/testing/2026-07-18-v1-use-cases.md`](docs/testing/2026-07-18-v1-use-cases.md).
 
 ## License and copyright

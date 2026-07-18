@@ -8,7 +8,7 @@ Blueprint/IR 与 Architecture Guardian 已经从 Backlog 升级到当前 `v2.0 P
 
 - NVIDIA/SkillSpector 对比、AST/source-to-sink/SARIF 吸收和 0.1.1 验证已完成，不再作为 Backlog 候选。
 - 2.0 Phase 1 尚未完成的 fixture、只读 inventory 和 evidence 收口属于当前 Sprint，已记录在 [`v2 Phase 1 Handoff`](handoffs/2026-07-16-v2-phase1-next.md)，不重复塞入 Backlog。
-- tag、公开发布、1.0 稳定契约和更远期架构扩展仍保留各自的发布门禁或下方候选，不视为本次 review 已完成。
+- `v1.0.0` tag、公开发布和稳定契约已于 2026-07-18 完成；更远期架构扩展继续遵守各自 Sprint 与发布门禁。
 - 版权与安装边界已升级为 v1.0 发布前置项，事实源为 `docs/guides/licensing-and-installation.md`、2026-07-18 Apache-2.0 Spec/Plan 和 ADR 0006；不在 Backlog 重复拆分。
 - Agent Skill-only runtime 依赖检测已通过独立 Spec/Plan 和远程闭环完成，不再作为 Backlog 候选。
 

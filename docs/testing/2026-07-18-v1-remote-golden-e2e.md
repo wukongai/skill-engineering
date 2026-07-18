@@ -2,7 +2,7 @@
 
 日期：2026-07-18
 
-状态：Passed；已获得 `v1.0.0` tag 与 GitHub Release 独立授权
+状态：Passed；`v1.0.0` tag 与 GitHub Release 已正式发布
 
 ## 对外可展示结论
 
@@ -48,10 +48,10 @@ npx skills add wukongai/skill-engineering --skill skill-engineering -a codex -y
 
 ## 同一远程候选的确定性闭环
 
-RC 复验使用提交而不是尚未授权创建的 tag：
+正式发布前的 RC 复验使用提交；发布后用户可固定使用 tag：
 
 ```bash
-uv tool install "git+https://github.com/wukongai/skill-engineering.git@086457c"
+uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"
 ```
 
 安装器记录 `skill-engineering==1.0.0`。随后：
@@ -73,4 +73,4 @@ uv tool install "git+https://github.com/wukongai/skill-engineering.git@086457c"
 
 ## 最终边界
 
-本报告证明远程安装、真实用户创建/维护行为、runtime 依赖指引和确定性创建/Doctor 闭环均可工作。它不宣称静态 100/A 等于跨模型业务效用，也没有执行真实 Global/Profile 安装。用户已单独授权 `v1.0.0` tag 和 GitHub Release。
+本报告证明远程安装、真实用户创建/维护行为、runtime 依赖指引和确定性创建/Doctor 闭环均可工作。它不宣称静态 100/A 等于跨模型业务效用，也没有执行真实 Global/Profile 安装。`v1.0.0` tag 与 GitHub Release 已正式发布。

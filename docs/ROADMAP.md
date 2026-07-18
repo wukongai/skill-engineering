@@ -69,7 +69,7 @@
 - pytest、Ruff、Skill validation、production Doctor、credential lint、diff check 全通过；
 - commit、push、tag 和公开发布分别获得授权。
 
-当前 RC 事实源：[`v1.0 Sprint`](sprints/2026-07-v1.0-stable-contract.md)、[`1.x 公开契约`](references/v1-public-contract.md)、[`兼容与回滚`](guides/v1-compatibility.md)、[`四个 Use Case`](testing/2026-07-18-v1-use-cases.md)。
+当前 Stable 事实源：[`v1.0 Sprint`](sprints/2026-07-v1.0-stable-contract.md)、[`1.x 公开契约`](references/v1-public-contract.md)、[`兼容与回滚`](guides/v1-compatibility.md)、[`四个 Use Case`](testing/2026-07-18-v1-use-cases.md)和 [GitHub Release v1.0.0](https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0)。
 
 ### 不进入 1.0
 

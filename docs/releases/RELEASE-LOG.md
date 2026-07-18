@@ -9,11 +9,11 @@
 | `1.0.0` | Stable | Stable Lifecycle Contract | 本地与远程 runtime 门禁通过；正式发布 |
 | `2.0.0` | In Development | Architecture Guardian | 当前开发主线 |
 
-## Unreleased 文档治理
+## 1.0 发布治理记录
 
 2026-07-16：首次明确 MIT 版权范围、第三方/用户内容/商标边界和 CLI/Agent Skill 双轨安装指南。
 
-2026-07-18：在首个稳定 tag 前，经 ADR 0006 将当前仓库和 v1.0 候选迁移为 Apache-2.0，版权人为“艾笑”；新增 `NOTICE`、`CITATION.cff` 和品牌使用说明。历史 MIT 副本继续按其取得时的条款使用。该治理不等于 1.0 已正式发布，tag 和 GitHub Release 仍是独立门禁。
+2026-07-18：在首个稳定 tag 前，经 ADR 0006 将当前仓库和 v1.0 候选迁移为 Apache-2.0，版权人为“艾笑”；新增 `NOTICE`、`CITATION.cff` 和品牌使用说明。历史 MIT 副本继续按其取得时的条款使用。许可证治理完成后，tag 与 GitHub Release 又分别获得明确授权并于同日正式发布。
 
 ## `0.1.0` — Public Beta
 
@@ -72,7 +72,7 @@ pytest、Ruff、production Doctor、凭证 lint、diff check、隔离 E2E 均通
 
 对应工件：[`1.0 Spec`](../specs/2026-07-16-v1.0-stable-contract-spec.md)、[`1.0 Plan`](../plans/2026-07-16-v1.0-stable-contract-plan.md)。
 
-### RC 实施状态
+### 正式发布状态
 
 - 唯一身份和远程安装命令已冻结；
 - 1.x 公开契约、0.1.x schema 兼容和升级/回滚指南已完成；
@@ -81,7 +81,9 @@ pytest、Ruff、production Doctor、凭证 lint、diff check、隔离 E2E 均通
 - 默认分支已推送，标准安装器只发现并安装一个 `skill-engineering`；Skill-only 环境缺少 CLI 时给出确定性安装指引，同一远程候选安装 CLI 后 create preview/apply 与 team Doctor 完整通过；
 - 发布候选许可证在正式 tag 前迁移为 Apache-2.0；许可证资产、包元数据、用户文档和发布材料已对齐，131 项测试、完整门禁、wheel/sdist 核验与 PM 独立复核通过；
 - runtime 修复后全量门禁为 133 passed，Ruff、官方 Skill validation、production Doctor 100/A、credential lint 和 diff check 通过；
-- 用户已单独批准 `v1.0.0` tag 和 GitHub Release；本发布提交是 tag 与 Release 的唯一目标。
+- 用户已单独批准 `v1.0.0` tag 和 GitHub Release；annotated tag 已指向发布提交 `c841c59`。
+- GitHub Release 已正式发布并设为 Latest：<https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0>。
+- 发布附件已上传：`skill_engineering-1.0.0-py3-none-any.whl`、`skill_engineering-1.0.0.tar.gz`。
 
 ## `2.0.0` — Architecture Guardian（当前开发）
 

@@ -16,7 +16,7 @@
 ## 风险与恢复
 
 - 错把 CLI 内部依赖损坏当成“未安装”：只处理 `ModuleNotFoundError.name == "skill_engineering"`。
-- 指引依赖尚未创建的 tag：正式文案固定 `v1.0.0`，RC 回归使用同一候选 commit 安装；tag 仍是独立授权点。
+- 指引在发布前依赖尚未创建的 tag：正式文案固定 `v1.0.0`，RC 回归先使用同一候选 commit；后续 tag 已单独授权并创建。
 - wrapper 与 CLI 行为漂移：wrapper 不实现 Doctor 规则，只负责导入、参数转发和依赖提示。
 - 用户不使用 `uv`：本版本以 README 的稳定 CLI 推荐入口为唯一指引；其他包管理器继续在安装指南说明。
 
@@ -25,4 +25,4 @@
 - wrapper 仅捕获顶层 `skill_engineering` 缺失，返回退出码 2 和双轨安装指引；
 - 隔离 `python -I` 回归确认 Skill-only 环境不输出 traceback；仓库环境 wrapper 兼容回归通过；
 - 远程 `main` 提交 `086457c` 已完成标准安装、Skill-only 指引、固定候选 CLI 安装、create preview/apply 和 team Doctor；
-- 正式 `v1.0.0` tag 与 GitHub Release 仍保留为独立授权点。
+- 正式 `v1.0.0` tag 与 GitHub Release 后续已单独授权并发布；本 runtime 任务不再构成发布阻断。

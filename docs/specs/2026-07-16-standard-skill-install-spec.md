@@ -1,6 +1,6 @@
 # Skill Engineering 标准安装体验 Spec
 
-状态：Accepted in `1.0.0` RC；标准安装器与 Agent Skill-only runtime 指引均通过
+状态：Accepted in `1.0.0` Stable；标准安装器与 Agent Skill-only runtime 指引均通过
 
 日期：2026-07-16
 
@@ -68,4 +68,4 @@ git clone https://github.com/wukongai/skill-engineering.git
 - README、安装指南和安装治理 reference 均以 `npx skills add` / `npm exec` 作为普通用户入口，clone/fork 仅保留在源码学习与二次开发路径；
 - Skill-only 环境运行随包 wrapper 时会明确说明 Python CLI 尚未安装、给出固定版本安装命令并以非零状态停止，不再输出 traceback 或误报成功；
 - 从同一远程提交安装 Python CLI 后，create preview → 同一 plan apply → team Doctor 完整通过；
-- 安装器发现、canonical identity、文档拆分、runtime 依赖检测和远程默认分支闭环已完成；`v1.0.0` tag、GitHub Release 和真实 Global/Profile 变更仍需分别授权。
+- 安装器发现、canonical identity、文档拆分、runtime 依赖检测和远程默认分支闭环已完成；`v1.0.0` tag 与 GitHub Release 后续已单独授权并正式发布，真实 Global/Profile 变更仍不在本 Spec 范围。

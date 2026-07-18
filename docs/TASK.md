@@ -10,7 +10,7 @@
 - [x] 完成 Blueprint schema、migration、rollback 和敏感信息基础门禁回归。
 - [ ] 补齐真实 Skill inventory 的 schema/迁移/rollback evidence，并保持不接入 apply。
 
-## v1.0 Stable Contract Planned
+## v1.0 Stable Contract Released
 
 - [x] 统一用户可见 Agent Skill 身份为 `skill-engineering`，移除 `skill-guide` 顶层暴露并增加隔离安装/创建/Doctor 回归。
 - [x] 将普通用户安装入口统一为标准 `npx skills add` / `npm exec`，并把 clone/fork 限定为源码学习与二次开发路径。
@@ -21,6 +21,7 @@
 - [x] 推送默认分支并通过远程标准安装 smoke；只发现并安装 `skill-engineering`，安装副本 Skill validation 与 production Doctor 通过。
 - [x] 补齐 Agent Skill-only 干净环境的 Python runtime 依赖检测，并从远程同一候选完成 create preview → apply → doctor 复验。
 - [x] 获得 `v1.0.0` tag 与 GitHub Release 的单独授权；发布提交作为正式 tag 目标。
+- [x] `v1.0.0` annotated tag 已指向发布提交 `c841c59`，GitHub Release 已正式发布并设为 Latest：<https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0>。
 - [x] 在 v1.0 tag 前迁移到 Apache-2.0，版权人为“艾笑”；补齐 NOTICE、citation、品牌边界，并在 README 提供 CLI/Agent Skill 双轨安装矩阵。
 
 ## Apache-2.0 与安装策略收口（2026-07-18）
@@ -43,14 +44,14 @@
 - [x] 完成对比证据、README、Roadmap、功能矩阵、发布日志和测试记录的同步。
 - [x] 完成全量验证：pytest 116 passed、Ruff、官方 Skill validation、production Doctor 100/A、credential lint、diff check 和文档/schema 检查。
 - [x] 变更已提交为 `c58d389`，推送到 `codex/version-roadmap`，并建立 Draft PR #2。
-- [ ] tag、公开发布和从 Draft PR 转为正式发布（保留为独立发布门禁，不在本次 review 自动执行）。
+- [x] `0.1.1` 不单独 tag/release；相关能力已并入并随 `v1.0.0` 正式发布。历史 Draft PR 不作为 1.0 发布入口。
 
 ## OB Task 对齐：SkillSpector Review 与 2.0 启动
 
 > 本节是可直接同步到 Obsidian/OB 的任务摘要；项目仓库的正式事实源仍是本文件、当前 Sprint 和 Handoff。
 
 - **任务名称**：Skill Engineering：对比 NVIDIA SkillSpector，吸收安全能力并启动 2.0 Architecture Guardian。
-- **任务状态**：SkillSpector review 已完成；2.0 Phase 1 开发中。
+- **任务状态**：SkillSpector review 与 `v1.0.0` 正式发布均已完成；2.0 Phase 1 开发中。
 - **版本范围**：`0.1.1` Security Doctor 收口、`1.0.0` 稳定化规划、`2.0.0` Architecture Guardian Phase 1。
 - **任务目标**：在不破坏现有 CLI、JSON、contract 和发布边界的前提下，引入 AST 行为检查、局部 source-to-sink 风险关联、SARIF 输出，并建立可继续开发的 Blueprint/IR 架构事实层。
 - **已完成交付**：
@@ -66,7 +67,7 @@
   - 补齐真实 inventory 的 schema、migration、rollback、敏感信息和 0.1.x 回归 evidence；
   - 不接入 apply，不创建 tag，不进行公开发布或 Global enable。
 - **验收依据**：[`SkillSpector 测试证据`](testing/2026-07-15-skillspector-security-doctor.md)、[`v2 Phase 1 Handoff`](handoffs/2026-07-16-v2-phase1-next.md)、[`当前 Sprint`](sprints/2026-07-v2.0-architecture-guardian.md)。
-- **OB 后续动作**：下一次从 fixture 开始；完成后同步更新本 Task、Sprint、Daily Log、测试 evidence 和 Handoff，再讨论 1.0 push/release。
+- **OB 后续动作**：1.0 发布任务关闭；下一次只从 2.0 fixture 开始，完成后同步更新本 Task、Sprint、Daily Log、测试 evidence 和 Handoff。
 
 ## v0.1.x Done / Baseline
 
@@ -101,7 +102,7 @@
 - [x] pytest 116 passed。
 - [x] Ruff、官方 Skill validation、production Doctor 100/A、凭证 lint、diff check 通过。
 - [x] commit、push 已完成：`c58d389` / `codex/version-roadmap` / Draft PR #2。
-- [ ] 用户确认 tag 或公开发布（不自动执行）。
+- [x] `0.1.1` 不单独发布；能力已随用户单独授权的 `v1.0.0` tag 和 GitHub Release 正式交付。
 
 ## Done
 
