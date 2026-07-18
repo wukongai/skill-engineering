@@ -16,12 +16,13 @@
 - 后续候选：[`BACKLOG.md`](BACKLOG.md)
 - 当前 Sprint：[`sprints/2026-07-v2.0-architecture-guardian.md`](sprints/2026-07-v2.0-architecture-guardian.md)
 - 当前 Handoff：[`handoffs/2026-07-16-v2-phase1-next.md`](handoffs/2026-07-16-v2-phase1-next.md)
+- Apache-2.0 收口证据：[`testing/2026-07-18-apache-2.0-license-closeout.md`](testing/2026-07-18-apache-2.0-license-closeout.md)
 - V0.1 Spec：[`specs/2026-07-13-v0.1-public-beta-spec.md`](specs/2026-07-13-v0.1-public-beta-spec.md)
 - V0.1 Plan：[`plans/2026-07-13-v0.1-public-beta-plan.md`](plans/2026-07-13-v0.1-public-beta-plan.md)
 - V1.0 Spec/Plan：[`specs/2026-07-16-v1.0-stable-contract-spec.md`](specs/2026-07-16-v1.0-stable-contract-spec.md) / [`plans/2026-07-16-v1.0-stable-contract-plan.md`](plans/2026-07-16-v1.0-stable-contract-plan.md)
 - V2.0 Spec/Plan：[`specs/2026-07-16-v2.0-architecture-guardian-spec.md`](specs/2026-07-16-v2.0-architecture-guardian-spec.md) / [`plans/2026-07-16-v2.0-architecture-guardian-plan.md`](plans/2026-07-16-v2.0-architecture-guardian-plan.md)
-- 版权与安装 Spec/Plan：[`specs/2026-07-16-licensing-installation-policy-spec.md`](specs/2026-07-16-licensing-installation-policy-spec.md) / [`plans/2026-07-16-licensing-installation-policy-plan.md`](plans/2026-07-16-licensing-installation-policy-plan.md)
-- 版权与安装决策：[`adr/0005-mit-license-and-installation-boundaries.md`](adr/0005-mit-license-and-installation-boundaries.md)（安装器入口见 [`adr/0004-standard-skill-cli-install.md`](adr/0004-standard-skill-cli-install.md)）
+- Apache-2.0 与署名 Spec/Plan：[`specs/2026-07-18-apache-2.0-attribution-spec.md`](specs/2026-07-18-apache-2.0-attribution-spec.md) / [`plans/2026-07-18-apache-2.0-attribution-plan.md`](plans/2026-07-18-apache-2.0-attribution-plan.md)
+- 当前许可证决策：[`adr/0006-apache-2.0-attribution-and-brand-boundary.md`](adr/0006-apache-2.0-attribution-and-brand-boundary.md)（取代历史 ADR 0005；安装器入口见 [`adr/0004-standard-skill-cli-install.md`](adr/0004-standard-skill-cli-install.md)）
 
 ## 长期记录
 

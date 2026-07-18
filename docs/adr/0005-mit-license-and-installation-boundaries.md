@@ -1,6 +1,6 @@
 # ADR 0005：保持 MIT 并区分 CLI 与 Agent Skill 安装边界
 
-- 状态：Accepted for v1.0 planning
+- 状态：Superseded by ADR 0006（2026-07-18）
 - 日期：2026-07-16
 - 关联：`docs/specs/2026-07-16-licensing-installation-policy-spec.md`
 - 安装入口关联：`docs/adr/0004-standard-skill-cli-install.md`

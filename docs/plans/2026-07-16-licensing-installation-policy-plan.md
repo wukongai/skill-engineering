@@ -1,6 +1,6 @@
 # Skill Engineering 版权与安装政策实施计划
 
-状态：Planned，引用 Spec：`docs/specs/2026-07-16-licensing-installation-policy-spec.md`
+状态：Superseded by `docs/plans/2026-07-18-apache-2.0-attribution-plan.md`；保留为 MIT 阶段的历史实施记录
 
 ## 阶段
 

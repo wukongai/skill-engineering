@@ -34,6 +34,8 @@ Skill Engineering 使用语义化版本 `MAJOR.MINOR.PATCH`：
 6. README 的安装、能力和限制描述。
 7. `LICENSE`、版权与安装指南以及许可证/安装范围的营销表述。
 
+`1.0.0` 在正式 tag 前通过 ADR 0006 将发布候选从 MIT 迁移为 Apache-2.0。迁移前合法获得的 MIT 副本不受追溯性改写；当前仓库和 v1.0 发布物以 Apache-2.0 为准。
+
 ## 发布阶段
 
 ```text

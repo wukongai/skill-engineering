@@ -12,7 +12,7 @@
 
 - `2.0.0` 进入 Architecture Guardian Phase 1，先实现 Blueprint/IR 契约与只读 inventory。
 
-## 1.0.0 - 2026-07-18
+## 1.0.0 - Unreleased (Release Candidate)
 
 ### Added
 
@@ -21,13 +21,14 @@
 - 1.x 公开契约、0.1.x schema 兼容策略、升级/回滚指南和版本一致性自动门禁。
 - Python 3.10、3.12、3.14 CI 支持矩阵，以及 wheel 和干净环境安装验证。
 - 会议纪要、GitHub Issue、Web 应用验收和研究证据包四个用户旅程的发布证据索引。
+- Apache-2.0 `NOTICE`、GitHub `CITATION.cff` 与独立品牌使用边界。
 
 ### Changed
 
 - 唯一用户可见 Agent Skill 身份统一为 `skill-engineering`，移除 `skill-guide` 顶层暴露。
 - 普通用户安装入口统一为 `npx skills add` / `npm exec`；clone/fork 只用于源码学习、二次开发和贡献。
 - 冻结 create/improve/release 的 Preview → 同一未漂移计划 → 明确批准 → Apply 边界。
-- 明确 MIT 对原创代码、Agent Skill、references、schemas、tests、examples 和文档的覆盖范围，并区分第三方材料、用户生成内容与商标边界。
+- 在首个稳定 tag 前从 MIT 候选迁移为 Apache-2.0：保留商业友好与可自托管方向，增加显式专利授权、修改声明和 NOTICE 来源追溯，并区分第三方材料、用户生成内容与品牌边界。
 
 ### Compatibility
 

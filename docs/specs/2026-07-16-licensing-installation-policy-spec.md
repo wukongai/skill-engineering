@@ -1,6 +1,6 @@
 # Skill Engineering 版权与安装政策 Spec
 
-状态：Planned，作为 v1.0 Stable Lifecycle Contract 的发布前置项
+状态：Superseded by `docs/specs/2026-07-18-apache-2.0-attribution-spec.md`；保留为 MIT 阶段的历史决策记录
 
 ## 背景
 

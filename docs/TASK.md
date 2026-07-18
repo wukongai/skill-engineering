@@ -21,7 +21,14 @@
 - [x] 推送默认分支并通过远程标准安装 smoke；只发现并安装 `skill-engineering`，安装副本 Skill validation 与 production Doctor 通过。
 - [ ] 补齐 Agent Skill-only 干净环境的 Python runtime 依赖检测/bootstrap，并完成 create → apply → doctor 复验；这是 1.0 正式发布阻断。
 - [ ] 获得 `v1.0.0` tag 与 GitHub Release 的单独授权。
-- [x] 固定 MIT 版权范围、第三方材料和用户生成内容边界，并在 README 提供 CLI/Agent Skill 双轨安装矩阵。
+- [x] 在 v1.0 tag 前迁移到 Apache-2.0，版权人为“艾笑”；补齐 NOTICE、citation、品牌边界，并在 README 提供 CLI/Agent Skill 双轨安装矩阵。
+
+## Apache-2.0 与安装策略收口（2026-07-18）
+
+- [x] 通过 Spec、Plan 和 ADR 0006 固定 Apache-2.0、署名追溯、用户内容与品牌边界。
+- [x] 对齐 `LICENSE`、`NOTICE`、`CITATION.cff`、`TRADEMARKS.md` 与 Python 包元数据。
+- [x] 对齐 README、PRODUCT、CONTRIBUTING、版权安装指南、VERSIONING、CHANGELOG、Sprint 和发布证据。
+- [x] 全量门禁、PM 独立复核和 OB task 同步完成；本 Apache-2.0 与安装策略窗口已关闭。
 
 - [x] 对比 NVIDIA SkillSpector，并固定可复核的上游 commit 与采用矩阵。
 - [x] Doctor 增加 Python AST 动态执行、不安全 shell 和外部输入到执行 sink 检查。

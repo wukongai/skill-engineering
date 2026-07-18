@@ -1,6 +1,6 @@
 # Skill Engineering
 
-> Current stable candidate: `1.0.0` · next development: `2.0.0` Architecture Guardian · local-first · provider-neutral · MIT
+> Current stable candidate: `1.0.0` · next development: `2.0.0` Architecture Guardian · local-first · provider-neutral · Apache-2.0
 
 Skill Engineering helps users rapidly create Agent Skills that are engineered from the first version, then keeps them clear, testable, safe, and extensible through every later change.
 
@@ -80,10 +80,10 @@ Skill Engineering 有两个独立交付物：Python CLI 和 Agent Skill。安装
 |---|---|
 | 贡献或修改仓库代码 | `python3 -m pip install -e ".[dev]"` |
 | 试用 Agent Skill | `npx skills add ... --skill skill-engineering`；去掉 `-g` 为当前项目 |
-| 使用稳定 CLI | 从 GitHub 固定版本安装：`uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"` |
+| 使用稳定 CLI（正式 `v1.0.0` tag 后） | 从 GitHub 固定版本安装：`uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"` |
 | 多项目/全局暴露 | `npx skills add ... -g`；组织化 Profile/台账再交给 Agent Skill Hub |
 
-`1.0.0` 的 GitHub 源码、Agent Skill 和 Python wheel 使用同一版本事实源。本项目当前没有宣称已发布 PyPI 包；2.0 Blueprint/Architecture Guardian 仍是 Preview，不属于 1.0 稳定契约。
+`1.0.0` 的 GitHub 源码、Agent Skill 和 Python wheel 使用同一版本事实源，但正式 tag 尚未创建，因此上面的固定 tag 命令当前还不可执行；RC 阶段的 CLI 只按开发路径从当前源码验证。本项目也没有宣称已发布 PyPI 包。2.0 Blueprint/Architecture Guardian 仍是 Preview，不属于 1.0 稳定契约。
 
 完整的版权范围、第三方材料、用户生成内容、升级、卸载和回滚边界见[版权与安装指南](docs/guides/licensing-and-installation.md)。
 
@@ -181,7 +181,7 @@ The four public 1.0 user journeys and their release-candidate rerun are indexed 
 
 ## License and copyright
 
-Original source code, Agent Skill instructions, references, schemas, tests, examples, and documentation are MIT (`SPDX-License-Identifier: MIT`) unless a file says otherwise. Third-party material keeps its original license; user prompts, private data, generated Skills, and runtime outputs are not claimed by this project. The `Skill Engineering` name and logo are not licensed as trademarks by MIT. See the [copyright and installation policy](docs/guides/licensing-and-installation.md) and the full [MIT License](LICENSE).
+Original source code, Agent Skill instructions, references, schemas, tests, examples, and documentation are licensed under Apache License 2.0 (`SPDX-License-Identifier: Apache-2.0`) unless a file says otherwise. Commercial use and redistribution are allowed; redistributors must follow the license's notice-retention and modified-file requirements. Third-party material keeps its original license, and user prompts, private data, generated Skills, and runtime outputs are not claimed by this project. See the [copyright and installation policy](docs/guides/licensing-and-installation.md), [NOTICE](NOTICE), [citation metadata](CITATION.cff), [brand policy](TRADEMARKS.md), and the full [Apache License 2.0](LICENSE).
 
 ## Contributing and security
 
