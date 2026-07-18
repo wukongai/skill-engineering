@@ -1,6 +1,6 @@
 # 当前任务
 
-当前版本：`1.0.0` Stable Lifecycle Contract 发布候选收口中；`2.0.0` Architecture Guardian Phase 1 保持开发预览。
+当前版本：`1.0.0` Stable Lifecycle Contract 正式发布；`2.0.0` Architecture Guardian Phase 1 保持开发预览。
 
 ## In Progress
 
@@ -17,10 +17,10 @@
 - [x] 冻结 CLI/API/JSON/contract schema 与兼容策略。
 - [x] 完成 wheel 门禁、Python 支持矩阵、迁移/回滚文档和远程默认分支安装 smoke。
 - [x] 固定 release evidence、独立评审入口、回滚和废弃周期。
-- [x] 在同一 1.0.0 候选上完成四个 Use Case 和全量质量门禁（128 pytest、Ruff、Skill validation、Doctor 100/A、credential lint、diff、wheel 和干净环境 smoke）。
+- [x] 在同一 1.0.0 候选上完成四个 Use Case 和全量质量门禁（133 pytest、Ruff、Skill validation、Doctor 100/A、credential lint、diff、wheel 和干净环境 smoke）。
 - [x] 推送默认分支并通过远程标准安装 smoke；只发现并安装 `skill-engineering`，安装副本 Skill validation 与 production Doctor 通过。
 - [x] 补齐 Agent Skill-only 干净环境的 Python runtime 依赖检测，并从远程同一候选完成 create preview → apply → doctor 复验。
-- [ ] 获得 `v1.0.0` tag 与 GitHub Release 的单独授权。
+- [x] 获得 `v1.0.0` tag 与 GitHub Release 的单独授权；发布提交作为正式 tag 目标。
 - [x] 在 v1.0 tag 前迁移到 Apache-2.0，版权人为“艾笑”；补齐 NOTICE、citation、品牌边界，并在 README 提供 CLI/Agent Skill 双轨安装矩阵。
 
 ## Apache-2.0 与安装策略收口（2026-07-18）

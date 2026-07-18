@@ -6,7 +6,7 @@
 |---|---|---|---|
 | `0.1.0` | Stable baseline | Public Beta 本地闭环 | 已发布基线 |
 | `0.1.1` | Folded into 1.0 | Security Doctor 强化 | 不单独发布 |
-| `1.0.0` | Release Candidate | Stable Lifecycle Contract | 本地与远程 runtime 门禁通过；等待 tag 与 GitHub Release 授权 |
+| `1.0.0` | Stable | Stable Lifecycle Contract | 本地与远程 runtime 门禁通过；正式发布 |
 | `2.0.0` | In Development | Architecture Guardian | 当前开发主线 |
 
 ## Unreleased 文档治理
@@ -49,7 +49,7 @@ pytest、Ruff、production Doctor、凭证 lint、diff check、隔离 E2E 均通
 
 实现、验证、commit 和 push 已完成：变更位于 `c58d389` / `codex/version-roadmap`，并已建立 Draft PR #2。该增量后来并入 `1.0.0` RC，不再创建单独的 `v0.1.1` tag。
 
-## `1.0.0` — Stable Lifecycle Contract（Release Candidate）
+## `1.0.0` — Stable Lifecycle Contract
 
 日期：2026-07-18
 
@@ -81,7 +81,7 @@ pytest、Ruff、production Doctor、凭证 lint、diff check、隔离 E2E 均通
 - 默认分支已推送，标准安装器只发现并安装一个 `skill-engineering`；Skill-only 环境缺少 CLI 时给出确定性安装指引，同一远程候选安装 CLI 后 create preview/apply 与 team Doctor 完整通过；
 - 发布候选许可证在正式 tag 前迁移为 Apache-2.0；许可证资产、包元数据、用户文档和发布材料已对齐，131 项测试、完整门禁、wheel/sdist 核验与 PM 独立复核通过；
 - runtime 修复后全量门禁为 133 passed，Ruff、官方 Skill validation、production Doctor 100/A、credential lint 和 diff check 通过；
-- tag 和 GitHub Release 尚未执行，等待用户单独批准。
+- 用户已单独批准 `v1.0.0` tag 和 GitHub Release；本发布提交是 tag 与 Release 的唯一目标。
 
 ## `2.0.0` — Architecture Guardian（当前开发）
 

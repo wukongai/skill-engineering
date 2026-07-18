@@ -12,7 +12,7 @@
 
 - `2.0.0` 进入 Architecture Guardian Phase 1，先实现 Blueprint/IR 契约与只读 inventory。
 
-## 1.0.0 - Unreleased (Release Candidate)
+## 1.0.0 - 2026-07-18
 
 ### Added
 
