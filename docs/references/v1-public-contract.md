@@ -6,7 +6,8 @@
 
 - 唯一用户可见 Agent Skill 名称：`skill-engineering`；
 - 唯一源码目录：`skills/skill-engineering/`；
-- 标准安装命令：`npx skills add wukongai/skill-engineering --skill skill-engineering`；
+- 普通用户标准安装命令：`npx skills add wukongai/skill-engineering`；
+- 1.x 继续兼容 `--skill`、`-g`、`-a` 和 `-y` 等定向或非交互参数，但不要求普通用户使用；
 - `skill-guide` 只作为历史名称存在，不是可安装、可发现或可触发入口。
 
 ## 稳定 CLI

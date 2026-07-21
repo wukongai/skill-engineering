@@ -1,6 +1,6 @@
 # ADR-0004：使用标准 `skills` CLI 作为普通用户安装入口
 
-状态：Accepted with release gate
+状态：Accepted；普通用户默认命令由 ADR-0007 细化为简约交互式入口
 
 日期：2026-07-16
 
