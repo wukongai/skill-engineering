@@ -1,0 +1,73 @@
+# Case E:同一 Authoring Brief 在五宿主 adapter 中的共同候选 fixture。
+# 不变量:核心文件语义一致;只有 skill_dir、write_tool、optional_metadata 允许适配。
+brief_id: meeting-notes-extractor
+brief_goal: 把会议记录整理成决策、负责人和截止时间
+candidate_fixture: tests/fixtures/meeting-notes
+core_files:
+  - SKILL.md
+hosts:
+  - id: codex
+    core_files:
+      - SKILL.md
+    skill_dir: .agents/skills
+    write_tool: host_file_edit
+    approval: host_approval_prompt
+    candidate_fingerprint: 2113b4e0bac781409a4f81be342aac2e13f9c96b4d83ef559c4bce6bc4d2af06
+    optional_metadata: []
+    adapted_fields:
+      - skill_dir
+      - write_tool
+      - approval
+      - optional_metadata
+  - id: claude-code
+    core_files:
+      - SKILL.md
+    skill_dir: .claude/skills
+    write_tool: host_file_edit
+    approval: host_approval_prompt
+    candidate_fingerprint: 2113b4e0bac781409a4f81be342aac2e13f9c96b4d83ef559c4bce6bc4d2af06
+    optional_metadata: []
+    adapted_fields:
+      - skill_dir
+      - write_tool
+      - approval
+      - optional_metadata
+  - id: hermes
+    core_files:
+      - SKILL.md
+    skill_dir: hermes_external_skill_dir
+    write_tool: skill_manage(create)+skill_manage(write_file)
+    approval: skills.write_approval pending/diff/approve
+    candidate_fingerprint: 2113b4e0bac781409a4f81be342aac2e13f9c96b4d83ef559c4bce6bc4d2af06
+    optional_metadata: []
+    adapted_fields:
+      - skill_dir
+      - write_tool
+      - approval
+      - optional_metadata
+  - id: pi
+    core_files:
+      - SKILL.md
+    skill_dir: project_skill_dir
+    write_tool: host_file_edit
+    approval: host_approval_prompt
+    candidate_fingerprint: 2113b4e0bac781409a4f81be342aac2e13f9c96b4d83ef559c4bce6bc4d2af06
+    optional_metadata: []
+    adapted_fields:
+      - skill_dir
+      - write_tool
+      - approval
+      - optional_metadata
+  - id: kimi-cli
+    core_files:
+      - SKILL.md
+    skill_dir: .agents/skills
+    write_tool: host_file_edit
+    approval: host_approval_prompt
+    candidate_fingerprint: 2113b4e0bac781409a4f81be342aac2e13f9c96b4d83ef559c4bce6bc4d2af06
+    optional_metadata: []
+    adapted_fields:
+      - skill_dir
+      - write_tool
+      - approval
+      - optional_metadata

@@ -4,7 +4,7 @@
 
 > **Make Skills dependable: turn one work goal into an Agent capability you can trust and maintain for the long term.**
 
-Current stable release: [`1.0.0`](https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0) · Next: `2.0.0` Architecture Guardian (development preview) · local-first · provider-neutral · Apache-2.0
+Current stable release: [`1.0.0`](https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0) · In development: `1.1.0` Native Authoring (self-contained creation) · local-first · provider-neutral · Apache-2.0
 
 Skill Engineering is a meta-Skill for creating, auditing, and maintaining Agent Skills. You describe the work you want done. It first decides whether a Skill is justified, then makes responsibilities, trigger boundaries, outputs, risks, and verification explicit. Nothing is written until you approve the plan.
 
@@ -152,17 +152,21 @@ All four cases reran Preview, Apply, failure recovery, structural checks, and re
 
 `1.0.0` is released. It freezes a stable local lifecycle contract for creation, Doctor, behavioral result comparison, isolated maintenance, evolution, release evidence, and rollback.
 
+### 1.1: creation no longer needs a second tool
+
+`1.1.0` moves the full authoring capability into the Skill itself (Native Authoring Kernel): installing only Skill Engineering covers clarification, task-specific complete candidates, the Content Completion Gate, creation review with scoring, and a one-command post-creation self-test — no official skill-creator or standalone Python CLI required. The legacy `create` CLI remains as a `scaffold_only` compatibility entry.
+
 ### 2.0: protect the whole Skill architecture
 
-Architecture Guardian is in development. Blueprint/IR describes component roles, execution topology, and governance levels so later checks can identify dependency problems, duplicated responsibilities, trigger collisions, context cost, and architectural change. All results remain read-only previews before any production modification.
+Architecture Guardian is in development (paused during 1.1, resuming after the 1.1 release). Blueprint/IR describes component roles, execution topology, and governance levels so later checks can identify dependency problems, duplicated responsibilities, trigger collisions, context cost, and architectural change. All results remain read-only previews before any production modification.
 
 ### 3.0 vision: evolve from real usage
 
 3.0 is a long-term direction, not a release commitment. The goal is to learn from redacted real runs, generate isolated candidates, validate them with development/holdout, high-risk, and negative-transfer evidence, then release or withdraw them gradually within controlled scopes.
 
-> 1.0 makes one Skill dependable. 2.0 protects the whole Skill architecture. 3.0 lets Skills evolve from real usage.
+> 1.0 makes one Skill dependable. 1.1 makes creation self-contained. 2.0 protects the whole Skill architecture. 3.0 lets Skills evolve from real usage.
 
-See the [Roadmap](docs/ROADMAP.md), [VERSIONING](docs/VERSIONING.md), [FEATURE-MATRIX](docs/FEATURE-MATRIX.md), and the [current 2.0 Sprint](docs/sprints/2026-07-v2.0-architecture-guardian.md) for precise status.
+See the [Roadmap](docs/ROADMAP.md), [VERSIONING](docs/VERSIONING.md), [FEATURE-MATRIX](docs/FEATURE-MATRIX.md), and the [current 1.1 Sprint](docs/sprints/2026-07-v1.1-native-authoring.md) for precise status.
 
 ## Release evidence
 
@@ -188,7 +192,7 @@ Production Doctor reached `100/A`. That is structural readiness, not proof of bu
 
 The Agent Skill is the product entry point. Ordinary users should not treat the CLI as a second product to learn. The repository still contains a deterministic Python core and 1.x-compatible CLI for immutable plans, Doctor, evaluation, maintenance records, CI, and recovery.
 
-The standard `skills` installer installs only the Agent Skill, not the Python runtime. Some deep 1.0 checks and maintenance operations still require that core. When it is missing, the Skill reports the dependency explicitly instead of pretending the operation succeeded. Maintainers and CI can pin the stable runtime with:
+The standard `skills` installer installs only the Agent Skill, not the Python runtime. Since 1.1, the core creation flow (clarification, complete candidates, content gate, creation review, post-creation self-test) requires neither the Python CLI nor the official `skill-creator`: content checks and self-tests run through portable checkers shipped with the Skill, with an Agent-native equivalent when the host has no Python. Advanced operations such as evaluation, release, and deep maintenance still use that core. When it is missing, the Skill reports the dependency explicitly instead of pretending the operation succeeded. Maintainers and CI can pin the stable runtime with:
 
 ```bash
 uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"
@@ -220,7 +224,7 @@ Start with the [documentation index](docs/README.md). The project uses its own l
 ```bash
 python3 -m pytest -q
 python3 -m ruff check src tests
-python3 /path/to/skill-creator/scripts/quick_validate.py skills/skill-engineering
+python3 /path/to/skill-creator/scripts/quick_validate.py skills/skill-engineering  # optional external tool; production Doctor is the CI authority
 bash scripts/credential-lint.sh --all
 git diff --check
 ```

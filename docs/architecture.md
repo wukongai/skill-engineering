@@ -8,6 +8,7 @@ Versioned architecture direction:
 
 - `0.1.x` supplies the local deterministic lifecycle baseline.
 - `1.0` freezes the CLI/JSON/contract/release evidence interfaces.
+- `1.1` adds the Native Authoring Kernel inside the Agent Skill package: Authoring Brief, complete candidate generation, Content Completion Gate, creation review, and host adapters; the Python core remains the advanced/CI surface, not a prerequisite for core creation.
 - `2.0` adds a separate Blueprint/IR fact layer and Architecture Guardian checks; it does not replace Doctor or Agent Skill Hub.
 
 ## Two entry flows
@@ -32,6 +33,8 @@ Product and version management are downstream of the artifact decision for a new
 ## Conversational layer
 
 `skills/skill-engineering/` is the Agent-facing entry. It routes user intent, loads only the needed reference or stage instructions, and stops at approval boundaries.
+
+Since 1.1 it also carries the Native Authoring Kernel: `references/authoring-brief.md` (fourteen-field contract), complete candidate generation rules, portable checkers (`scripts/content_gate.py`, `scripts/skill_self_test.py`, stdlib-only), the creation review flow (`references/creation-review.md`), and host adapters (`references/host-adapters/`). Core creation no longer depends on an external Creator or the Python CLI.
 
 It does not duplicate deterministic implementation in prose. Commands delegate to the Python core.
 

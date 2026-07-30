@@ -14,6 +14,7 @@ Skill Engineering 的核心竞争力是“架构优先的快速生成 + 全生�
 
 - `0.1.x`：验证本地闭环和安全/证据基础；
 - `1.0.x`：冻结 CLI、contract、评测、维护和发布的稳定生命周期契约；
+- `1.1.x`：创建主链路自包含（Native Authoring Kernel）——单安装完成完整创建、内容门禁、创建评审与创建后自测，不依赖外部 Creator；
 - `2.0.x`：在不破坏 1.x 输入的前提下，引入 Blueprint/IR 和 Architecture Guardian；
 - 任何版本都不把静态分数冒充真实任务效用，也不自动 Global 发布。
 

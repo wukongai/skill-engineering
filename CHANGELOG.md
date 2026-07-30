@@ -4,7 +4,22 @@
 
 ## Unreleased
 
+### 1.1.0 Native Authoring
+
 ### Added
+
+- Native Authoring Kernel：Authoring Brief 十四字段契约与原生完整候选生成，核心创建不再依赖官方 `skill-creator`、宿主专用作者 Skill 或独立 Python CLI。
+- Portable 写入安全链：Content Completion Gate、Doctor v2 portable creation profile、声明式真实自测，以及 `native_plan.py preview → apply → verify`。
+- 创建评审与六态用户可见状态机：`needs_discovery` → `candidate_incomplete` → `candidate_ready` → `created_untried` → `validated` / `needs_improvement`。
+- Codex、Claude Code、Hermes、Pi、Kimi CLI 宿主适配契约；五宿主共享同一真实候选 fingerprint，Hermes 保留 `skill_manage` 写入和 pending/diff/approve。
+
+### Changed
+
+- legacy flag-based `create` 只保留为 1.0/CI `scaffold_only` 兼容入口，普通创建固定走完整 Native Authoring。
+- Authoring Brief 在持久化边界自动脱敏；新 BuildPlan 使用 hash v2 保护 `content_status`，旧计划继续兼容读取。
+- 真实任务试用完成前，portable 分数只表示 structural-readiness，并固定输出 `utility_claim=false`。
+
+### 2.0.0 Preview
 
 - Architecture Guardian Blueprint schema v1、Python 数据模型、确定性 fingerprint、unknown/legacy 保留和敏感扩展字段门禁。
 

@@ -7,13 +7,49 @@
 | `0.1.0` | Stable baseline | Public Beta 本地闭环 | 已发布基线 |
 | `0.1.1` | Folded into 1.0 | Security Doctor 强化 | 不单独发布 |
 | `1.0.0` | Stable | Stable Lifecycle Contract | 本地与远程 runtime 门禁通过；正式发布 |
-| `2.0.0` | In Development | Architecture Guardian | 当前开发主线 |
+| `1.1.0` | Unreleased / Remediation | Native Authoring | Codex E2E 已通过；Hermes E2E、K3 终审与发布授权待完成 |
+| `2.0.0` | Paused | Architecture Guardian | Phase 1 在 1.1 期间暂停 |
 
 ## 1.0 发布治理记录
 
 2026-07-16：首次明确 MIT 版权范围、第三方/用户内容/商标边界和 CLI/Agent Skill 双轨安装指南。
 
 2026-07-18：在首个稳定 tag 前，经 ADR 0006 将当前仓库和 v1.0 候选迁移为 Apache-2.0，版权人为“艾笑”；新增 `NOTICE`、`CITATION.cff` 和品牌使用说明。历史 MIT 副本继续按其取得时的条款使用。许可证治理完成后，tag 与 GitHub Release 又分别获得明确授权并于同日正式发布。
+
+## `1.1.0` — Native Authoring（Unreleased）
+
+日期：2026-07-29
+
+### 版本目标
+
+创建主链路自包含：普通用户只安装 `skill-engineering`、只描述目标，即可在交互引导下得到任务专属、内容完整的 Skill，并在创建终点获得评审分数和简易自动化测试入口（ADR 0008）。
+
+### 当前候选已实现
+
+- Authoring Brief 契约与原生完整候选生成，移除 official skill-creator delegate；
+- Content Completion Gate（portable checker + Agent-native 等价清单）与 `scaffold_only` 降级语义；
+- Doctor v2 portable creation profile、六态用户可见状态机、声明式真实脚本自测；
+- `native_plan.py preview → apply → verify`，绑定脱敏 Brief、候选 manifest、
+  target preflight 与创建评审，任一漂移拒绝 Apply；
+- 宿主适配契约（Codex、Claude Code、Hermes、Pi、Kimi CLI）与 Case E 跨宿主 fixture；
+- 1.0 CLI/JSON/contract 兼容回归与 1.0→1.1 迁移说明。
+
+### 发布门禁状态
+
+2026-07-30 Codex remediation 已通过 211 项 pytest、Ruff、Skill lint、
+production Doctor 100/A、portable self-test、credential lint、release consistency
+和 diff check；安装产物在 `python -I -S` 下完成 Content Gate、portable review、
+Native Plan 与 self-test 隔离 smoke。
+Case A–F 历史与修复证据见
+[`1.1 验收证据`](../testing/2026-07-29-v1.1-native-authoring-cases.md)。
+
+Codex 无 Creator E2E 已完成 runtime failure → `needs_improvement` → 候选修复 →
+同一 Native Plan Apply/Verify → 写后自测 → 真实样本 `validated`。
+
+**当前不得发布**：Hermes 无 Creator 真实 E2E 仍待真实环境，K3 终审与发布授权
+也未完成。adapter fixture 与确定性
+门禁不能替代真实宿主证据；之后 commit、push、tag 与 GitHub Release 仍分别申请
+授权。静态通过不证明跨模型真实效用。
 
 ## `0.1.0` — Public Beta
 

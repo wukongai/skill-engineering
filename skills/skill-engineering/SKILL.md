@@ -21,7 +21,7 @@ description: Skill Engineering：快速生成并全生命周期维护 Codex、Cl
 ## 能力路由
 
 - 新需求或需求还模糊:先读取 `references/capability-brainstorming.md`、`references/selection-matrix.md` 与 `stages/discover/INSTRUCTIONS.md`;自查已有能力,一次问一个关键问题,比较 2-3 个产物方案。信息不足保持 `needs_discovery`,不得默认创建 Skill。
-- 创建 Skill:先读 `references/authoring-standard.md` 与 `stages/design/INSTRUCTIONS.md`;从第一次生成开始建立边界、架构、安全和验证契约,快速交付最小但完整的可用候选。官方 `skill-creator` 可用时委托标准 Skill 内容生成,再由本 Skill补充决策、治理与验证。新建使用 `skill-engineering create`。
+- 创建 Skill:先读 `references/authoring-brief.md`、`references/authoring-standard.md` 与 `stages/design/INSTRUCTIONS.md`;先形成并保存脱敏 Authoring Brief,再由 Native Authoring Kernel 直接生成任务专属的完整候选(不依赖官方 `skill-creator`、宿主专用作者 Skill 或独立 Python CLI),从第一次生成开始建立边界、架构、安全和验证契约,快速交付最小但完整的可用候选。候选先落隔离目录并运行 `scripts/native_plan.py preview`;用户预览并确认实际文件后,只对同一 plan/candidate/target 执行 `apply` 和 `verify`,再运行 `scripts/skill_self_test.py`。宿主差异先读 `references/host-adapters/common-capabilities.md`,再按具体宿主适配,不复制作者逻辑。
 - 体检:运行 `skill-engineering audit`。比较 baseline/candidate 真实行为结果时,先用 `skill-engineering validate-eval-suite`,再运行 `skill-engineering evaluate`;同时读取 `references/evaluation-standard.md` 与 `stages/evaluate/INSTRUCTIONS.md`。
 - 安装或治理:读取 `references/install-governance.md` 与 `stages/install-audit/INSTRUCTIONS.md`,先完成安全和范围判断;多项目/Profile/Global 分发交给 Agent Skill Hub。自进化 Canary 只通过 `skill-engineering release-plan --channel canary` 进入明确项目。
 - 修改已有 Skill:读取 `references/maintenance-protocol.md`、`references/rule-authoring.md` 与 `stages/review/INSTRUCTIONS.md`;先收集失败模式、预期行为和回归证据,确认最低根因层级,再把独立候选目录交给 `skill-engineering improve`。展示增删改 diff、复杂度变化和 preflight 后停止确认;批准后必须用同一 plan id 应用,再运行 `verify-improvement`。需要回看趋势或撤销时使用 `maintenance-history` / `undo-improvement`。
@@ -32,8 +32,9 @@ description: Skill Engineering：快速生成并全生命周期维护 Codex、Cl
 ## 自动推进契约
 
 - `decide`、`audit`、本机可见 Skill 扫描和生成计划属于只读/预览步骤,可自动执行。
-- `create` 默认只预览;只有用户明确同意写入时才加 `--apply`。
-- `create --apply` 必须引用用户已经预览的同一份计划;写后运行结构 postflight,失败清理本次新建目标。production 结构通过但真实证据缺失时明确说明尚不能发布。
+- 普通创建固定走 Native Authoring:完整候选先通过 `scripts/content_gate.py` 与 `scripts/creation_review.py`,再由 `scripts/native_plan.py` 生成 preview;阻断项存在时保持 `candidate_incomplete`。
+- `native_plan.py apply` 必须引用用户已经预览的同一份 plan、candidate 和 target;写后执行 `verify` 与 `scripts/skill_self_test.py`。production 结构通过但真实证据缺失时明确说明尚不能发布。
+- legacy `skill-engineering create` 只在用户明确要求 1.0 兼容 scaffold 或 CI scaffold 时使用;它始终输出 `scaffold_only`,不得进入普通创建主链路或产生“完整创建成功”的反馈。
 - `improve` 必须先记录失败模式、根因层级、预期行为和回归证据,再对比独立候选目录;展示文件 diff、复杂度增量和门禁结果。删除必须显式声明,不得从候选缺失推断。
 - `evolve` 可以自动完成证据聚类、数据集、候选工作区、候选生成、确定性评测、压缩推荐、版本快照和 Shadow;不得把缺少 expected 的反馈伪装成测试,也不得让候选生成器看到 baseline 评分结果或 holdout assertions。
 - Canary/Active 必须引用同一份未漂移 Release Plan 并停在确认点;不得自动 Global。发布后必须验证并返回 ReleaseRecord 与回滚入口。
@@ -50,6 +51,19 @@ description: Skill Engineering：快速生成并全生命周期维护 Codex、Cl
 审批问题必须描述用户将授权的实际动作、作用范围和能否撤销,不要只要求用户“批准 Canary/Active、Plan ID 或 ReleaseRecord”。部分成功必须明确说“整体尚未完成”:例如文件已恢复但操作记录失败时,先说明已恢复的内容和仍失败的环节,不得包装成通过。
 
 涉及发布、安装、失败恢复或跨任务 handoff 时,读取 `references/user-feedback-standard.md`。
+
+## 用户可见创建状态
+
+创建链路只向用户展示这六个状态;内部结构可以映射,但不得把低状态包装成高状态:
+
+1. `needs_discovery`:还缺少会改变结果的信息。
+2. `candidate_incomplete`:候选存在,但仍有内容缺口(门禁阻断、FAIL 或 SEC 命中)。
+3. `candidate_ready`:完整候选和预览已准备,尚未写入。
+4. `created_untried`:已按预览写入并通过创建检查,尚未验证真实任务效果。
+5. `validated`:至少一个真实任务已完成,并有对应证据。
+6. `needs_improvement`:真实失败已记录,等待候选修复。
+
+写后流程、创建评审反馈模板和创建后简易自动化测试入口见 `references/creation-review.md`。
 
 评测必须分开说明结构健康、证据覆盖与真实任务效用。没有 baseline/holdout/真实 rollout 时,明确写“尚未验证实际效果”,不能把静态分数冒充效果分。
 

@@ -171,6 +171,8 @@ class BuildPlan:
     regression_cases: list[str] = field(default_factory=list)
     no_regression_reason: str = ""
     profile: str = "team"
+    content_status: str = ""  # ""=legacy 1.x;scaffold_only | content_complete(1.1)
+    hash_version: int = 1  # 1=legacy plan hash;2=content_status-protected create hash
     deletions: list[str] = field(default_factory=list)
     retained_legacy_files: list[str] = field(default_factory=list)
     complexity: dict[str, Any] = field(default_factory=dict)
@@ -290,6 +292,34 @@ class MaintenanceRecord:
 
 
 @dataclass
+class AuthoringBrief:
+    """v1.1 Native Authoring 的结构化需求契约。
+
+    只保存脱敏摘要；凭证、完整私有会话和原始敏感 Prompt 不得进入任何字段。
+    """
+
+    id: str
+    goal: str = ""
+    target_users: str = ""
+    positive_triggers: list[str] = field(default_factory=list)
+    negative_triggers: list[str] = field(default_factory=list)
+    inputs: list[str] = field(default_factory=list)
+    outputs: list[str] = field(default_factory=list)
+    workflow: list[str] = field(default_factory=list)
+    failure_modes: list[str] = field(default_factory=list)
+    side_effects: list[str] = field(default_factory=list)
+    approvals: list[str] = field(default_factory=list)
+    resources: list[str] = field(default_factory=list)
+    examples: list[str] = field(default_factory=list)
+    verification: list[str] = field(default_factory=list)
+    host_requirements: list[str] = field(default_factory=list)
+    status: str = "draft"
+    schema_version: str = SCHEMA_VERSION
+    created_at: str = field(default_factory=now_iso)
+    updated_at: str = field(default_factory=now_iso)
+
+
+@dataclass
 class JourneySession:
     id: str
     intent: str
@@ -364,6 +394,31 @@ def load_build_plan(root: Path, plan_id: str) -> BuildPlan:
     data = _load_json(local_state_root(root) / "build-plans" / f"{plan_id}.json")
     data["files"] = [BuildFile(**item) for item in data.get("files", [])]
     return BuildPlan(**data)
+
+
+def save_authoring_brief(root: Path, brief: AuthoringBrief) -> Path:
+    from .authoring import sanitize_brief
+
+    sanitized = sanitize_brief(brief)
+    sanitized.updated_at = now_iso()
+    return _save_contract(root, "authoring-briefs", sanitized.id, sanitized)
+
+
+def load_authoring_brief(root: Path, brief_id: str) -> AuthoringBrief:
+    return _load_contract(root, "authoring-briefs", brief_id, AuthoringBrief)
+
+
+def list_authoring_briefs(root: Path) -> list[AuthoringBrief]:
+    folder = local_state_root(root) / "authoring-briefs"
+    if not folder.is_dir():
+        return []
+    briefs: list[AuthoringBrief] = []
+    for path in sorted(folder.glob("*.json"), reverse=True):
+        try:
+            briefs.append(AuthoringBrief(**_load_json(path)))
+        except (SystemExit, TypeError):
+            continue
+    return briefs
 
 
 def save_install_plan(root: Path, plan: InstallPlan) -> Path:

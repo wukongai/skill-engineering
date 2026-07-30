@@ -90,3 +90,7 @@ Doctor 报告还必须给出 0-100 质量评分。评分是 review 和安装治�
 - 工程化 30%:渐进披露、根入口长度、references/scripts/internal workflow steps/contract 分层、安装边界。
 
 低于 80 分时,报告应给出优先修复建议。详细标准见 `references/quality-score-standard.md`。
+
+## 创建评审
+
+新建 Skill 写后按同一套 Doctor 规则与评分运行创建评审,不因为是新建 Skill 放宽 FAIL 或 SEC。创建评审的流程、反馈模板和用户可见状态机见 `references/creation-review.md`;评分边界(结构就绪度、非真实效用)与 `references/quality-score-standard.md` 一致。

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "tests": [
+    {
+      "id": "content-gate-usage-boundary",
+      "script": "scripts/content_gate.py",
+      "stdin": "tests/fixtures/self-test-input.txt",
+      "expected_exit": 2,
+      "stderr_contains": [
+        "usage:"
+      ],
+      "timeout_seconds": 10
+    },
+    {
+      "id": "creation-review-usage-boundary",
+      "script": "scripts/creation_review.py",
+      "stdin": "tests/fixtures/self-test-input.txt",
+      "expected_exit": 2,
+      "stderr_contains": [
+        "usage:"
+      ],
+      "timeout_seconds": 10
+    },
+    {
+      "id": "native-plan-usage-boundary",
+      "script": "scripts/native_plan.py",
+      "stdin": "tests/fixtures/self-test-input.txt",
+      "expected_exit": 2,
+      "stderr_contains": [
+        "usage:"
+      ],
+      "timeout_seconds": 10
+    },
+    {
+      "id": "skill-self-test-usage-boundary",
+      "script": "scripts/skill_self_test.py",
+      "stdin": "tests/fixtures/self-test-input.txt",
+      "expected_exit": 2,
+      "stderr_contains": [
+        "usage:"
+      ],
+      "timeout_seconds": 10
+    }
+  ]
+}

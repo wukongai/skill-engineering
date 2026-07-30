@@ -9,9 +9,10 @@
 | `0.1.0` | 已发布基线 | Public Beta 本地生命周期闭环 | 已发布 |
 | `0.1.1` | 已并入 1.0 | Security Doctor：AST、source-to-sink、SARIF | 不单独发布 |
 | `1.0.0` | Stable | Stable Lifecycle Contract | 本地与远程安装门禁通过，正式发布 |
-| `2.0.0` | 当前开发 | Architecture Guardian | Phase 1 进行中 |
+| `1.1.0` | 当前开发 | Native Authoring：单安装完整创建、内容门禁、创建评审与自动化测试 | Sprint 进行中 |
+| `2.0.0` | 暂停 | Architecture Guardian | Phase 1 在 1.1 期间暂停，1.1 发布后恢复 |
 
-当前代码包版本为 `1.0.0` Stable；tag 目标、GitHub Release 内容和远程默认分支安装验证绑定同一发布提交。“2.0 开发中”不表示 2.0 已发布或可以替代 1.x 稳定契约。
+当前代码包版本为 `1.1.0`（Native Authoring，发布门禁收尾中）；最新正式发布为 `1.0.0` Stable，tag 目标、GitHub Release 内容和远程默认分支安装验证绑定同一发布提交。“1.1/2.0 开发中”不表示已发布或可以替代 1.x 稳定契约。
 
 ## `0.1.x`：本地生命周期基线
 
@@ -78,7 +79,31 @@
 - 自动 Global 发布；
 - 用单一静态分数宣称真实效用。
 
-## `2.0.0`：Architecture Guardian（当前开发）
+## `1.1.0`：Native Authoring（当前开发）
+
+### 目标
+
+普通用户只安装 `skill-engineering`、只描述目标，即可在交互引导下一步步得到任务专属、内容完整、工程架构优雅的 Skill；创建终点包含 Doctor 评审分数和简易自动化测试入口，不再依赖官方 `skill-creator`、宿主专用作者 Skill 或独立 Python CLI 完成核心创建。
+
+### 必须交付
+
+- Authoring Brief 契约与原生完整候选生成（Native Authoring Kernel）；
+- Content Completion Gate：占位、空资源、通用 fallback、断链引用阻断 Apply；
+- 创建评审与评分（复用 Doctor v2）、用户可见状态机、创建后简易自动化测试入口；
+- Codex、Claude Code、Hermes、Pi、Kimi CLI 宿主适配契约；
+- 1.0 CLI/JSON/contract 兼容与 `scaffold_only` 降级语义；
+- Case A–F 验收证据、全量门禁与文档同步。
+
+事实源：[`1.1 Spec`](specs/2026-07-29-v1.1-native-authoring-spec.md)、[`1.1 Plan`](plans/2026-07-29-v1.1-native-authoring-plan.md)、[`ADR 0008`](adr/0008-native-authoring-kernel.md)、[`1.1 Sprint`](sprints/2026-07-v1.1-native-authoring.md)。
+
+### 不进入 1.1
+
+- 创建后阅读、注释和 Skill Graph（`1.2.0`）；
+- 云端服务、模型 Provider、托管平台；
+- 自动 Global 安装；
+- 2.0 Architecture Guardian 新能力。
+
+## `2.0.0`：Architecture Guardian（暂停，1.1 发布后恢复）
 
 ### 目标
 
@@ -90,7 +115,7 @@
 2. **Execution topology**：entrypoint、stage、delegate、state、side effect、rollback；
 3. **Governance level**：personal、team、production、commercial 及其证据要求。
 
-### Phase 1：Blueprint/IR 契约（当前 Sprint）
+### Phase 1：Blueprint/IR 契约（暂停，1.1 发布后恢复）
 
 - [x] Blueprint JSON schema `1.0.0`；
 - [x] Python Blueprint/Topology/Governance/Dependency 数据模型；
@@ -145,7 +170,7 @@
 | 方向 | 归属 | 说明 |
 |---|---|---|
 | Skill Portfolio、owner、stale、多项目依赖图 | `2.1+` | 与 Agent Skill Hub 的 registry/profile 边界对齐 |
-| Behavior Eval Lab、provider-neutral rollout runner | 2.0 后续实验轨道 | without/with-skill、pressure、multi-turn、跨模型矩阵 |
+| Behavior Eval Lab、provider-neutral rollout runner | 2.0 后续实验轨道；Waza 研究已完成，尚未进入当前 Sprint | clean-room 重写 without/current/candidate、grader、trial、CI、replay、pressure、multi-turn 与跨模型矩阵；详见 Backlog Epic |
 | 安装模拟、升级兼容、供应链证据 | `2.1+` | 依赖 1.0 稳定 contract 和 2.0 Blueprint |
 | 云端协作、RBAC、托管评测、SLA | 未来商业版本 | 不进入当前开源核心 Sprint |
 

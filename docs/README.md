@@ -7,6 +7,7 @@
 - 产品定位：[`PRODUCT.md`](PRODUCT.md)
 - 长期原则：[`constitution.md`](constitution.md)
 - 当前架构：[`architecture.md`](architecture.md)
+- 执行架构与全生命周期流程图：[`guides/skill-engineering-execution-architecture.md`](guides/skill-engineering-execution-architecture.md)
 - 版本规则：[`VERSIONING.md`](VERSIONING.md)
 - 版权与安装：[`guides/licensing-and-installation.md`](guides/licensing-and-installation.md)
 - 功能总表：[`FEATURE-MATRIX.md`](FEATURE-MATRIX.md)
@@ -14,15 +15,18 @@
 - 当前任务：[`TASK.md`](TASK.md)
 - 路线图：[`ROADMAP.md`](ROADMAP.md)
 - 后续候选：[`BACKLOG.md`](BACKLOG.md)
-- 当前 Sprint：[`sprints/2026-07-v2.0-architecture-guardian.md`](sprints/2026-07-v2.0-architecture-guardian.md)
-- 当前 Handoff：[`handoffs/2026-07-16-v2-phase1-next.md`](handoffs/2026-07-16-v2-phase1-next.md)
+- 当前 Sprint：[`sprints/2026-07-v1.1-native-authoring.md`](sprints/2026-07-v1.1-native-authoring.md)（2.0 Phase 1 暂停中：[`sprints/2026-07-v2.0-architecture-guardian.md`](sprints/2026-07-v2.0-architecture-guardian.md)）
+- 当前 Handoff：[`handoffs/2026-07-29-v1.1-codex-review-e2e.md`](handoffs/2026-07-29-v1.1-codex-review-e2e.md)（Codex 交叉评审 + 真实 E2E；2.0 恢复时回到 [`handoffs/2026-07-16-v2-phase1-next.md`](handoffs/2026-07-16-v2-phase1-next.md)）
+- 1.1 验收证据：[`testing/2026-07-29-v1.1-native-authoring-cases.md`](testing/2026-07-29-v1.1-native-authoring-cases.md)
 - Apache-2.0 收口证据：[`testing/2026-07-18-apache-2.0-license-closeout.md`](testing/2026-07-18-apache-2.0-license-closeout.md)
 - V0.1 Spec：[`specs/2026-07-13-v0.1-public-beta-spec.md`](specs/2026-07-13-v0.1-public-beta-spec.md)
 - V0.1 Plan：[`plans/2026-07-13-v0.1-public-beta-plan.md`](plans/2026-07-13-v0.1-public-beta-plan.md)
 - V1.0 Spec/Plan：[`specs/2026-07-16-v1.0-stable-contract-spec.md`](specs/2026-07-16-v1.0-stable-contract-spec.md) / [`plans/2026-07-16-v1.0-stable-contract-plan.md`](plans/2026-07-16-v1.0-stable-contract-plan.md)
+- V1.1 Spec/Plan：[`specs/2026-07-29-v1.1-native-authoring-spec.md`](specs/2026-07-29-v1.1-native-authoring-spec.md) / [`plans/2026-07-29-v1.1-native-authoring-plan.md`](plans/2026-07-29-v1.1-native-authoring-plan.md)
 - V2.0 Spec/Plan：[`specs/2026-07-16-v2.0-architecture-guardian-spec.md`](specs/2026-07-16-v2.0-architecture-guardian-spec.md) / [`plans/2026-07-16-v2.0-architecture-guardian-plan.md`](plans/2026-07-16-v2.0-architecture-guardian-plan.md)
 - Apache-2.0 与署名 Spec/Plan：[`specs/2026-07-18-apache-2.0-attribution-spec.md`](specs/2026-07-18-apache-2.0-attribution-spec.md) / [`plans/2026-07-18-apache-2.0-attribution-plan.md`](plans/2026-07-18-apache-2.0-attribution-plan.md)
 - 当前许可证决策：[`adr/0006-apache-2.0-attribution-and-brand-boundary.md`](adr/0006-apache-2.0-attribution-and-brand-boundary.md)（取代历史 ADR 0005；安装器入口见 [`adr/0004-standard-skill-cli-install.md`](adr/0004-standard-skill-cli-install.md)）
+- 当前创建链路决策：[`adr/0008-native-authoring-kernel.md`](adr/0008-native-authoring-kernel.md)
 
 ## 长期记录
 

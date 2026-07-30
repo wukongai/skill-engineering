@@ -1,8 +1,24 @@
 # 当前任务
 
-当前版本：`1.0.0` Stable Lifecycle Contract 正式发布；`2.0.0` Architecture Guardian Phase 1 保持开发预览。
+当前版本：`1.0.0` Stable 正式发布；`1.1.0` Native Authoring 为当前开发 Sprint；`2.0.0` Architecture Guardian Phase 1 在 1.1 期间暂停，保持开发预览。
 
-## In Progress
+## In Progress：v1.1 Native Authoring
+
+- [x] 完成 1.1 Spec（含创建评审与评分、Case F 自动化测试）与 Plan。
+- [x] NA-0：Sprint、ADR 0008、TASK/ROADMAP 登记，Hermes 骨架失败 RED 基线。
+- [x] NA-1：Authoring Brief 契约与 journey 持久化。
+- [x] NA-2：原生完整候选生成，移除 official skill-creator delegate。
+- [x] NA-3：Content Completion Gate 与 `scaffold_only` 降级语义。
+- [x] NA-4：创建评审与评分、用户可见状态机、创建后简易自动化测试入口。
+- [x] NA-5：宿主适配契约与 Case E 跨宿主 fixture。
+- [x] NA-6：1.0 兼容与迁移回归。
+- [x] NA-7a：Codex review remediation、211 pytest、Ruff、portable self-test、
+  production Doctor 100/A、credential lint、release consistency 与 diff check。
+- [x] NA-7b：Codex 无 Creator 隔离 E2E（含 runtime failure →
+  `needs_improvement`、修复、同一 Native Plan Apply/Verify、真实样本 `validated`）。
+- [ ] NA-7c：K3 remediation 终审、Hermes 无 Creator 真实 E2E 与发布授权。
+
+## Paused：v2.0 Architecture Guardian Phase 1（1.1 期间暂停）
 
 - [x] 定义 Blueprint/IR schema version、三轴字段、unknown/legacy 和 fingerprint。
 - [ ] 为 atomic/router/orchestrator/adapter 建立最小 Blueprint fixture 与负例。
@@ -108,3 +124,6 @@
 
 - [x] 完成 Yao Meta Skill、Superpowers 和本地能力审计，并建立可复核研究与采用矩阵：[`Yao/Superpowers 研究`](research/2026-07-16-yao-meta-superpowers-architecture-adoption.md)。
 - [x] 明确 V1 核心是创建 + 防架构腐化维护 + 检查 + 自进化 + 友好交互。
+- [x] 完成 Microsoft Waza 竞品调研：固定上游 commit，核对 Skill CI、A/B、grader、trial、gate、snapshot/replay 和 dashboard 的真实实现边界；确认本项目已有 baseline/candidate/holdout/negative-transfer 结果比较器，但缺少自动 behavior runner。研究结论见 [`Waza 对比研究`](research/2026-07-20-microsoft-waza-comparison.md)。
+- [x] 将 Behavior Evaluation Lab 拆为独立 Backlog Epic，并创建新任务 handoff；本轮没有修改实现，也没有把该能力加入当前 Architecture Guardian Phase 1。
+- [x] 完成 `1va7/skill2loop` 固定 commit 调研、源码与测试核验、冲突/采用矩阵和 Observation Boundary 目标架构；实现工作留在 Backlog，不进入当前 v2 Phase 1：[`调研报告`](research/2026-07-20-skill2loop-observation-boundary.md)。

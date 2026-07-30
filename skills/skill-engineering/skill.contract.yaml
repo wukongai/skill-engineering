@@ -56,6 +56,14 @@ outputs:
     type: text
     required: false
     contract: "信息足够后比较最相关的 2-3 个产物方案,并给出推荐与取舍。"
+  - name: authoring_brief
+    type: json-or-text
+    required: false
+    contract: "候选生成前的结构化需求契约;缺 goal/触发/反触发/verification 时保持 needs_discovery。"
+  - name: creation_review
+    type: json-or-text
+    required: false
+    contract: "写后创建评审:内容门禁复跑 + portable creation profile 四维结构就绪度;完整 CLI Doctor 仅为可选增强。结论先行,阻断项存在时状态不高于 candidate_incomplete,未试用时明示尚未验证实际任务效果。"
   - name: skill_scaffold
     type: files
     required: false
@@ -119,12 +127,12 @@ delegates:
   - name: capability discovery stage
     kind: workflow
     when: "新需求尚未确认真实任务、复用价值、AI 判断价值、触发边界或已有能力复用关系。"
-  - name: official skill-creator
-    kind: skill
-    when: "官方 skill-creator 可用且需要创建或更新标准 Skill 内容。"
+  - name: Native Authoring Kernel
+    kind: workflow
+    when: "Authoring Brief 就绪后,由本 Skill 直接生成任务专属的完整 Skill 候选;不依赖任何外部 Creator。"
   - name: skill-engineering create
     kind: cli
-    when: "官方 skill-creator 不可用,或需要确定性的本地创建计划与 apply。"
+    when: "需要确定性的本地创建计划与 apply 的高级或 CI 入口;普通用户创建走 Native Authoring Kernel。"
   - name: skill-engineering improve
     kind: cli
     when: "记录失败模式和根因,对比独立候选目录,生成复杂度增量与确定性 preflight,再按同一计划更新。"
@@ -200,9 +208,16 @@ forbidden:
   - default_create_skill_with_blocking_unknowns
   - artifact_creation_before_discovery_decision
   - product_or_version_scaffold_before_skill_decision_for_new_request
+  - external_creator_dependency_for_core_creation
+  - reporting_scaffold_only_as_complete_creation
+  - claiming_validated_without_real_task_trial
+  - presenting_structural_score_as_utility
 
 state:
   files:
+    - name: authoring_briefs
+      path: ".skill-engineering/authoring-briefs/*.json"
+      required: false
     - name: journey_sessions
       path: ".skill-engineering/journeys/*.json"
       required: false
@@ -240,6 +255,21 @@ state:
         - active_source_promotion
 
 scripts:
+  - path: scripts/content_gate.py
+    required_flags:
+      - "--json"
+  - path: scripts/creation_review.py
+    required_flags:
+      - "--profile"
+      - "--json"
+  - path: scripts/native_plan.py
+    required_flags:
+      - "preview"
+      - "apply"
+      - "verify"
+  - path: scripts/skill_self_test.py
+    required_flags:
+      - "--json"
   - path: scripts/doctor_skill.py
     required_flags:
       - "--profile"
@@ -254,6 +284,9 @@ tests:
     - tests/test_evolution.py
     - tests/user-feedback-cases.yaml
     - tests/product-positioning.yaml
+    - tests/native-authoring-cases.yaml
+    - tests/native-authoring-behavior.yaml
+    - tests/host-adapter-fixtures.yaml
 
 evaluation:
   score_scope: structural_readiness

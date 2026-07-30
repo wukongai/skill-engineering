@@ -1,0 +1,17 @@
+cases:
+  - id: no-external-creator-dependency
+    source: skills/skill-engineering/SKILL.md
+    must_include:
+      - 不依赖官方 `skill-creator`
+  - id: complete-candidate-not-skeleton
+    source: skills/skill-engineering/references/authoring-standard.md
+    must_include:
+      - 不得先把空骨架写入正式目标
+  - id: creation-review-score-feedback
+    source: skills/skill-engineering/references/quality-score-standard.md
+    must_include:
+      - 创建评审
+  - id: hermes-scaffold-early-success-forbidden
+    source: skills/skill-engineering/skill.contract.yaml
+    must_include:
+      - reporting_scaffold_only_as_complete_creation

@@ -4,7 +4,7 @@
 
 > **把 Skill 做稳：从一句工作目标，变成可以长期信任、持续维护的 Agent 能力。**
 
-当前稳定版本：[`1.0.0`](https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0) · 下一阶段：`2.0.0` Architecture Guardian（开发预览） · local-first · provider-neutral · Apache-2.0
+当前稳定版本：[`1.0.0`](https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0) · 当前开发：`1.1.0` Native Authoring（自包含创建） · local-first · provider-neutral · Apache-2.0
 
 <!-- Stable positioning regression: rapidly create Agent Skills that are engineered from the first version through architecture-first rapid generation and lifecycle protection. -->
 
@@ -154,17 +154,21 @@ Skill Engineering 没有立即写文件，而是先确认：普通会议摘要�
 
 `1.0.0` 已正式发布，冻结创建、Doctor、评测结果比较、隔离维护、演进、发布证据和回滚组成的本地生命周期契约。
 
+### 1.1：创建不再需要第二个工具
+
+`1.1.0` 把完整作者能力收进 Skill 自身（Native Authoring Kernel）：只安装 Skill Engineering 就能完成需求澄清、任务专属完整候选、内容完整性门禁、创建评审评分和创建后一键自测；不再依赖官方 skill-creator 或独立 Python CLI。旧 `create` CLI 保留为 `scaffold_only` 兼容入口。
+
 ### 2.0：守护整套 Skill 架构
 
-Architecture Guardian 正在开发。它使用 Blueprint/IR 描述组件职责、执行拓扑和治理等级，后续检查依赖、职责重复、触发冲突、上下文成本和架构变化。所有结果先只读预览，不自动修改正式 Skill。
+Architecture Guardian 正在开发（1.1 期间暂停，1.1 发布后恢复）。它使用 Blueprint/IR 描述组件职责、执行拓扑和治理等级，后续检查依赖、职责重复、触发冲突、上下文成本和架构变化。所有结果先只读预览，不自动修改正式 Skill。
 
 ### 3.0 前瞻：从真实使用中持续进化
 
 3.0 是长期方向，尚未形成正式发布承诺。目标是从脱敏的真实运行中发现反复问题，生成隔离候选，使用 development/holdout、high-risk 和 negative-transfer 证据验证，再在受控范围内逐步发布或撤回。
 
-> 1.0 管好一个 Skill，2.0 守护整套 Skill 架构，3.0 让 Skill 从真实使用中持续进化。
+> 1.0 管好一个 Skill，1.1 让创建自包含，2.0 守护整套 Skill 架构，3.0 让 Skill 从真实使用中持续进化。
 
-准确状态见 [Roadmap](docs/ROADMAP.md)、[VERSIONING](docs/VERSIONING.md)、[FEATURE-MATRIX](docs/FEATURE-MATRIX.md) 和[当前 2.0 Sprint](docs/sprints/2026-07-v2.0-architecture-guardian.md)。
+准确状态见 [Roadmap](docs/ROADMAP.md)、[VERSIONING](docs/VERSIONING.md)、[FEATURE-MATRIX](docs/FEATURE-MATRIX.md) 和[当前 1.1 Sprint](docs/sprints/2026-07-v1.1-native-authoring.md)。
 
 ## 发布证据
 
@@ -190,7 +194,7 @@ production Doctor 曾达到 `100/A`，它只代表结构准备度，不代表所
 
 Agent Skill 是产品入口，普通用户不需要把 CLI 当成第二套产品学习。仓库仍保留 Python 确定性内核和 1.x CLI 兼容接口，用于不可变计划、Doctor、评测、维护记录、CI 和恢复。
 
-标准 `skills` 安装只安装 Agent Skill，不会同时安装 Python runtime。当前 1.0 的部分深度检查或维护动作需要该内核；缺少时，Skill 会明确报告依赖，而不会伪装成已经成功。维护者和 CI 如需固定稳定 runtime，可使用：
+标准 `skills` 安装只安装 Agent Skill，不会同时安装 Python runtime。1.1 起，核心创建流程（需求澄清、完整候选、内容门禁、创建评审、创建后自测）不依赖 Python CLI，也不要求安装官方 `skill-creator`：内容完整性检查与创建后自测由随 Skill 交付的 portable checker 完成，宿主没有 Python 时使用 Agent-native 等价检查并明确告知。评测、发布和深度维护等高级动作仍使用该内核；缺少时，Skill 会明确报告依赖，而不会伪装成已经成功。维护者和 CI 如需固定稳定 runtime，可使用：
 
 ```bash
 uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"
@@ -222,7 +226,7 @@ docs/                       产品、规范、计划和发布证据
 ```bash
 python3 -m pytest -q
 python3 -m ruff check src tests
-python3 /path/to/skill-creator/scripts/quick_validate.py skills/skill-engineering
+python3 /path/to/skill-creator/scripts/quick_validate.py skills/skill-engineering  # 可选外部工具,CI 以 production Doctor 为准
 bash scripts/credential-lint.sh --all
 git diff --check
 ```

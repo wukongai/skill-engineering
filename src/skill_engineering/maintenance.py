@@ -183,7 +183,10 @@ def _copy_effective_tree(
 
 
 def _plan_hash(plan: BuildPlan) -> str:
-    return payload_hash(asdict(plan), exclude={"plan_hash", "applied", "record_id"})
+    return payload_hash(
+        asdict(plan),
+        exclude={"plan_hash", "applied", "record_id", "hash_version"},
+    )
 
 
 def create_improvement_plan(

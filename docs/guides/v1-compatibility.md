@@ -36,6 +36,14 @@ uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"
 
 源码贡献者仍可使用 `python3 -m pip install -e ".[dev]"`。clone/fork 不是普通用户使用 Agent Skill 的前置步骤。
 
+## 从 1.0 升级到 1.1
+
+1. 已创建的 Skill 不需要任何改动；`.skill-engineering/` 状态继续使用 `schema_version: "1"`；
+2. 核心创建流程不再需要官方 `skill-creator` 或独立 Python CLI；两者都不需要单独卸载；
+3. 旧 flag-based `create` 生成的计划按 1.0 语义读取，可以正常 apply，但标记为 `scaffold_only`，不得当作完整候选；
+4. 1.0 的 improve、verify、undo、evaluate、evolve 和 release 流程与单一事实源不变；
+5. 重新安装或更新 Agent Skill 后，创建入口自动使用 Native Authoring Kernel，无需迁移操作。
+
 ## 回滚
 
 - Agent Skill：先移除当前 `skill-engineering` 安装，再从备份恢复旧目录；

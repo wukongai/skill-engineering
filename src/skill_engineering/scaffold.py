@@ -1,7 +1,8 @@
 """Preview-first fallback scaffolding for Skill Engineering.
 
-The official skill-creator can own richer generation. This module provides a
-deterministic, cross-agent fallback and never writes unless apply is explicit.
+1.1 起,完整内容生成由 Native Authoring Kernel(宿主 Agent + Authoring Brief)负责;
+本模块是确定性的 scaffold_only 兼容入口:只保证结构与边界,不得产生“完整创建成功”
+的用户反馈,并且除非 apply 显式确认,否则不写入任何文件。
 """
 
 from __future__ import annotations
@@ -33,9 +34,12 @@ TYPE_CHECKS = {
 
 
 def _build_plan_hash(plan: BuildPlan) -> str:
+    excluded = {"plan_hash", "applied", "record_id", "postflight"}
+    if plan.hash_version < 2:
+        excluded.update({"content_status", "hash_version"})
     return payload_hash(
         asdict(plan),
-        exclude={"plan_hash", "applied", "record_id", "postflight"},
+        exclude=excluded,
     )
 
 
@@ -274,13 +278,19 @@ def create_build_plan(
         recommended_scope=recommended_scope,
         files=files,
         omitted=omitted,
-        warnings=["这是变更计划,尚未写入任何文件。"],
+        warnings=[
+            "这是变更计划,尚未写入任何文件。",
+            "scaffold_only:这是骨架方案,只保证结构与边界;任务专属内容需要由 "
+            "Native Authoring 按 Authoring Brief 生成,并通过内容完整性检查后才能视为完整候选。",
+        ],
         verification_commands=[
             f"skill-engineering lint {target}",
             f"skill-engineering doctor {target} --profile {'production' if production else 'team'}",
         ],
         target_fingerprint=fingerprint_path(target),
         profile="production" if production else "team",
+        content_status="scaffold_only",
+        hash_version=2,
     )
     plan.plan_hash = _build_plan_hash(plan)
     save_build_plan(root, plan)
@@ -392,6 +402,23 @@ def format_build_plan(plan: BuildPlan) -> str:
     from .interaction import UserFeedback
 
     if plan.applied:
+        if plan.content_status != "content_complete":
+            return UserFeedback(
+                status="incomplete",
+                result=(
+                    f"{plan.skill_name} 的骨架已创建并通过结构验证"
+                    "(scaffold_only,任务专属内容尚未生成)。"
+                ),
+                impact=[
+                    f"已在 {plan.target} 创建 {len(plan.files)} 个计划内文件。",
+                    "lint 和结构检查已通过,但这只是骨架,不是完整 Skill。",
+                ],
+                next_action=(
+                    "由宿主 Agent 按 Authoring Brief 补全任务专属内容,并通过内容完整性"
+                    "检查(content_gate)后,才能视为完整候选。"
+                ),
+                technical_details=[f"plan={plan.id}"],
+            ).render()
         release = plan.postflight.get("release_readiness", {})
         release_ready = bool(release.get("ready"))
         if plan.profile == "production" and not release_ready:
@@ -434,6 +461,7 @@ def format_build_plan(plan: BuildPlan) -> str:
         impact=[
             f"将在 {plan.target} 创建 {len(plan.files)} 个文件。",
             f"能力类型：{plan.kind}。",
+            "scaffold_only:这是骨架方案,只保证结构与边界;任务专属内容需由 Native Authoring 按 Authoring Brief 生成。",
             "目前尚未写入任何文件。",
         ],
         next_action="确认创建位置和文件范围后再写入。",

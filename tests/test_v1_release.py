@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from pathlib import Path
+import subprocess
+import sys
 
 import pytest
 
@@ -111,7 +113,59 @@ def test_research_pack_unsafe_first_plan_rolls_back(tmp_path: Path):
 
 
 def test_v1_version_and_release_facts_are_frozen():
-    assert skill_engineering.__version__ == "1.0.0"
-    assert 'version = "1.0.0"' in (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    # 1.1.0:当前发布版本;v1 公开契约与兼容指南在 1.x 内持续有效
+    assert skill_engineering.__version__ == "1.1.0"
+    assert 'version = "1.1.0"' in (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert (ROOT / "docs/references/v1-public-contract.md").is_file()
     assert (ROOT / "docs/guides/v1-compatibility.md").is_file()
+
+
+def test_v11_changelog_remains_unreleased_before_release_authorization():
+    changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+
+    assert "## 1.1.0 -" not in changelog
+    unreleased = changelog.split("## Unreleased", 1)[1].split("## 1.0.0", 1)[0]
+    assert "1.1.0" in unreleased
+    assert "Native Authoring" in unreleased
+
+
+def test_bilingual_readme_marks_external_quick_validate_optional():
+    chinese = (ROOT / "README.md").read_text(encoding="utf-8")
+    english = (ROOT / "README.en.md").read_text(encoding="utf-8")
+
+    chinese_line = next(line for line in chinese.splitlines() if "quick_validate.py" in line)
+    english_line = next(line for line in english.splitlines() if "quick_validate.py" in line)
+    assert "可选" in chinese_line and "production Doctor" in chinese_line
+    assert "optional" in english_line.lower() and "production Doctor" in english_line
+
+
+def test_debug_log_is_ignored():
+    ignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+    assert "kimi-hook-debug.log" in ignore
+
+
+def test_release_evidence_does_not_claim_pending_e2e_passed():
+    release_log = (ROOT / "docs/releases/RELEASE-LOG.md").read_text(encoding="utf-8")
+    v11 = release_log.split("## `1.1.0`", 1)[1].split("## `0.1.0`", 1)[0]
+
+    assert "Unreleased" in v11
+    assert "Codex" in v11 and "Hermes" in v11
+    assert "待" in v11 or "pending" in v11.lower()
+    assert "不得发布" in v11
+
+
+def test_unreleased_v11_passes_consistency_without_fake_release_date():
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "check-release.py"),
+            "--version",
+            "1.1.0",
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr

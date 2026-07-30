@@ -4,3 +4,5 @@
 
 - [`Yao Meta Skill、Superpowers 与本地五种架构模式`](2026-07-16-yao-meta-superpowers-architecture-adoption.md)
 - [`NVIDIA SkillSpector 对比`](2026-07-15-nvidia-skillspector-comparison.md)
+- [`Microsoft Waza 与 Skill Engineering 行为评测体系对比`](2026-07-20-microsoft-waza-comparison.md)
+- [`skill2loop 与 Skill Engineering 自进化观测边界`](2026-07-20-skill2loop-observation-boundary.md)

@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "purpose": "枚举 portable creation profile 与完整 Doctor v2 的共同支持 fixture；只在这些 fixture 上承诺 grade 和四维分数一致。",
+  "fixtures": [
+    {
+      "id": "pure-agent-clean",
+      "kind": "pure_agent_clean",
+      "directory": "pure-agent-clean",
+      "profile": "personal",
+      "expected": {
+        "grade": "A",
+        "dimensions": {
+          "functional_value": 100,
+          "stability": 100,
+          "security": 100,
+          "engineering": 100
+        }
+      }
+    }
+  ]
+}

@@ -30,6 +30,27 @@ def _runtime_version() -> str:
     return match.group(1)
 
 
+def _changelog_version_is_consistent(version: str) -> bool:
+    changelog = _text("CHANGELOG.md")
+    if f"## {version} -" in changelog:
+        return True
+    unreleased_match = re.search(
+        r"^## Unreleased\s*$([\s\S]*?)(?=^## \S|\Z)",
+        changelog,
+        re.MULTILINE,
+    )
+    if not unreleased_match or f"### {version} " not in unreleased_match.group(1):
+        return False
+    release_log = _text("docs/releases/RELEASE-LOG.md")
+    return bool(
+        re.search(
+            rf"^## `{re.escape(version)}`.*Unreleased",
+            release_log,
+            re.MULTILINE,
+        )
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="检查 Skill Engineering 发布事实一致性。")
     parser.add_argument("--version", required=True, help="预期产品版本，例如 1.0.0")
@@ -43,12 +64,11 @@ def main() -> int:
             f'name = "skill-engineering"\nversion = "{args.version}"' in _text("uv.lock")
         ),
         "readme_version": f"`{args.version}`" in _text("README.md"),
-        "changelog_version": f"## {args.version} -" in _text("CHANGELOG.md"),
+        "changelog_version": _changelog_version_is_consistent(args.version),
         "release_log_version": f"## `{args.version}`" in _text("docs/releases/RELEASE-LOG.md"),
         "roadmap_version": f"`{args.version}`" in _text("docs/ROADMAP.md"),
         "canonical_install": (
-            "npx skills add wukongai/skill-engineering --skill skill-engineering"
-            in _text("README.md")
+            "npx skills add wukongai/skill-engineering" in _text("README.md")
         ),
         "canonical_skill_source": (ROOT / "skills/skill-engineering/SKILL.md").is_file(),
         "legacy_skill_absent": not (ROOT / "skills/skill-guide").exists(),

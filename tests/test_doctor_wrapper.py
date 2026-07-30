@@ -27,6 +27,7 @@ def test_installed_skill_wrapper_reports_missing_python_cli(tmp_path: Path):
         [
             sys.executable,
             "-I",
+            "-S",  # 隔离 site-packages,确定性地模拟“未安装 Python CLI”的宿主
             str(installed_wrapper),
             str(tmp_path / "demo-skill"),
             "--profile",

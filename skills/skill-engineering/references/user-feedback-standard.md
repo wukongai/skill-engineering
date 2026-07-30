@@ -25,7 +25,7 @@ Skill Engineering 面向只想完成任务的普通用户。工具记录用于�
 
 不要说:
 
-> 请批准 Canary 应用 release-plan-xxx。
+> 请批准 Canary 应用 `<release-plan-id>`。
 
 应该说:
 
