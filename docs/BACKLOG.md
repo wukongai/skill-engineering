@@ -2,14 +2,25 @@
 
 Backlog 保存尚未进入当前 Sprint 的候选能力。进入实现前必须升级为 Spec、Plan 和 Task。
 
-Blueprint/IR 与 Architecture Guardian 已经从 Backlog 升级到当前 `v2.0 Phase 1` Sprint；不要在 Backlog 中重复承诺同一范围。
+Blueprint/IR 与 Architecture Guardian 已经从 Backlog 升级到独立
+`v2.0 Phase 1` Sprint，但该 Sprint 当前暂停；不要在 Backlog 中重复承诺同一范围。
 
-`1.1.0 Native Authoring` 已于 2026-07-29 升级为当前 Sprint（Spec、Plan、ADR 0008），不在 Backlog 重复；创建后阅读、注释和 Skill Graph 保持 `1.2.0` Backlog 候选，不进入 1.1。
+`1.1.0 Native Authoring` 已于 2026-08-01 正式发布，不在 Backlog 重复；
+正式 Tag 完整用户回归作为发布后独立验证跟踪。创建后阅读、注释和 Skill Graph
+保持 `1.2.0` Backlog 候选，不进入 1.1。
+
+`1.1.1 Maintenance Tiers & Versioning` 已于 2026-08-01 作为非计划 P2 任务登记，
+从 [`v1.1.1 Handoff`](handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md)
+进入当前任务队列，不在 Backlog 重复记账。其 Spec/Plan 尚未完成，不得把计划项
+写成已交付能力。
 
 ## 2026-07-16 Review Closure
 
 - NVIDIA/SkillSpector 对比、AST/source-to-sink/SARIF 吸收和 0.1.1 验证已完成，不再作为 Backlog 候选。
-- 2.0 Phase 1 尚未完成的 fixture、只读 inventory 和 evidence 收口属于当前 Sprint，已记录在 [`v2 Phase 1 Handoff`](handoffs/2026-07-16-v2-phase1-next.md)，不重复塞入 Backlog。
+- 2.0 Phase 1 尚未完成的 fixture、只读 inventory 和 evidence 收口属于已暂停
+  的独立 Sprint，记录在
+  [`v2 Phase 1 Handoff`](handoffs/2026-07-16-v2-phase1-next.md)，不重复塞入
+  Backlog；恢复时间另行排期。
 - `v1.0.0` tag、公开发布和稳定契约已于 2026-07-18 完成；更远期架构扩展继续遵守各自 Sprint 与发布门禁。
 - 版权与安装边界已升级为 v1.0 发布前置项，事实源为 `docs/guides/licensing-and-installation.md`、2026-07-18 Apache-2.0 Spec/Plan 和 ADR 0006；不在 Backlog 重复拆分。
 - Agent Skill-only runtime 依赖检测已通过独立 Spec/Plan 和远程闭环完成，不再作为 Backlog 候选。

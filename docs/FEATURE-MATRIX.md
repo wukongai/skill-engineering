@@ -1,6 +1,7 @@
 # Skill Engineering 功能总表
 
-这份表回答“现在能做什么、属于哪个版本、证据在哪里”。`已交付` 只表示代码和门禁已经通过；`Unreleased` 不等于已经公开发布。
+这份表回答“现在能做什么、属于哪个版本、证据在哪里”。`1.1.0` 已于 2026-08-01
+正式发布；其中正式 Tag 的完整新手用户回归仍按发布后独立验证跟踪。
 
 | 能力域 | 功能 | 当前状态 | 目标版本 | 主要入口/证据 |
 |---|---|---|---|---|
@@ -8,16 +9,19 @@
 | Decide | 逐步澄清并判断产物类型 | 已交付 | 1.0 稳定 | `decide`、decision tests |
 | Create | 最小架构选择与完整 Skill 候选 | 已交付 | 1.0 稳定 | `create` |
 | Create | Preview → 同一计划 Apply → postflight | 已交付 | 1.0 稳定 | build plan、scaffold tests |
-| Create | Authoring Brief 契约与原生完整候选生成 | 已交付 | 1.1.0 | authoring-brief、authoring/native-authoring tests |
-| Create | Content Completion Gate(portable + Agent-native) | 已交付 | 1.1.0 | content_gate.py、content gate tests |
-| Create | 创建评审评分、六态状态机、创建后自测入口 | 已交付 | 1.1.0 | creation-review、skill_self_test.py |
-| Create | 宿主适配契约(Codex/Claude Code/Hermes/Pi/Kimi CLI) | 已交付 | 1.1.0 | host-adapters、Case E fixture |
-| Create | 旧 create fallback 的 scaffold_only 降级语义 | 已交付 | 1.1.0 | scaffold_only tests |
+| Create | Authoring Brief 契约与原生完整候选生成 | 1.1 Stable | 1.1.0 | authoring-brief、authoring/native-authoring tests |
+| Create | Content Completion Gate(portable + Agent-native) | 1.1 Stable | 1.1.0 | content_gate.py、content gate tests |
+| Create | 创建评审评分、六态状态机、创建后自测入口 | 1.1 Stable | 1.1.0 | creation-review、skill_self_test.py |
+| Create | 宿主适配契约(Codex/Claude Code/Hermes/Pi/Kimi CLI) | 1.1 Stable；非 Codex 实测非阻断 | 1.1.0 | host-adapters、Case E fixture |
+| Create | 旧 create fallback 的 scaffold_only 降级语义 | 1.1 Stable | 1.1.0 | scaffold_only tests |
 | Doctor | 结构、行为风险、安全和治理检查 | 已交付 | 1.0 稳定 | `doctor` / `audit` |
 | Doctor | AST 动态执行、shell、source-to-sink | 1.0 Stable | 1.0 稳定 | `SEC108-SEC111`、security tests |
 | Doctor | JSON 与 SARIF 2.1.0 报告 | 1.0 Stable | 1.0 稳定 | `--format sarif` |
 | Evaluate | baseline/holdout/high-risk/negative-transfer | 已交付 | 1.0 稳定 | `evaluate`、evaluation docs |
 | Improve | 隔离候选、失败模式、复杂度 diff、维护记录 | 已交付 | 1.0 稳定 | `improve`、verify/undo |
+| Improve | hotfix/feature/refactor 维护分流 | P2 任务，尚未实现 | 1.1.1 | 1.1.1 Handoff/Sprint |
+| Improve | 当前阻断与结构债务分离、分级回归 | P2 任务，尚未实现 | 1.1.1 | 1.1.1 Handoff/Sprint |
+| Versioning | SemVer 建议、Changelog 与 MaintenanceRecord 闭环 | P2 任务，尚未实现 | 1.1.1 | 1.1.1 Handoff/Sprint |
 | Evolve | 脱敏 run、候选、Pareto、Shadow/Canary/Active | 已交付 | 1.0 稳定 | evolution/release plan |
 | Release | 预览、审批、验证、回滚证据 | 1.0 Stable | 1.0 稳定 | release plan、release installer |
 | Governance | Product/Architecture/Spec/Plan/ADR/Sprint/Changelog | 已交付 | 1.0 稳定 | `docs/` |
@@ -35,5 +39,6 @@
 
 - 想使用当前能力：看 README 和 `v1.0.0` GitHub Release。
 - 想依赖稳定契约：看 `1.0.0` Spec/Plan、公开契约和发布证据。
-- 想参与当前开发：看 `2.0.0` Sprint、Spec、Plan 和 ADR。
+- 想参与当前开发：先看 `1.1.1` Handoff 与 2026-08 Sprint；Spec/Plan 尚待当前任务创建。
+- 想恢复 Architecture Guardian：看已暂停的 `2.0.0` Sprint、Spec、Plan 和 ADR。
 - 想提议额外能力：先进入 Backlog，不直接扩大当前 Sprint。

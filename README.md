@@ -4,7 +4,7 @@
 
 > **把 Skill 做稳：从一句工作目标，变成可以长期信任、持续维护的 Agent 能力。**
 
-当前稳定版本：[`1.0.0`](https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0) · 当前开发：`1.1.0` Native Authoring（自包含创建） · local-first · provider-neutral · Apache-2.0
+当前稳定版本：[`1.1.0`](https://github.com/wukongai/skill-engineering/releases/tag/v1.1.0) Native Authoring · 下一任务：`1.1.1` 维护分级与版本管理（P2） · local-first · provider-neutral · Apache-2.0
 
 <!-- Stable positioning regression: rapidly create Agent Skills that are engineered from the first version through architecture-first rapid generation and lifecycle protection. -->
 
@@ -158,6 +158,8 @@ Skill Engineering 没有立即写文件，而是先确认：普通会议摘要�
 
 `1.1.0` 把完整作者能力收进 Skill 自身（Native Authoring Kernel）：只安装 Skill Engineering 就能完成需求澄清、任务专属完整候选、内容完整性门禁、创建评审评分和创建后一键自测；不再依赖官方 skill-creator 或独立 Python CLI。旧 `create` CLI 保留为 `scaffold_only` 兼容入口。
 
+`1.1.0` 已于 2026-08-01 正式发布。发布前已通过 Codex 无 Creator 真实 E2E 和完整工程门禁；正式 Tag 的远程安装、新手完整创建、真实使用与维护回归会在发布后独立项目中执行，在报告完成前不宣称覆盖所有宿主和生产环境。`1.1.1` 已登记为 2026-08-01 非计划 P2 任务，将补齐 hotfix/feature/refactor 分流、阻断问题与结构债务分离、分级回归和 SemVer/Changelog/维护记录闭环。
+
 ### 2.0：守护整套 Skill 架构
 
 Architecture Guardian 正在开发（1.1 期间暂停，1.1 发布后恢复）。它使用 Blueprint/IR 描述组件职责、执行拓扑和治理等级，后续检查依赖、职责重复、触发冲突、上下文成本和架构变化。所有结果先只读预览，不自动修改正式 Skill。
@@ -168,15 +170,17 @@ Architecture Guardian 正在开发（1.1 期间暂停，1.1 发布后恢复）�
 
 > 1.0 管好一个 Skill，1.1 让创建自包含，2.0 守护整套 Skill 架构，3.0 让 Skill 从真实使用中持续进化。
 
-准确状态见 [Roadmap](docs/ROADMAP.md)、[VERSIONING](docs/VERSIONING.md)、[FEATURE-MATRIX](docs/FEATURE-MATRIX.md) 和[当前 1.1 Sprint](docs/sprints/2026-07-v1.1-native-authoring.md)。
+准确状态见 [Roadmap](docs/ROADMAP.md)、[VERSIONING](docs/VERSIONING.md)、[FEATURE-MATRIX](docs/FEATURE-MATRIX.md)、[1.1 RC Sprint](docs/sprints/2026-07-v1.1-native-authoring.md) 和[当前 1.1.1 任务](docs/sprints/2026-08-v1.1.1-maintenance-versioning.md)。
 
 ## 发布证据
 
-`1.0.0` 正式发布候选完成了四个真实用户旅程回归，以及当时的 133 项 pytest、Ruff、Agent Skill validation、credential lint、diff check、wheel 构建、干净环境安装和远程安装验证。
+`1.1.0` 发布前完成了 Codex 无 Creator 真实 E2E、K3 终审、Alibaba Skill Up + 真实 Codex 四个核心场景 4/4，以及 212 项 pytest、Ruff、Agent Skill validation、credential lint、diff check、wheel 构建和干净环境安装验证。正式 Tag 的完整新手用户回归按[发布决策](docs/testing/2026-08-01-v1.1-release-decision.md)在发布后独立执行。
 
 production Doctor 曾达到 `100/A`，它只代表结构准备度，不代表所有真实任务中的业务效果。
 
-- [GitHub Release v1.0.0](https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0)
+- [GitHub Release v1.1.0](https://github.com/wukongai/skill-engineering/releases/tag/v1.1.0)
+- [v1.1.0 发布决策与验证边界](docs/testing/2026-08-01-v1.1-release-decision.md)
+- [v1.1 三方评估](docs/testing/2026-07-31-v1.1-three-way-evaluation.md)
 - [四个 Use Case](docs/testing/2026-07-18-v1-use-cases.md)
 - [远程标准安装验证](docs/testing/2026-07-16-standard-skill-install.md)
 - [1.x 公开契约](docs/references/v1-public-contract.md)
@@ -197,7 +201,7 @@ Agent Skill 是产品入口，普通用户不需要把 CLI 当成第二套产品
 标准 `skills` 安装只安装 Agent Skill，不会同时安装 Python runtime。1.1 起，核心创建流程（需求澄清、完整候选、内容门禁、创建评审、创建后自测）不依赖 Python CLI，也不要求安装官方 `skill-creator`：内容完整性检查与创建后自测由随 Skill 交付的 portable checker 完成，宿主没有 Python 时使用 Agent-native 等价检查并明确告知。评测、发布和深度维护等高级动作仍使用该内核；缺少时，Skill 会明确报告依赖，而不会伪装成已经成功。维护者和 CI 如需固定稳定 runtime，可使用：
 
 ```bash
-uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"
+uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.1.0"
 ```
 
 这是当前实现边界与兼容入口，不是普通用户开始使用 Skill Engineering 的前置知识。

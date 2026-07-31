@@ -17,10 +17,12 @@ Skill Engineering 使用语义化版本 `MAJOR.MINOR.PATCH`：
 
 - 已发布基线：`0.1.0` Public Beta。
 - `0.1.1` Security Doctor 增量已并入 `1.0.0`，不再单独发布。
-- 当前稳定版本：`1.0.0` Stable Lifecycle Contract；tag 与 GitHub Release 已于 2026-07-18 正式发布。
-- 当前开发目标：`2.0.0` Architecture Guardian；第一阶段为 Blueprint/IR 契约设计。
+- 前一稳定版本：`1.0.0` Stable Lifecycle Contract；tag 与 GitHub Release 已于 2026-07-18 正式发布。
+- 当前稳定版本：`1.1.0` Native Authoring；Owner 已明确授权并于 2026-08-01 完成正式发布。
+- 当前开发任务：`1.1.1` Maintenance Tiers & Versioning；2026-08-01 非计划 P2，从 Handoff 进入 Spec/Plan 后实施。
+- `2.0.0` Architecture Guardian Phase 1 暂停；待 1.1 发布线收口后重新排期。
 
-代码包版本在 RC 阶段与候选版本一致；只有 tag、GitHub Release 和远程安装门禁完成后才能标记 Stable。`1.0.0` 已满足这些条件；`Unreleased` 或 2.0 Preview 功能仍不得被文档表述成 1.0 已发布能力。
+代码包版本在 RC 阶段与候选版本一致；只有发布前工程门禁、merge、tag 和 GitHub Release 完成后才能标记 Stable。`1.1.0` 已满足这些发布条件。正式 Tag 的远程安装、新手完整创建、真实使用与维护回归作为发布后独立项目继续执行；完成前不得把该项写成已通过，也不得把结构分数写成真实任务效用。`1.1.1` 仍是计划任务，2.0 Preview 功能也不得被表述成已发布能力。
 
 ## 版本事实源
 

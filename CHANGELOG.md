@@ -4,7 +4,14 @@
 
 ## Unreleased
 
-### 1.1.0 Native Authoring
+### Planning
+
+- `1.1.1` 已登记为 2026-08-01 非计划 P2 任务，计划增加维护分级、技术债分流、分级回归和版本记录闭环；尚未实现。
+- `2.0.0` Architecture Guardian Phase 1 在 1.1 发布线收口期间暂停。
+
+## 1.1.0 - 2026-08-01
+
+### Native Authoring
 
 ### Added
 
@@ -23,13 +30,14 @@
 - 三方评估中项目原生门禁全绿，Alibaba Skill Up 驱动的真实 Codex 四个核心场景
   4/4 通过；Microsoft Waza/Copilot 的未完成项与跨宿主限制按非阻断证据记录。
 
+### Validation boundary
+
+- 发布前已通过 Codex 真实 E2E、212 项 pytest、Ruff、Skill validation、production Doctor、portable self-test、credential lint、release consistency、构建与干净环境 smoke。
+- 正式 tag 的远程安装、新手完整创建、真实使用和维护回归作为发布后独立项目执行；在该报告完成前，不把静态结构分数或 adapter fixture 表述成跨宿主真实效用。
+
 ### 2.0.0 Preview
 
 - Architecture Guardian Blueprint schema v1、Python 数据模型、确定性 fingerprint、unknown/legacy 保留和敏感扩展字段门禁。
-
-### Planning
-
-- `2.0.0` 进入 Architecture Guardian Phase 1，先实现 Blueprint/IR 契约与只读 inventory。
 
 ## 1.0.0 - 2026-07-18
 

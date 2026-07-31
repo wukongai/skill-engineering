@@ -1,10 +1,10 @@
 # 当前任务
 
-当前版本：`1.0.0` Stable 正式发布；`1.1.0` Native Authoring 发布候选已提交并
-推送，等待 merge、tag 和 GitHub Release 独立授权；`1.1.1` 维护分级与版本管理
+当前版本：`1.1.0` Native Authoring Stable，已获准并于 2026-08-01 正式发布；
+正式 Tag 的完整新手用户回归转入独立发布后项目。`1.1.1` 维护分级与版本管理
 已获准启动；`2.0.0` Architecture Guardian Phase 1 暂停，保持开发预览。
 
-## In Progress：v1.1 Native Authoring
+## Released：v1.1 Native Authoring
 
 - [x] 完成 1.1 Spec（含创建评审与评分、Case F 自动化测试）与 Plan。
 - [x] NA-0：Sprint、ADR 0008、TASK/ROADMAP 登记，Hermes 骨架失败 RED 基线。
@@ -26,11 +26,16 @@
   Waza/Copilot 的未完成项与兼容性问题已按非阻断证据记录。
 - [x] NA-7e：发布策略与三方评估收口提交为 `2227e2a`，已推送到
   `origin/codex/version-roadmap`。
-- [ ] NA-7f：merge、tag `v1.1.0` 和 GitHub Release 分别获得明确授权。
+- [x] NA-7f：Owner 明确授权 merge、双远程 push、tag `v1.1.0` 和正式
+  GitHub Release；发布前构建与干净环境 smoke 通过。
+- [ ] NA-7g：从远程正式 Tag 安装，在全新隔离项目完成普通用户的完整创建、
+  真实使用、失败修复和维护回归；该项是发布后验证，不阻断已授权发布。
 
-## Next：v1.1.1 Maintenance Tiers & Versioning
+## In Progress：v1.1.1 Maintenance Tiers & Versioning（非计划 P2）
 
-- [ ] MT-0：从
+- [x] MT-0a：2026-08-01 非计划任务登记为 P2，建立
+  [`当前 Sprint`](sprints/2026-08-v1.1.1-maintenance-versioning.md) 与 OB Task。
+- [ ] MT-0b：从
   [`v1.1.1 Handoff`](handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md)
   恢复上下文，完成现状盘点、Spec、Plan；跨版本契约取舍需要 ADR。
 - [ ] MT-1：把 `hotfix / feature / refactor` 维护分级、当前阻断与结构债务分离、

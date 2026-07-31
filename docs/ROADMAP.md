@@ -9,11 +9,11 @@
 | `0.1.0` | 已发布基线 | Public Beta 本地生命周期闭环 | 已发布 |
 | `0.1.1` | 已并入 1.0 | Security Doctor：AST、source-to-sink、SARIF | 不单独发布 |
 | `1.0.0` | Stable | Stable Lifecycle Contract | 本地与远程安装门禁通过，正式发布 |
-| `1.1.0` | Release Candidate | Native Authoring：单安装完整创建、内容门禁、创建评审与自动化测试 | 候选已推送；merge/tag/Release 待授权 |
-| `1.1.1` | Next | 维护分级与版本管理：小修、功能升级、重构分流与 SemVer 闭环 | Handoff 已准备；Spec/Plan 待新任务完成 |
+| `1.1.0` | Stable | Native Authoring：单安装完整创建、内容门禁、创建评审与自动化测试 | 2026-08-01 正式发布；正式 Tag 用户回归转入发布后独立项目 |
+| `1.1.1` | Next / P2 | 维护分级与版本管理：小修、功能升级、重构分流与 SemVer 闭环 | 2026-08-01 非计划任务已登记；Handoff 已准备，Spec/Plan 待完成 |
 | `2.0.0` | 暂停 | Architecture Guardian | Phase 1 在 1.1 期间暂停，1.1 发布后恢复 |
 
-当前代码包版本为 `1.1.0`（Native Authoring，发布门禁收尾中）；最新正式发布为 `1.0.0` Stable，tag 目标、GitHub Release 内容和远程默认分支安装验证绑定同一发布提交。“1.1/2.0 开发中”不表示已发布或可以替代 1.x 稳定契约。
+当前代码包和最新正式发布版本均为 `1.1.0` Stable（Native Authoring）。发布前 Codex 真实 E2E 与工程门禁已经通过；正式 Tag 的远程安装、新手创建、真实使用与维护回归按独立发布后项目执行。`1.1.1/2.0` 开发中不表示已发布或可以替代当前 1.x 稳定契约。
 
 ## `0.1.x`：本地生命周期基线
 
@@ -80,7 +80,7 @@
 - 自动 Global 发布；
 - 用单一静态分数宣称真实效用。
 
-## `1.1.0`：Native Authoring（当前开发）
+## `1.1.0`：Native Authoring（Stable）
 
 ### 目标
 
@@ -97,6 +97,10 @@
 
 事实源：[`1.1 Spec`](specs/2026-07-29-v1.1-native-authoring-spec.md)、[`1.1 Plan`](plans/2026-07-29-v1.1-native-authoring-plan.md)、[`ADR 0008`](adr/0008-native-authoring-kernel.md)、[`1.1 Sprint`](sprints/2026-07-v1.1-native-authoring.md)。
 
+发布边界：[`v1.1.0 正式发布决策`](testing/2026-08-01-v1.1-release-decision.md)
+明确记录发布前已完成证据与发布后正式 Tag 用户回归。后者完成前，不宣称覆盖
+所有新手路径、宿主和生产环境。
+
 ### 不进入 1.1
 
 - 创建后阅读、注释和 Skill Graph（`1.2.0`）；
@@ -105,6 +109,9 @@
 - 2.0 Architecture Guardian 新能力。
 
 ## `1.1.1`：Maintenance Tiers & Versioning（Next）
+
+任务属性：2026-08-01 非计划任务，优先级 P2。当前只完成任务登记与 Handoff，
+尚未完成 Spec/Plan，也未进入 `1.1.0` 发布内容。
 
 ### 目标
 

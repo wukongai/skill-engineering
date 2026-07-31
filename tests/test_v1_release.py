@@ -120,13 +120,15 @@ def test_v1_version_and_release_facts_are_frozen():
     assert (ROOT / "docs/guides/v1-compatibility.md").is_file()
 
 
-def test_v11_changelog_remains_unreleased_before_release_authorization():
+def test_v11_changelog_records_formal_release_and_validation_boundary():
     changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
 
-    assert "## 1.1.0 -" not in changelog
-    unreleased = changelog.split("## Unreleased", 1)[1].split("## 1.0.0", 1)[0]
-    assert "1.1.0" in unreleased
-    assert "Native Authoring" in unreleased
+    assert "## 1.1.0 - 2026-08-01" in changelog
+    released = changelog.split("## 1.1.0 - 2026-08-01", 1)[1].split(
+        "## 1.0.0", 1
+    )[0]
+    assert "Native Authoring" in released
+    assert "发布后独立项目" in released
 
 
 def test_bilingual_readme_marks_external_quick_validate_optional():
@@ -171,16 +173,16 @@ def test_release_evidence_reports_codex_passed_and_non_codex_non_blocking():
     release_log = (ROOT / "docs/releases/RELEASE-LOG.md").read_text(encoding="utf-8")
     v11 = release_log.split("## `1.1.0`", 1)[1].split("## `0.1.0`", 1)[0]
 
-    assert "Unreleased" in v11
+    assert "Stable" in v11
     assert "Codex" in v11 and "Hermes" in v11
     assert "已通过" in v11
     assert "非阻断" in v11
-    assert "merge" in v11.lower()
+    assert "发布后" in v11
     assert "tag" in v11.lower()
     assert "GitHub Release" in v11
 
 
-def test_unreleased_v11_passes_consistency_without_fake_release_date():
+def test_released_v11_passes_consistency_with_frozen_release_date():
     result = subprocess.run(
         [
             sys.executable,

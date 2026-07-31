@@ -4,7 +4,7 @@
 
 > **Make Skills dependable: turn one work goal into an Agent capability you can trust and maintain for the long term.**
 
-Current stable release: [`1.0.0`](https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0) · In development: `1.1.0` Native Authoring (self-contained creation) · local-first · provider-neutral · Apache-2.0
+Current stable release: [`1.1.0`](https://github.com/wukongai/skill-engineering/releases/tag/v1.1.0) Native Authoring · Next task: `1.1.1` maintenance tiers and versioning (P2) · local-first · provider-neutral · Apache-2.0
 
 Skill Engineering is a meta-Skill for creating, auditing, and maintaining Agent Skills. You describe the work you want done. It first decides whether a Skill is justified, then makes responsibilities, trigger boundaries, outputs, risks, and verification explicit. Nothing is written until you approve the plan.
 
@@ -156,6 +156,8 @@ All four cases reran Preview, Apply, failure recovery, structural checks, and re
 
 `1.1.0` moves the full authoring capability into the Skill itself (Native Authoring Kernel): installing only Skill Engineering covers clarification, task-specific complete candidates, the Content Completion Gate, creation review with scoring, and a one-command post-creation self-test — no official skill-creator or standalone Python CLI required. The legacy `create` CLI remains as a `scaffold_only` compatibility entry.
 
+`1.1.0` was formally released on 2026-08-01. Before release it passed the real Codex no-Creator E2E and the complete engineering gate. Exact-tag remote installation plus a full novice create/use/maintain regression will run as a separate post-release project; until that report is complete, the project does not claim coverage across every host or production environment. `1.1.1` is registered as an unplanned P2 task for maintenance routing and versioning.
+
 ### 2.0: protect the whole Skill architecture
 
 Architecture Guardian is in development (paused during 1.1, resuming after the 1.1 release). Blueprint/IR describes component roles, execution topology, and governance levels so later checks can identify dependency problems, duplicated responsibilities, trigger collisions, context cost, and architectural change. All results remain read-only previews before any production modification.
@@ -166,15 +168,17 @@ Architecture Guardian is in development (paused during 1.1, resuming after the 1
 
 > 1.0 makes one Skill dependable. 1.1 makes creation self-contained. 2.0 protects the whole Skill architecture. 3.0 lets Skills evolve from real usage.
 
-See the [Roadmap](docs/ROADMAP.md), [VERSIONING](docs/VERSIONING.md), [FEATURE-MATRIX](docs/FEATURE-MATRIX.md), and the [current 1.1 Sprint](docs/sprints/2026-07-v1.1-native-authoring.md) for precise status.
+See the [Roadmap](docs/ROADMAP.md), [VERSIONING](docs/VERSIONING.md), [FEATURE-MATRIX](docs/FEATURE-MATRIX.md), the [1.1 RC Sprint](docs/sprints/2026-07-v1.1-native-authoring.md), and the [current 1.1.1 task](docs/sprints/2026-08-v1.1.1-maintenance-versioning.md) for precise status.
 
 ## Release evidence
 
-The `1.0.0` release candidate reran four real user journeys and passed the then-current 133 pytest tests, Ruff, Agent Skill validation, credential lint, diff checks, wheel builds, clean-environment installation, and remote installation checks.
+Before release, `1.1.0` passed the real Codex no-Creator E2E, K3 final review, four Alibaba Skill Up + real Codex scenarios, 212 pytest tests, Ruff, Agent Skill validation, credential lint, diff checks, wheel builds, and clean-environment installation. A full exact-tag novice regression is tracked as a separate post-release project.
 
 Production Doctor reached `100/A`. That is structural readiness, not proof of business outcomes across every real task.
 
-- [GitHub Release v1.0.0](https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0)
+- [GitHub Release v1.1.0](https://github.com/wukongai/skill-engineering/releases/tag/v1.1.0)
+- [v1.1.0 release decision and validation boundary](docs/testing/2026-08-01-v1.1-release-decision.md)
+- [v1.1 three-way evaluation](docs/testing/2026-07-31-v1.1-three-way-evaluation.md)
 - [Four verified use cases](docs/testing/2026-07-18-v1-use-cases.md)
 - [Remote standard-install evidence](docs/testing/2026-07-16-standard-skill-install.md)
 - [1.x public contract](docs/references/v1-public-contract.md)
@@ -195,7 +199,7 @@ The Agent Skill is the product entry point. Ordinary users should not treat the 
 The standard `skills` installer installs only the Agent Skill, not the Python runtime. Since 1.1, the core creation flow (clarification, complete candidates, content gate, creation review, post-creation self-test) requires neither the Python CLI nor the official `skill-creator`: content checks and self-tests run through portable checkers shipped with the Skill, with an Agent-native equivalent when the host has no Python. Advanced operations such as evaluation, release, and deep maintenance still use that core. When it is missing, the Skill reports the dependency explicitly instead of pretending the operation succeeded. Maintainers and CI can pin the stable runtime with:
 
 ```bash
-uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.0.0"
+uv tool install "git+https://github.com/wukongai/skill-engineering.git@v1.1.0"
 ```
 
 This is a current implementation boundary and compatibility surface, not prerequisite knowledge for beginning with Skill Engineering.

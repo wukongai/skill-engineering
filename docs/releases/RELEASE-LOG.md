@@ -7,7 +7,8 @@
 | `0.1.0` | Stable baseline | Public Beta 本地闭环 | 已发布基线 |
 | `0.1.1` | Folded into 1.0 | Security Doctor 强化 | 不单独发布 |
 | `1.0.0` | Stable | Stable Lifecycle Contract | 本地与远程 runtime 门禁通过；正式发布 |
-| `1.1.0` | Unreleased / Release Candidate | Native Authoring | Codex E2E 与 K3 终审已通过；Hermes E2E 非阻断；merge/tag/GitHub Release 待授权 |
+| `1.1.0` | Stable | Native Authoring | 2026-08-01 正式发布；正式 Tag 用户回归作为发布后独立验证 |
+| `1.1.1` | Next / P2 | Maintenance Tiers & Versioning | 2026-08-01 非计划任务已登记；Handoff 已准备，Spec/Plan 待完成 |
 | `2.0.0` | Paused | Architecture Guardian | Phase 1 在 1.1 期间暂停 |
 
 ## 1.0 发布治理记录
@@ -16,15 +17,15 @@
 
 2026-07-18：在首个稳定 tag 前，经 ADR 0006 将当前仓库和 v1.0 候选迁移为 Apache-2.0，版权人为“艾笑”；新增 `NOTICE`、`CITATION.cff` 和品牌使用说明。历史 MIT 副本继续按其取得时的条款使用。许可证治理完成后，tag 与 GitHub Release 又分别获得明确授权并于同日正式发布。
 
-## `1.1.0` — Native Authoring（Unreleased）
+## `1.1.0` — Native Authoring（Stable）
 
-日期：2026-07-29
+发布日期：2026-08-01
 
 ### 版本目标
 
 创建主链路自包含：普通用户只安装 `skill-engineering`、只描述目标，即可在交互引导下得到任务专属、内容完整的 Skill，并在创建终点获得评审分数和简易自动化测试入口（ADR 0008）。
 
-### 当前候选已实现
+### 正式发布内容
 
 - Authoring Brief 契约与原生完整候选生成，移除 official skill-creator delegate；
 - Content Completion Gate（portable checker + Agent-native 等价清单）与 `scaffold_only` 降级语义；
@@ -48,20 +49,39 @@ Codex 无 Creator E2E 已完成 runtime failure → `needs_improvement` → 候�
 
 K3 remediation 终审已 `approved`。根据 ADR-0009，Codex 是默认唯一必须通过的
 真实宿主 E2E；Hermes、Claude Code、Pi、Kimi CLI 真实 smoke 是非阻断兼容性
-证据，五宿主 adapter contract fixture 仍是发布门禁。当前候选已经提交并推送到
-功能分支；merge、tag `v1.1.0` 与 GitHub Release 仍需分别授权。静态通过和
-adapter fixture 不证明非 Codex 宿主的真实任务效用。
+证据，五宿主 adapter contract fixture 仍是发布门禁。静态通过和 adapter
+fixture 不证明非 Codex 宿主的真实任务效用。
 
 2026-07-31 canonical host 策略同步后复验：212 项 pytest、Ruff、Skill lint、
 production Doctor 100/A、portable self-test、credential lint、release
 consistency 和 diff check 全部通过。策略与三方评估收口提交为 `2227e2a`，
-已推送到 `origin/codex/version-roadmap`；版本仍为 Unreleased，merge、tag
-`v1.1.0` 和 GitHub Release 继续等待独立授权。
+已推送到 `origin/codex/version-roadmap`。
 
 同一冻结候选的三方评估中，项目原生门禁全绿，Alibaba Skill Up 驱动的真实
 Codex 四个核心场景 4/4 通过；Microsoft Waza/Copilot 发现的一次一问兼容性
 问题、入口预算告警和额度阻塞均作为非阻断证据保留。完整报告见
 [`2026-07-31-v1.1-three-way-evaluation.md`](../testing/2026-07-31-v1.1-three-way-evaluation.md)。
+
+### 正式发布决策与验证边界
+
+Owner 于 2026-08-01 明确授权 merge、双远程 push、annotated tag `v1.1.0` 和
+GitHub Release。发布前重新执行全量门禁、构建 wheel/sdist 并完成干净环境
+安装 smoke。
+
+正式 Tag 的远程安装、普通用户从模糊需求创建全新 Skill、真实任务试用、失败
+修复与维护回归转入发布后独立项目。该项只能在正式 Tag 可用后完整执行，不阻断
+本次已授权发布；在报告完成前不宣称覆盖所有宿主或生产环境。决策记录见
+[`2026-08-01-v1.1-release-decision.md`](../testing/2026-08-01-v1.1-release-decision.md)。
+
+## `1.1.1` — Maintenance Tiers & Versioning（Next / P2）
+
+日期：2026-08-01
+
+本版本作为非计划 P2 任务登记，目标是建立 hotfix/feature/refactor 分流、当前
+阻断与结构债务分离、分级回归，以及 SemVer/Changelog/MaintenanceRecord
+闭环。当前只有 Handoff 与任务入口，Spec/Plan 和实现尚未完成；该范围不并入
+`1.1.0` RC。恢复入口见
+[`2026-08-01-v1.1.1-maintenance-versioning-next.md`](../handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md)。
 
 ## `0.1.0` — Public Beta
 
@@ -133,7 +153,7 @@ pytest、Ruff、production Doctor、凭证 lint、diff check、隔离 E2E 均通
 - GitHub Release 已正式发布并设为 Latest：<https://github.com/wukongai/skill-engineering/releases/tag/v1.0.0>。
 - 发布附件已上传：`skill_engineering-1.0.0-py3-none-any.whl`、`skill_engineering-1.0.0.tar.gz`。
 
-## `2.0.0` — Architecture Guardian（当前开发）
+## `2.0.0` — Architecture Guardian（暂停）
 
 ### 版本目标
 
