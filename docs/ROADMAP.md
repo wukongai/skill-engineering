@@ -9,7 +9,8 @@
 | `0.1.0` | 已发布基线 | Public Beta 本地生命周期闭环 | 已发布 |
 | `0.1.1` | 已并入 1.0 | Security Doctor：AST、source-to-sink、SARIF | 不单独发布 |
 | `1.0.0` | Stable | Stable Lifecycle Contract | 本地与远程安装门禁通过，正式发布 |
-| `1.1.0` | 当前开发 | Native Authoring：单安装完整创建、内容门禁、创建评审与自动化测试 | Sprint 进行中 |
+| `1.1.0` | Release Candidate | Native Authoring：单安装完整创建、内容门禁、创建评审与自动化测试 | 候选已推送；merge/tag/Release 待授权 |
+| `1.1.1` | Next | 维护分级与版本管理：小修、功能升级、重构分流与 SemVer 闭环 | Handoff 已准备；Spec/Plan 待新任务完成 |
 | `2.0.0` | 暂停 | Architecture Guardian | Phase 1 在 1.1 期间暂停，1.1 发布后恢复 |
 
 当前代码包版本为 `1.1.0`（Native Authoring，发布门禁收尾中）；最新正式发布为 `1.0.0` Stable，tag 目标、GitHub Release 内容和远程默认分支安装验证绑定同一发布提交。“1.1/2.0 开发中”不表示已发布或可以替代 1.x 稳定契约。
@@ -102,6 +103,29 @@
 - 云端服务、模型 Provider、托管平台；
 - 自动 Global 安装；
 - 2.0 Architecture Guardian 新能力。
+
+## `1.1.1`：Maintenance Tiers & Versioning（Next）
+
+### 目标
+
+让普通用户更新老 Skill 时，系统先区分紧急补丁、范围功能升级和计划性重构，
+只让真正阻断本次变更的问题阻止交付；整体结构债务进入独立重构计划。普通
+`improve` 同时建立当前版本、目标版本、SemVer 建议、维护记录、Changelog 和
+发布审批的可追踪关系。
+
+### 当前边界
+
+- 保留 v1.1 已有独立 candidate、不可变 plan、preflight/postflight、自动回滚、
+  history 和 undo。
+- 不因体检发现全局历史债务而默认强迫紧急小修进入全量重构。
+- production 修改仍必须有回归证据；测试范围按变更等级确定，但不能降低共享
+  安全和兼容门禁。
+- Git branch、commit、push、tag、Release 继续是独立边界；Skill Engineering
+  不自动发布。
+- 实现前先完成 Spec、Plan；跨版本公开契约变化需要 ADR 和 1.x 兼容策略。
+
+恢复入口：
+[`v1.1.1 Maintenance Tiers & Versioning Handoff`](handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md)。
 
 ## `2.0.0`：Architecture Guardian（暂停，1.1 发布后恢复）
 

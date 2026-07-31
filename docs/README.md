@@ -30,6 +30,7 @@
 - 当前创建链路决策：[`adr/0008-native-authoring-kernel.md`](adr/0008-native-authoring-kernel.md)
 - 当前发布宿主决策：[`adr/0009-codex-canonical-release-gate.md`](adr/0009-codex-canonical-release-gate.md)
 - V1.1 三方评估：[`testing/2026-07-31-v1.1-three-way-evaluation.md`](testing/2026-07-31-v1.1-three-way-evaluation.md)
+- V1.1.1 维护分级与版本管理 Handoff：[`handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md`](handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md)
 
 ## 长期记录
 

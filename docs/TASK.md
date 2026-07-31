@@ -1,6 +1,8 @@
 # 当前任务
 
-当前版本：`1.0.0` Stable 正式发布；`1.1.0` Native Authoring 为当前开发 Sprint；`2.0.0` Architecture Guardian Phase 1 在 1.1 期间暂停，保持开发预览。
+当前版本：`1.0.0` Stable 正式发布；`1.1.0` Native Authoring 发布候选已提交并
+推送，等待 merge、tag 和 GitHub Release 独立授权；`1.1.1` 维护分级与版本管理
+已获准启动；`2.0.0` Architecture Guardian Phase 1 暂停，保持开发预览。
 
 ## In Progress：v1.1 Native Authoring
 
@@ -22,8 +24,20 @@
   production Doctor 100/A、credential lint、release consistency 与 diff check
   通过；Alibaba Skill Up + 真实 Codex 四个核心场景 4/4 通过，Microsoft
   Waza/Copilot 的未完成项与兼容性问题已按非阻断证据记录。
-- [ ] NA-7e：commit/push 当前策略候选；merge、tag `v1.1.0` 和 GitHub Release
-  分别获得明确授权。
+- [x] NA-7e：发布策略与三方评估收口提交为 `2227e2a`，已推送到
+  `origin/codex/version-roadmap`。
+- [ ] NA-7f：merge、tag `v1.1.0` 和 GitHub Release 分别获得明确授权。
+
+## Next：v1.1.1 Maintenance Tiers & Versioning
+
+- [ ] MT-0：从
+  [`v1.1.1 Handoff`](handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md)
+  恢复上下文，完成现状盘点、Spec、Plan；跨版本契约取舍需要 ADR。
+- [ ] MT-1：把 `hotfix / feature / refactor` 维护分级、当前阻断与结构债务分离、
+  分级回归范围落入稳定契约。
+- [ ] MT-2：为普通 `improve` 增加当前/目标版本、SemVer 建议、维护记录与
+  Changelog/发布边界，同时保持 1.x 兼容读取。
+- [ ] MT-3：完成 TDD、迁移/回滚、真实老 Skill 用例、全量门禁与独立评审。
 
 ## Paused：v2.0 Architecture Guardian Phase 1（1.1 期间暂停）
 

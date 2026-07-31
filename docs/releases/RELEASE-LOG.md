@@ -54,8 +54,9 @@ adapter fixture 不证明非 Codex 宿主的真实任务效用。
 
 2026-07-31 canonical host 策略同步后复验：212 项 pytest、Ruff、Skill lint、
 production Doctor 100/A、portable self-test、credential lint、release
-consistency 和 diff check 全部通过。当前策略变更尚未 commit/push；版本仍为
-Unreleased。
+consistency 和 diff check 全部通过。策略与三方评估收口提交为 `2227e2a`，
+已推送到 `origin/codex/version-roadmap`；版本仍为 Unreleased，merge、tag
+`v1.1.0` 和 GitHub Release 继续等待独立授权。
 
 同一冻结候选的三方评估中，项目原生门禁全绿，Alibaba Skill Up 驱动的真实
 Codex 四个核心场景 4/4 通过；Microsoft Waza/Copilot 发现的一次一问兼容性
