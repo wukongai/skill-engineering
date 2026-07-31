@@ -7,7 +7,7 @@
 | `0.1.0` | Stable baseline | Public Beta 本地闭环 | 已发布基线 |
 | `0.1.1` | Folded into 1.0 | Security Doctor 强化 | 不单独发布 |
 | `1.0.0` | Stable | Stable Lifecycle Contract | 本地与远程 runtime 门禁通过；正式发布 |
-| `1.1.0` | Unreleased / Remediation | Native Authoring | Codex E2E 已通过；Hermes E2E、K3 终审与发布授权待完成 |
+| `1.1.0` | Unreleased / Release Candidate | Native Authoring | Codex E2E 与 K3 终审已通过；Hermes E2E 非阻断；merge/tag/GitHub Release 待授权 |
 | `2.0.0` | Paused | Architecture Guardian | Phase 1 在 1.1 期间暂停 |
 
 ## 1.0 发布治理记录
@@ -46,10 +46,21 @@ Case A–F 历史与修复证据见
 Codex 无 Creator E2E 已完成 runtime failure → `needs_improvement` → 候选修复 →
 同一 Native Plan Apply/Verify → 写后自测 → 真实样本 `validated`。
 
-**当前不得发布**：Hermes 无 Creator 真实 E2E 仍待真实环境，K3 终审与发布授权
-也未完成。adapter fixture 与确定性
-门禁不能替代真实宿主证据；之后 commit、push、tag 与 GitHub Release 仍分别申请
-授权。静态通过不证明跨模型真实效用。
+K3 remediation 终审已 `approved`。根据 ADR-0009，Codex 是默认唯一必须通过的
+真实宿主 E2E；Hermes、Claude Code、Pi、Kimi CLI 真实 smoke 是非阻断兼容性
+证据，五宿主 adapter contract fixture 仍是发布门禁。当前候选已经提交并推送到
+功能分支；merge、tag `v1.1.0` 与 GitHub Release 仍需分别授权。静态通过和
+adapter fixture 不证明非 Codex 宿主的真实任务效用。
+
+2026-07-31 canonical host 策略同步后复验：212 项 pytest、Ruff、Skill lint、
+production Doctor 100/A、portable self-test、credential lint、release
+consistency 和 diff check 全部通过。当前策略变更尚未 commit/push；版本仍为
+Unreleased。
+
+同一冻结候选的三方评估中，项目原生门禁全绿，Alibaba Skill Up 驱动的真实
+Codex 四个核心场景 4/4 通过；Microsoft Waza/Copilot 发现的一次一问兼容性
+问题、入口预算告警和额度阻塞均作为非阻断证据保留。完整报告见
+[`2026-07-31-v1.1-three-way-evaluation.md`](../testing/2026-07-31-v1.1-three-way-evaluation.md)。
 
 ## `0.1.0` — Public Beta
 

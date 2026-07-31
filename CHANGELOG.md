@@ -18,6 +18,10 @@
 - legacy flag-based `create` 只保留为 1.0/CI `scaffold_only` 兼容入口，普通创建固定走完整 Native Authoring。
 - Authoring Brief 在持久化边界自动脱敏；新 BuildPlan 使用 hash v2 保护 `content_status`，旧计划继续兼容读取。
 - 真实任务试用完成前，portable 分数只表示 structural-readiness，并固定输出 `utility_claim=false`。
+- 发布策略以 Codex 作为默认唯一真实宿主 E2E 门禁；其他宿主真实 smoke 为
+  非阻断兼容性证据，adapter contract fixture 和共享安全边界仍必须通过。
+- 三方评估中项目原生门禁全绿，Alibaba Skill Up 驱动的真实 Codex 四个核心场景
+  4/4 通过；Microsoft Waza/Copilot 的未完成项与跨宿主限制按非阻断证据记录。
 
 ### 2.0.0 Preview
 

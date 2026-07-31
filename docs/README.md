@@ -23,10 +23,13 @@
 - V0.1 Plan：[`plans/2026-07-13-v0.1-public-beta-plan.md`](plans/2026-07-13-v0.1-public-beta-plan.md)
 - V1.0 Spec/Plan：[`specs/2026-07-16-v1.0-stable-contract-spec.md`](specs/2026-07-16-v1.0-stable-contract-spec.md) / [`plans/2026-07-16-v1.0-stable-contract-plan.md`](plans/2026-07-16-v1.0-stable-contract-plan.md)
 - V1.1 Spec/Plan：[`specs/2026-07-29-v1.1-native-authoring-spec.md`](specs/2026-07-29-v1.1-native-authoring-spec.md) / [`plans/2026-07-29-v1.1-native-authoring-plan.md`](plans/2026-07-29-v1.1-native-authoring-plan.md)
+- Codex 主发布门禁 Spec/Plan：[`specs/2026-07-31-codex-canonical-release-gate-spec.md`](specs/2026-07-31-codex-canonical-release-gate-spec.md) / [`plans/2026-07-31-codex-canonical-release-gate-plan.md`](plans/2026-07-31-codex-canonical-release-gate-plan.md)
 - V2.0 Spec/Plan：[`specs/2026-07-16-v2.0-architecture-guardian-spec.md`](specs/2026-07-16-v2.0-architecture-guardian-spec.md) / [`plans/2026-07-16-v2.0-architecture-guardian-plan.md`](plans/2026-07-16-v2.0-architecture-guardian-plan.md)
 - Apache-2.0 与署名 Spec/Plan：[`specs/2026-07-18-apache-2.0-attribution-spec.md`](specs/2026-07-18-apache-2.0-attribution-spec.md) / [`plans/2026-07-18-apache-2.0-attribution-plan.md`](plans/2026-07-18-apache-2.0-attribution-plan.md)
 - 当前许可证决策：[`adr/0006-apache-2.0-attribution-and-brand-boundary.md`](adr/0006-apache-2.0-attribution-and-brand-boundary.md)（取代历史 ADR 0005；安装器入口见 [`adr/0004-standard-skill-cli-install.md`](adr/0004-standard-skill-cli-install.md)）
 - 当前创建链路决策：[`adr/0008-native-authoring-kernel.md`](adr/0008-native-authoring-kernel.md)
+- 当前发布宿主决策：[`adr/0009-codex-canonical-release-gate.md`](adr/0009-codex-canonical-release-gate.md)
+- V1.1 三方评估：[`testing/2026-07-31-v1.1-three-way-evaluation.md`](testing/2026-07-31-v1.1-three-way-evaluation.md)
 
 ## 长期记录
 

@@ -219,7 +219,8 @@ flowchart TB
 - 本图覆盖 `v1.1.x` 的完整创建与既有 `1.0.x` 生命周期能力。
 - 创建后的注释式阅读、Guided Tour 和 Skill Graph 属于规划中的 `1.2.0`，不在本图当前执行链路内。
 - `2.0.x Architecture Guardian` 当前暂停；Blueprint/IR 不应被描述为 `v1.1.x` 已启用的写入门禁。
-- Hermes 无 Creator 真实 E2E 是 `v1.1.0` 的发布证据门禁，不是产品运行时对 Hermes Creator 的依赖。
+- Codex 无 Creator 真实 E2E 是默认唯一真实宿主发布门禁；Hermes 等其他宿主
+  真实 E2E 是非阻断兼容性证据，adapter contract fixture 仍必须通过。
 
 ## 主要事实源
 

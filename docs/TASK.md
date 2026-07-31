@@ -16,7 +16,14 @@
   production Doctor 100/A、credential lint、release consistency 与 diff check。
 - [x] NA-7b：Codex 无 Creator 隔离 E2E（含 runtime failure →
   `needs_improvement`、修复、同一 Native Plan Apply/Verify、真实样本 `validated`）。
-- [ ] NA-7c：K3 remediation 终审、Hermes 无 Creator 真实 E2E 与发布授权。
+- [x] NA-7c：K3 remediation 终审 approved；按 ADR-0009 固定 Codex 为默认唯一
+  真实宿主发布门禁，Hermes 真实 E2E 调整为非阻断兼容性证据。
+- [x] NA-7d：同步发布策略；212 pytest、Ruff、Skill lint、portable self-test、
+  production Doctor 100/A、credential lint、release consistency 与 diff check
+  通过；Alibaba Skill Up + 真实 Codex 四个核心场景 4/4 通过，Microsoft
+  Waza/Copilot 的未完成项与兼容性问题已按非阻断证据记录。
+- [ ] NA-7e：commit/push 当前策略候选；merge、tag `v1.1.0` 和 GitHub Release
+  分别获得明确授权。
 
 ## Paused：v2.0 Architecture Guardian Phase 1（1.1 期间暂停）
 

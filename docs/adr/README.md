@@ -9,3 +9,6 @@ ADR 记录跨版本仍重要的架构取舍。文件名使用 `NNNN-short-title.
 当前安装体验决策：ADR-0004 采用标准 `skills` CLI；ADR-0007 将普通用户默认命令细化为简约交互式入口。
 
 当前创建链路决策：ADR-0008 以 Native Authoring Kernel 取代外部 Creator 委托，标准安装产物自包含创建闭环。
+
+当前发布宿主决策：ADR-0009 以 Codex 作为默认唯一真实宿主发布门禁；其他宿主
+真实 E2E 是非阻断兼容性证据，adapter contract fixture 仍必须通过。

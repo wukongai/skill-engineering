@@ -144,14 +144,40 @@ def test_debug_log_is_ignored():
     assert "kimi-hook-debug.log" in ignore
 
 
-def test_release_evidence_does_not_claim_pending_e2e_passed():
+def test_codex_is_the_only_required_real_host_release_gate():
+    normative_paths = [
+        "docs/adr/0009-codex-canonical-release-gate.md",
+        "docs/specs/2026-07-29-v1.1-native-authoring-spec.md",
+        "docs/plans/2026-07-29-v1.1-native-authoring-plan.md",
+        "docs/TASK.md",
+        "docs/sprints/2026-07-v1.1-native-authoring.md",
+        "docs/releases/RELEASE-LOG.md",
+        "docs/guides/skill-engineering-execution-architecture.md",
+    ]
+    combined = "\n".join(
+        (ROOT / relative_path).read_text(encoding="utf-8")
+        for relative_path in normative_paths
+    )
+
+    assert "Codex" in combined
+    assert "唯一" in combined
+    assert "非阻断" in combined
+    assert "adapter" in combined.lower()
+    assert "Codex 与 Hermes 无 Creator E2E 通过" not in combined
+    assert "Hermes 无 Creator 真实 E2E 仍待真实环境" not in combined
+
+
+def test_release_evidence_reports_codex_passed_and_non_codex_non_blocking():
     release_log = (ROOT / "docs/releases/RELEASE-LOG.md").read_text(encoding="utf-8")
     v11 = release_log.split("## `1.1.0`", 1)[1].split("## `0.1.0`", 1)[0]
 
     assert "Unreleased" in v11
     assert "Codex" in v11 and "Hermes" in v11
-    assert "待" in v11 or "pending" in v11.lower()
-    assert "不得发布" in v11
+    assert "已通过" in v11
+    assert "非阻断" in v11
+    assert "merge" in v11.lower()
+    assert "tag" in v11.lower()
+    assert "GitHub Release" in v11
 
 
 def test_unreleased_v11_passes_consistency_without_fake_release_date():
