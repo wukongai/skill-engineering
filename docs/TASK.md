@@ -26,8 +26,9 @@
   Waza/Copilot 的未完成项与兼容性问题已按非阻断证据记录。
 - [x] NA-7e：发布策略与三方评估收口提交为 `2227e2a`，已推送到
   `origin/codex/version-roadmap`。
-- [x] NA-7f：Owner 明确授权 merge、双远程 push、tag `v1.1.0` 和正式
-  GitHub Release；发布前构建与干净环境 smoke 通过。
+- [x] NA-7f：Owner 明确授权并完成 merge、GitHub/Gitee `main` push、
+  annotated tag `v1.1.0` 和正式 GitHub Release；发布前构建与干净环境 smoke、
+  发布后远程 Tag 与附件复核均通过。
 - [ ] NA-7g：从远程正式 Tag 安装，在全新隔离项目完成普通用户的完整创建、
   真实使用、失败修复和维护回归；该项是发布后验证，不阻断已授权发布。
 

@@ -73,6 +73,18 @@ GitHub Release。发布前重新执行全量门禁、构建 wheel/sdist 并完�
 本次已授权发布；在报告完成前不宣称覆盖所有宿主或生产环境。决策记录见
 [`2026-08-01-v1.1-release-decision.md`](../testing/2026-08-01-v1.1-release-decision.md)。
 
+### 正式发布结果
+
+- 发布提交：`1f6508db4ad5ace606f739f7ec2329d671beb109`；
+- annotated tag：`v1.1.0`，GitHub/Gitee 均解析到同一发布提交；
+- GitHub Release 已正式发布：
+  <https://github.com/wukongai/skill-engineering/releases/tag/v1.1.0>；
+- wheel 与 sdist 已上传，远程下载后的 SHA-256 与发布前构建结果一致；
+- 公开 Tag 隔离克隆后的 Content Completion Gate 与 portable self-test 通过。
+
+完整事实见
+[`2026-08-01-v1.1-release-verification.md`](../testing/2026-08-01-v1.1-release-verification.md)。
+
 ## `1.1.1` — Maintenance Tiers & Versioning（Next / P2）
 
 日期：2026-08-01
