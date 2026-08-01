@@ -197,3 +197,13 @@ def test_released_v11_passes_consistency_with_frozen_release_date():
     )
 
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_ci_release_and_lint_contracts_are_explicit():
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    project = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+
+    assert "python scripts/check-release.py --version 1.1.0" in workflow
+    assert "python scripts/check-release.py --version 1.0.0" not in workflow
+    assert '[tool.ruff.lint]\n' in project
+    assert 'select = ["E4", "E7", "E9", "F"]' in project

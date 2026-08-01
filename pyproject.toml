@@ -28,3 +28,8 @@ pythonpath = ["src"]
 
 [tool.ruff]
 line-length = 100
+
+[tool.ruff.lint]
+# Keep the pre-0.15.18 default lint boundary explicit so local and CI runs do
+# not change when Ruff expands its defaults.
+select = ["E4", "E7", "E9", "F"]
