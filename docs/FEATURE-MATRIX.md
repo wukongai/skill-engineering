@@ -1,7 +1,8 @@
 # Skill Engineering 功能总表
 
 这份表回答“现在能做什么、属于哪个版本、证据在哪里”。`1.1.0` 已于 2026-08-01
-正式发布；其中正式 Tag 的完整新手用户回归仍按发布后独立验证跟踪。
+正式发布；正式 Tag 的完整新手用户回归已在独立 Codex 项目完成，结论为
+`passed_with_limitations`、无阻断问题，范围不扩展到非 Codex 宿主或生产外部集成。
 
 | 能力域 | 功能 | 当前状态 | 目标版本 | 主要入口/证据 |
 |---|---|---|---|---|
@@ -37,7 +38,7 @@
 
 ## 版本阅读方式
 
-- 想使用当前能力：看 README 和 `v1.0.0` GitHub Release。
+- 想使用当前能力：看 README 和 `v1.1.0` GitHub Release。
 - 想依赖稳定契约：看 `1.0.0` Spec/Plan、公开契约和发布证据。
 - 想参与当前开发：先看 `1.1.1` Handoff 与 2026-08 Sprint；Spec/Plan 尚待当前任务创建。
 - 想恢复 Architecture Guardian：看已暂停的 `2.0.0` Sprint、Spec、Plan 和 ADR。

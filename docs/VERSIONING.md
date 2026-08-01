@@ -22,7 +22,7 @@ Skill Engineering 使用语义化版本 `MAJOR.MINOR.PATCH`：
 - 当前开发任务：`1.1.1` Maintenance Tiers & Versioning；2026-08-01 非计划 P2，从 Handoff 进入 Spec/Plan 后实施。
 - `2.0.0` Architecture Guardian Phase 1 暂停；待 1.1 发布线收口后重新排期。
 
-代码包版本在 RC 阶段与候选版本一致；只有发布前工程门禁、merge、tag 和 GitHub Release 完成后才能标记 Stable。`1.1.0` 已满足这些发布条件。正式 Tag 的远程安装、新手完整创建、真实使用与维护回归作为发布后独立项目继续执行；完成前不得把该项写成已通过，也不得把结构分数写成真实任务效用。`1.1.1` 仍是计划任务，2.0 Preview 功能也不得被表述成已发布能力。
+代码包版本在 RC 阶段与候选版本一致；只有发布前工程门禁、merge、tag 和 GitHub Release 完成后才能标记 Stable。`1.1.0` 已满足这些发布条件。正式 Tag 的远程安装、新手完整创建、真实使用、失败修复、维护记录与 undo 已在发布后独立项目完成；结论为 `passed_with_limitations`，无阻断问题。结构分仍不得冒充真实任务效用，真实效用结论只覆盖已记录的 17 条合成反馈。`1.1.1` 仍是计划任务，2.0 Preview 功能也不得被表述成已发布能力。
 
 ## 版本事实源
 

@@ -1,7 +1,7 @@
 # 当前任务
 
 当前版本：`1.1.0` Native Authoring Stable，已获准并于 2026-08-01 正式发布；
-正式 Tag 的完整新手用户回归转入独立发布后项目。`1.1.1` 维护分级与版本管理
+正式 Tag 的完整新手用户回归已在独立 Codex 项目完成。`1.1.1` 维护分级与版本管理
 已获准启动；`2.0.0` Architecture Guardian Phase 1 暂停，保持开发预览。
 
 ## Released：v1.1 Native Authoring
@@ -29,8 +29,10 @@
 - [x] NA-7f：Owner 明确授权并完成 merge、GitHub/Gitee `main` push、
   annotated tag `v1.1.0` 和正式 GitHub Release；发布前构建与干净环境 smoke、
   发布后远程 Tag 与附件复核均通过。
-- [ ] NA-7g：从远程正式 Tag 安装，在全新隔离项目完成普通用户的完整创建、
-  真实使用、失败修复和维护回归；该项是发布后验证，不阻断已授权发布。
+- [x] NA-7g：从远程正式 Tag 安装，在全新隔离项目完成普通用户的完整创建、
+  17 条合成反馈真实使用、未授权 Slack 维护阻断、只读草稿修复、维护记录与
+  真实 undo；结论为 `passed_with_limitations`，无阻断问题。证据见
+  [`发布后完整用户回归`](testing/2026-08-01-v1.1-post-release-user-regression.md)。
 
 ## In Progress：v1.1.1 Maintenance Tiers & Versioning（非计划 P2）
 

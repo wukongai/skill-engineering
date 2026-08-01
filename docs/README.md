@@ -20,6 +20,7 @@
 - 1.1 验收证据：[`testing/2026-07-29-v1.1-native-authoring-cases.md`](testing/2026-07-29-v1.1-native-authoring-cases.md)
 - 1.1 正式发布决策：[`testing/2026-08-01-v1.1-release-decision.md`](testing/2026-08-01-v1.1-release-decision.md)
 - 1.1 正式发布验证：[`testing/2026-08-01-v1.1-release-verification.md`](testing/2026-08-01-v1.1-release-verification.md)
+- 1.1 发布后完整用户回归：[`testing/2026-08-01-v1.1-post-release-user-regression.md`](testing/2026-08-01-v1.1-post-release-user-regression.md)
 - Apache-2.0 收口证据：[`testing/2026-07-18-apache-2.0-license-closeout.md`](testing/2026-07-18-apache-2.0-license-closeout.md)
 - V0.1 Spec：[`specs/2026-07-13-v0.1-public-beta-spec.md`](specs/2026-07-13-v0.1-public-beta-spec.md)
 - V0.1 Plan：[`plans/2026-07-13-v0.1-public-beta-plan.md`](plans/2026-07-13-v0.1-public-beta-plan.md)

@@ -158,11 +158,11 @@ Skill Engineering 没有立即写文件，而是先确认：普通会议摘要�
 
 `1.1.0` 把完整作者能力收进 Skill 自身（Native Authoring Kernel）：只安装 Skill Engineering 就能完成需求澄清、任务专属完整候选、内容完整性门禁、创建评审评分和创建后一键自测；不再依赖官方 skill-creator 或独立 Python CLI。旧 `create` CLI 保留为 `scaffold_only` 兼容入口。
 
-`1.1.0` 已于 2026-08-01 正式发布。发布前已通过 Codex 无 Creator 真实 E2E 和完整工程门禁；正式 Tag 的远程安装、新手完整创建、真实使用与维护回归会在发布后独立项目中执行，在报告完成前不宣称覆盖所有宿主和生产环境。`1.1.1` 已登记为 2026-08-01 非计划 P2 任务，将补齐 hotfix/feature/refactor 分流、阻断问题与结构债务分离、分级回归和 SemVer/Changelog/维护记录闭环。
+`1.1.0` 已于 2026-08-01 正式发布。发布前已通过 Codex 无 Creator 真实 E2E 和完整工程门禁；正式 Tag 的远程安装、新手完整创建、真实使用、失败修复、维护记录与真实 undo 已在独立 Codex 项目完成，结论为 `passed_with_limitations`，无阻断问题。该证据只覆盖本次 Codex 场景，不代表所有宿主和生产环境。`1.1.1` 已登记为 2026-08-01 非计划 P2 任务，将补齐 hotfix/feature/refactor 分流、阻断问题与结构债务分离、分级回归和 SemVer/Changelog/维护记录闭环。
 
 ### 2.0：守护整套 Skill 架构
 
-Architecture Guardian 正在开发（1.1 期间暂停，1.1 发布后恢复）。它使用 Blueprint/IR 描述组件职责、执行拓扑和治理等级，后续检查依赖、职责重复、触发冲突、上下文成本和架构变化。所有结果先只读预览，不自动修改正式 Skill。
+Architecture Guardian 当前暂停，待 `1.1.1` 维护分级与版本管理收口后重新排期。它使用 Blueprint/IR 描述组件职责、执行拓扑和治理等级，后续检查依赖、职责重复、触发冲突、上下文成本和架构变化。所有结果先只读预览，不自动修改正式 Skill。
 
 ### 3.0 前瞻：从真实使用中持续进化
 
@@ -170,16 +170,17 @@ Architecture Guardian 正在开发（1.1 期间暂停，1.1 发布后恢复）�
 
 > 1.0 管好一个 Skill，1.1 让创建自包含，2.0 守护整套 Skill 架构，3.0 让 Skill 从真实使用中持续进化。
 
-准确状态见 [Roadmap](docs/ROADMAP.md)、[VERSIONING](docs/VERSIONING.md)、[FEATURE-MATRIX](docs/FEATURE-MATRIX.md)、[1.1 RC Sprint](docs/sprints/2026-07-v1.1-native-authoring.md) 和[当前 1.1.1 任务](docs/sprints/2026-08-v1.1.1-maintenance-versioning.md)。
+准确状态见 [Roadmap](docs/ROADMAP.md)、[VERSIONING](docs/VERSIONING.md)、[FEATURE-MATRIX](docs/FEATURE-MATRIX.md)、[1.1 发布 Sprint](docs/sprints/2026-07-v1.1-native-authoring.md) 和[当前 1.1.1 任务](docs/sprints/2026-08-v1.1.1-maintenance-versioning.md)。
 
 ## 发布证据
 
-`1.1.0` 发布前完成了 Codex 无 Creator 真实 E2E、K3 终审、Alibaba Skill Up + 真实 Codex 四个核心场景 4/4，以及 212 项 pytest、Ruff、Agent Skill validation、credential lint、diff check、wheel 构建和干净环境安装验证。正式 Tag 的完整新手用户回归按[发布决策](docs/testing/2026-08-01-v1.1-release-decision.md)在发布后独立执行。
+`1.1.0` 发布前完成了 Codex 无 Creator 真实 E2E、K3 终审、Alibaba Skill Up + 真实 Codex 四个核心场景 4/4，以及 212 项 pytest、Ruff、Agent Skill validation、credential lint、diff check、wheel 构建和干净环境安装验证。正式 Tag 的完整新手用户回归已按[发布决策](docs/testing/2026-08-01-v1.1-release-decision.md)在独立项目完成。
 
 production Doctor 曾达到 `100/A`，它只代表结构准备度，不代表所有真实任务中的业务效果。
 
 - [GitHub Release v1.1.0](https://github.com/wukongai/skill-engineering/releases/tag/v1.1.0)
 - [v1.1.0 发布决策与验证边界](docs/testing/2026-08-01-v1.1-release-decision.md)
+- [v1.1.0 发布后完整用户回归](docs/testing/2026-08-01-v1.1-post-release-user-regression.md)
 - [v1.1 三方评估](docs/testing/2026-07-31-v1.1-three-way-evaluation.md)
 - [四个 Use Case](docs/testing/2026-07-18-v1-use-cases.md)
 - [远程标准安装验证](docs/testing/2026-07-16-standard-skill-install.md)

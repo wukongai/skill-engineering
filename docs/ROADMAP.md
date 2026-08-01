@@ -9,11 +9,11 @@
 | `0.1.0` | 已发布基线 | Public Beta 本地生命周期闭环 | 已发布 |
 | `0.1.1` | 已并入 1.0 | Security Doctor：AST、source-to-sink、SARIF | 不单独发布 |
 | `1.0.0` | Stable | Stable Lifecycle Contract | 本地与远程安装门禁通过，正式发布 |
-| `1.1.0` | Stable | Native Authoring：单安装完整创建、内容门禁、创建评审与自动化测试 | 2026-08-01 正式发布；正式 Tag 用户回归转入发布后独立项目 |
+| `1.1.0` | Stable | Native Authoring：单安装完整创建、内容门禁、创建评审与自动化测试 | 2026-08-01 正式发布；正式 Tag 用户回归已完成，`passed_with_limitations`、无阻断 |
 | `1.1.1` | Next / P2 | 维护分级与版本管理：小修、功能升级、重构分流与 SemVer 闭环 | 2026-08-01 非计划任务已登记；Handoff 已准备，Spec/Plan 待完成 |
-| `2.0.0` | 暂停 | Architecture Guardian | Phase 1 在 1.1 期间暂停，1.1 发布后恢复 |
+| `2.0.0` | 暂停 | Architecture Guardian | 待 `1.1.1` 维护分级与版本管理收口后重新排期 |
 
-当前代码包和最新正式发布版本均为 `1.1.0` Stable（Native Authoring）。发布前 Codex 真实 E2E 与工程门禁已经通过；正式 Tag 的远程安装、新手创建、真实使用与维护回归按独立发布后项目执行。`1.1.1/2.0` 开发中不表示已发布或可以替代当前 1.x 稳定契约。
+当前代码包和最新正式发布版本均为 `1.1.0` Stable（Native Authoring）。发布前 Codex 真实 E2E 与工程门禁已经通过；正式 Tag 的远程安装、新手创建、真实使用、失败修复、维护记录与 undo 已在独立 Codex 项目完成。`1.1.1/2.0` 开发中不表示已发布或可以替代当前 1.x 稳定契约。
 
 ## `0.1.x`：本地生命周期基线
 
@@ -98,7 +98,8 @@
 事实源：[`1.1 Spec`](specs/2026-07-29-v1.1-native-authoring-spec.md)、[`1.1 Plan`](plans/2026-07-29-v1.1-native-authoring-plan.md)、[`ADR 0008`](adr/0008-native-authoring-kernel.md)、[`1.1 Sprint`](sprints/2026-07-v1.1-native-authoring.md)。
 
 发布边界：[`v1.1.0 正式发布决策`](testing/2026-08-01-v1.1-release-decision.md)
-明确记录发布前已完成证据与发布后正式 Tag 用户回归。后者完成前，不宣称覆盖
+明确记录发布前已完成证据与发布后正式 Tag 用户回归。发布后回归现已完成，见
+[`v1.1.0 发布后完整用户回归`](testing/2026-08-01-v1.1-post-release-user-regression.md)；结论不宣称覆盖
 所有新手路径、宿主和生产环境。
 
 ### 不进入 1.1
@@ -134,7 +135,7 @@
 恢复入口：
 [`v1.1.1 Maintenance Tiers & Versioning Handoff`](handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md)。
 
-## `2.0.0`：Architecture Guardian（暂停，1.1 发布后恢复）
+## `2.0.0`：Architecture Guardian（暂停，待 `1.1.1` 收口后重新排期）
 
 ### 目标
 
@@ -146,7 +147,7 @@
 2. **Execution topology**：entrypoint、stage、delegate、state、side effect、rollback；
 3. **Governance level**：personal、team、production、commercial 及其证据要求。
 
-### Phase 1：Blueprint/IR 契约（暂停，1.1 发布后恢复）
+### Phase 1：Blueprint/IR 契约（暂停，待 `1.1.1` 收口后重新排期）
 
 - [x] Blueprint JSON schema `1.0.0`；
 - [x] Python Blueprint/Topology/Governance/Dependency 数据模型；

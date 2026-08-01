@@ -7,7 +7,7 @@
 | `0.1.0` | Stable baseline | Public Beta 本地闭环 | 已发布基线 |
 | `0.1.1` | Folded into 1.0 | Security Doctor 强化 | 不单独发布 |
 | `1.0.0` | Stable | Stable Lifecycle Contract | 本地与远程 runtime 门禁通过；正式发布 |
-| `1.1.0` | Stable | Native Authoring | 2026-08-01 正式发布；正式 Tag 用户回归作为发布后独立验证 |
+| `1.1.0` | Stable | Native Authoring | 2026-08-01 正式发布；正式 Tag 用户回归已完成，`passed_with_limitations`、无阻断 |
 | `1.1.1` | Next / P2 | Maintenance Tiers & Versioning | 2026-08-01 非计划任务已登记；Handoff 已准备，Spec/Plan 待完成 |
 | `2.0.0` | Paused | Architecture Guardian | Phase 1 在 1.1 期间暂停 |
 
@@ -70,8 +70,16 @@ GitHub Release。发布前重新执行全量门禁、构建 wheel/sdist 并完�
 
 正式 Tag 的远程安装、普通用户从模糊需求创建全新 Skill、真实任务试用、失败
 修复与维护回归转入发布后独立项目。该项只能在正式 Tag 可用后完整执行，不阻断
-本次已授权发布；在报告完成前不宣称覆盖所有宿主或生产环境。决策记录见
+本次已授权发布；当时约定在报告完成前不宣称覆盖所有宿主或生产环境。决策记录见
 [`2026-08-01-v1.1-release-decision.md`](../testing/2026-08-01-v1.1-release-decision.md)。
+
+### 发布后完整用户回归
+
+正式 Tag 用户回归已于 2026-08-01 在全新独立 Codex 项目完成：精确 Tag
+project-local 安装、新手逐轮创建、17 条合成反馈真实试用、未授权 Slack 自动发送
+阻断、收窄为只读草稿、维护记录、真实 undo 与最终重应用均通过。结论为
+`passed_with_limitations`，无阻断问题；完整证据见
+[`2026-08-01-v1.1-post-release-user-regression.md`](../testing/2026-08-01-v1.1-post-release-user-regression.md)。
 
 ### 正式发布结果
 
@@ -92,7 +100,7 @@ GitHub Release。发布前重新执行全量门禁、构建 wheel/sdist 并完�
 本版本作为非计划 P2 任务登记，目标是建立 hotfix/feature/refactor 分流、当前
 阻断与结构债务分离、分级回归，以及 SemVer/Changelog/MaintenanceRecord
 闭环。当前只有 Handoff 与任务入口，Spec/Plan 和实现尚未完成；该范围不并入
-`1.1.0` RC。恢复入口见
+已经冻结并发布的 `1.1.0` 内容。恢复入口见
 [`2026-08-01-v1.1.1-maintenance-versioning-next.md`](../handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md)。
 
 ## `0.1.0` — Public Beta

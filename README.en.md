@@ -156,11 +156,11 @@ All four cases reran Preview, Apply, failure recovery, structural checks, and re
 
 `1.1.0` moves the full authoring capability into the Skill itself (Native Authoring Kernel): installing only Skill Engineering covers clarification, task-specific complete candidates, the Content Completion Gate, creation review with scoring, and a one-command post-creation self-test — no official skill-creator or standalone Python CLI required. The legacy `create` CLI remains as a `scaffold_only` compatibility entry.
 
-`1.1.0` was formally released on 2026-08-01. Before release it passed the real Codex no-Creator E2E and the complete engineering gate. Exact-tag remote installation plus a full novice create/use/maintain regression will run as a separate post-release project; until that report is complete, the project does not claim coverage across every host or production environment. `1.1.1` is registered as an unplanned P2 task for maintenance routing and versioning.
+`1.1.0` was formally released on 2026-08-01. Before release it passed the real Codex no-Creator E2E and the complete engineering gate. Exact-tag remote installation plus a full novice create/use/fail/fix/maintain/undo regression has now completed in an isolated Codex project with a `passed_with_limitations` result and no blockers. This evidence covers the recorded Codex scenario only; it does not claim coverage across every host or production environment. `1.1.1` is registered as an unplanned P2 task for maintenance routing and versioning.
 
 ### 2.0: protect the whole Skill architecture
 
-Architecture Guardian is in development (paused during 1.1, resuming after the 1.1 release). Blueprint/IR describes component roles, execution topology, and governance levels so later checks can identify dependency problems, duplicated responsibilities, trigger collisions, context cost, and architectural change. All results remain read-only previews before any production modification.
+Architecture Guardian is currently paused and will be rescheduled after the `1.1.1` maintenance-tier and versioning work closes. Blueprint/IR describes component roles, execution topology, and governance levels so later checks can identify dependency problems, duplicated responsibilities, trigger collisions, context cost, and architectural change. All results remain read-only previews before any production modification.
 
 ### 3.0 vision: evolve from real usage
 
@@ -168,16 +168,17 @@ Architecture Guardian is in development (paused during 1.1, resuming after the 1
 
 > 1.0 makes one Skill dependable. 1.1 makes creation self-contained. 2.0 protects the whole Skill architecture. 3.0 lets Skills evolve from real usage.
 
-See the [Roadmap](docs/ROADMAP.md), [VERSIONING](docs/VERSIONING.md), [FEATURE-MATRIX](docs/FEATURE-MATRIX.md), the [1.1 RC Sprint](docs/sprints/2026-07-v1.1-native-authoring.md), and the [current 1.1.1 task](docs/sprints/2026-08-v1.1.1-maintenance-versioning.md) for precise status.
+See the [Roadmap](docs/ROADMAP.md), [VERSIONING](docs/VERSIONING.md), [FEATURE-MATRIX](docs/FEATURE-MATRIX.md), the [1.1 release Sprint](docs/sprints/2026-07-v1.1-native-authoring.md), and the [current 1.1.1 task](docs/sprints/2026-08-v1.1.1-maintenance-versioning.md) for precise status.
 
 ## Release evidence
 
-Before release, `1.1.0` passed the real Codex no-Creator E2E, K3 final review, four Alibaba Skill Up + real Codex scenarios, 212 pytest tests, Ruff, Agent Skill validation, credential lint, diff checks, wheel builds, and clean-environment installation. A full exact-tag novice regression is tracked as a separate post-release project.
+Before release, `1.1.0` passed the real Codex no-Creator E2E, K3 final review, four Alibaba Skill Up + real Codex scenarios, 212 pytest tests, Ruff, Agent Skill validation, credential lint, diff checks, wheel builds, and clean-environment installation. The full exact-tag novice regression has now completed in a separate isolated Codex project with `passed_with_limitations` and no blockers.
 
 Production Doctor reached `100/A`. That is structural readiness, not proof of business outcomes across every real task.
 
 - [GitHub Release v1.1.0](https://github.com/wukongai/skill-engineering/releases/tag/v1.1.0)
 - [v1.1.0 release decision and validation boundary](docs/testing/2026-08-01-v1.1-release-decision.md)
+- [v1.1.0 post-release full user regression](docs/testing/2026-08-01-v1.1-post-release-user-regression.md)
 - [v1.1 three-way evaluation](docs/testing/2026-07-31-v1.1-three-way-evaluation.md)
 - [Four verified use cases](docs/testing/2026-07-18-v1-use-cases.md)
 - [Remote standard-install evidence](docs/testing/2026-07-16-standard-skill-install.md)
