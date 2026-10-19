@@ -4,6 +4,21 @@
 正式 Tag 的完整新手用户回归已在独立 Codex 项目完成。`1.1.1` 维护分级与版本管理
 已获准启动；`2.0.0` Architecture Guardian Phase 1 暂停，保持开发预览。
 
+## In Progress：Universal Mini Governance（跨版本治理原则）
+
+- [x] MG-0：确认所有 Skill 先经过 mini Product、mini Spec、mini Plan，复杂或商业 Skill 再升级完整治理。
+- [x] MG-1：建立 Universal Mini Governance Spec/Plan 与 `mini-governance.md` 入口。
+- [x] MG-2：更新创建路由、Authoring Brief、契约、产品/架构文档和回归测试。
+- [ ] MG-3：完成全量工程门禁与独立评审；本任务不包含 commit、push、tag 或公开发布。
+
+## In Progress：Boundary Contract、Skill TDD 与维护收敛
+
+- [x] BT-0：建立 Boundary Contract、行为测试和维护收敛 Spec/Plan。
+- [x] BT-1：接入 Authoring Brief、Native Plan、Skill contract 和创建入口。
+- [x] BT-2：接入维护目标、baseline、最大修复轮数、完成门和延后债务记录。
+- [x] BT-3a：完成真实私董会/业务 Agent 偏题与收敛 fixture、全量行为回归、portable self-test 和 Doctor。
+- [x] BT-3b：完成独立评审；行为 Runner、维护轮次状态机和 acceptance_cases 契约已复核通过。
+
 ## Released：v1.1 Native Authoring
 
 - [x] 完成 1.1 Spec（含创建评审与评分、Case F 自动化测试）与 Plan。

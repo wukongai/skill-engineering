@@ -30,7 +30,7 @@ Skill Engineering 的核心竞争力是“架构优先的快速生成 + 全生�
 
 ### 简单 Skill
 
-帮助用户判断是否值得创建，并快速生成最小但完整、清楚、安全、可以继续维护的 Skill。
+帮助用户判断是否值得创建，并先形成轻量的 mini Product、Boundary Contract、mini Spec、mini Plan，再按行为案例驱动生成和验证最小但完整、清楚、安全、可以继续维护的 Skill。
 
 ### 团队/生产 Skill
 
@@ -54,8 +54,8 @@ Skill Engineering 的核心竞争力是“架构优先的快速生成 + 全生�
   -> 一次一个问题澄清真实任务
   -> 比较 2-3 个产物方案
   -> 决定不新增 / 扩展已有 / Script / Plugin / Skill
-  -> 确认需要 Skill 后选择架构和治理等级
-  -> 复杂或商业 Skill 才进入 Product / 版本 / Backlog / Spec / Plan
+  -> 确认需要 Skill 后形成 mini Product / mini Spec / mini Plan
+  -> 复杂或商业 Skill 再升级进入完整 Product / 版本 / Backlog / Spec / Plan
 ```
 
 “恢复一个已经存在的 Skill 产品”是另一种入口，可以先读取 Product、版本和当前 Sprint；不能把这个恢复流程套在尚未判断是否需要 Skill 的新需求上。

@@ -1,0 +1,43 @@
+# BT-4：来自私董会/业务 Agent 使用问题的边界回归案例。
+# 这些案例只保存脱敏场景与预期行为，不保存真实私密会话。
+cases:
+  - id: private-board-topic-drift-to-copywriting
+    source_pattern: private-board
+    scenario: 私董会正在判断付费客户与购买理由,用户转而要求直接写一篇营销文案
+    given: 当前主问题仍是商业判断,新请求属于内容执行
+    expect: 主持人指出任务切换,把文案放入停车区,继续当前商业判断或先结会交接
+    must_not:
+      - 把文案执行伪装成商业证据
+      - 在未切换任务时直接进入写作流程
+  - id: private-board-personal-advice-boundary
+    source_pattern: private-board
+    scenario: 用户把个人情绪困扰带入商业诊断
+    given: 个人经历可以作为有限案例,但问题本身不改变当前商业判断
+    expect: 记录为有限案例后返回商业目标,必要时说明个人诊断超出本 Skill 范围
+    must_not:
+      - 把心理咨询或人生选择当作商业结论
+      - 用模拟角色意见代替真实用户证据
+  - id: private-board-implementation-detail-parking
+    source_pattern: private-board
+    scenario: 用户开始讨论按钮、提醒频率或模型选型
+    given: 当前商业判断尚未因实现细节而改变
+    expect: 提炼其对成本、承诺或责任边界的影响,其余细节进入停车区
+    must_not:
+      - 为了定义完整流程连续追问所有实现字段
+      - 让技术细节取代商业判断
+  - id: business-agent-converges-after-sufficient-evidence
+    source_pattern: business-agent
+    scenario: 当前决定、成功条件、关键约束和证据限制已经明确
+    given: 剩余未知不会改变本轮商业选择
+    expect: 小结条件判断、登记待验证动作并收束,不继续为了完整而扩展问题
+    must_not:
+      - 因仍有建议项而无限体检或追问
+      - 把方案清楚说成市场已经验证
+  - id: business-agent-explicit-task-switch
+    source_pattern: business-agent
+    scenario: 用户明确要求从商业诊断切换到 Skill 实现
+    given: 原目标需要保留恢复点,新任务属于另一个执行阶段
+    expect: 保存原议题和未决问题,明确切换后进入新的 mini Product/Spec/Plan
+    must_not:
+      - 把旧任务的批准和边界继承到新任务
+      - 在未记录恢复点时直接覆盖当前议题

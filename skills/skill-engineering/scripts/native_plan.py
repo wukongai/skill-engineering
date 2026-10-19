@@ -29,6 +29,13 @@ REQUIRED_BRIEF_FIELDS = (
     "positive_triggers",
     "negative_triggers",
     "verification",
+    "mission",
+    "owned_capabilities",
+    "excluded_capabilities",
+    "drift_signals",
+    "stop_conditions",
+    "acceptance_cases",
+    "behavior_cases",
 )
 MUTABLE_EXECUTION_FIELDS = {
     "applied",
@@ -126,8 +133,49 @@ def _brief_snapshot(project: Path, brief_id: str) -> dict[str, object]:
         raise PlanError(f"Authoring Brief 尚未就绪,缺少:{', '.join(missing)}")
     return {
         "id": brief_id,
+        "behavior_cases": payload.get("behavior_cases", []),
         "path": path.relative_to(project).as_posix(),
         "fingerprint": _sha256_bytes(_canonical_bytes(payload)),
+    }
+
+
+def _run_behavior_cases(candidate: Path, cases: object) -> dict[str, object]:
+    """Execute deterministic assertions declared in the Authoring Brief."""
+    if not isinstance(cases, list):
+        return {"status": "uncovered", "total": 0, "passed": 0, "failed": 0, "uncovered": 1}
+    texts = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in sorted(candidate.rglob("*.md"))
+        if path.is_file() and not path.is_symlink()
+    )
+    reports: list[dict[str, object]] = []
+    for index, case in enumerate(cases):
+        if not isinstance(case, dict):
+            reports.append({"id": str(case) or f"case-{index}", "status": "uncovered"})
+            continue
+        case_id = str(case.get("id") or f"case-{index}")
+        assertions = case.get("assertions")
+        if not all(case.get(key) for key in ("given", "expect", "must_not")) or not isinstance(assertions, dict):
+            reports.append({"id": case_id, "status": "uncovered"})
+            continue
+        missing = [value for value in assertions.get("must_include", []) if value not in texts]
+        forbidden = [value for value in assertions.get("must_not_include", []) if value in texts]
+        reports.append({
+            "id": case_id,
+            "status": "passed" if not missing and not forbidden else "failed",
+            "missing": missing,
+            "forbidden": forbidden,
+        })
+    passed = sum(item["status"] == "passed" for item in reports)
+    failed = sum(item["status"] == "failed" for item in reports)
+    uncovered = sum(item["status"] == "uncovered" for item in reports)
+    return {
+        "status": "failed" if failed else "uncovered" if uncovered else "passed",
+        "total": len(reports),
+        "passed": passed,
+        "failed": failed,
+        "uncovered": uncovered,
+        "cases": reports,
     }
 
 
@@ -239,6 +287,9 @@ def preview_plan(
     creation_review = review.review_candidate(candidate, profile)
     if gate_findings or creation_review["status"] != "pass":
         raise PlanError("candidate 未通过 Content Gate / portable creation review。")
+    behavior_tests = _run_behavior_cases(candidate, brief["behavior_cases"])
+    if behavior_tests["status"] != "passed":
+        raise PlanError("candidate 未通过 Authoring Brief 中声明的行为案例。")
 
     plan: dict[str, object] = {
         "schema_version": PLAN_SCHEMA_VERSION,
@@ -259,6 +310,7 @@ def preview_plan(
             "findings": gate_findings,
         },
         "creation_review": creation_review,
+        "behavior_tests": behavior_tests,
         "content_status": "content_complete",
         "preview_summary": {
             "file_count": len(candidate_snapshot["files"]),

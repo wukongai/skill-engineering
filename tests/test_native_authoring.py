@@ -39,7 +39,7 @@ def test_normal_creation_route_never_instructs_legacy_create():
 
 
 def test_authoring_brief_contract_exists_with_required_fields():
-    """NA-1: Authoring Brief 契约随 Skill 交付，包含 Spec 定义的 14 个字段。"""
+    """Authoring Brief 契约包含需求、边界和行为测试字段。"""
     brief = SKILL_DIR / "references" / "authoring-brief.md"
     assert brief.is_file(), "references/authoring-brief.md 不存在"
     text = brief.read_text(encoding="utf-8")
@@ -58,6 +58,15 @@ def test_authoring_brief_contract_exists_with_required_fields():
         "examples",
         "verification",
         "host_requirements",
+        "mission",
+        "owned_capabilities",
+        "excluded_capabilities",
+        "allowed_context",
+        "drift_signals",
+        "redirect_strategy",
+        "stop_conditions",
+        "acceptance_cases",
+        "behavior_cases",
     ]:
         assert f"`{field}`" in text, f"authoring-brief.md 缺少字段 {field}"
 

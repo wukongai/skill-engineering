@@ -11,6 +11,8 @@
 | Create | 最小架构选择与完整 Skill 候选 | 已交付 | 1.0 稳定 | `create` |
 | Create | Preview → 同一计划 Apply → postflight | 已交付 | 1.0 稳定 | build plan、scaffold tests |
 | Create | Authoring Brief 契约与原生完整候选生成 | 1.1 Stable | 1.1.0 | authoring-brief、authoring/native-authoring tests |
+| Create | 所有 Skill 的 mini Product / mini Spec / mini Plan 前置治理 | Implemented in working tree | Next maintenance window | mini-governance、Universal Mini Governance Spec/Plan、feedback tests |
+| Create | Boundary Contract 与创建行为测试矩阵 | Implemented in working tree | Next maintenance window | boundary-contract、Authoring Brief、native-plan、feedback/native authoring tests |
 | Create | Content Completion Gate(portable + Agent-native) | 1.1 Stable | 1.1.0 | content_gate.py、content gate tests |
 | Create | 创建评审评分、六态状态机、创建后自测入口 | 1.1 Stable | 1.1.0 | creation-review、skill_self_test.py |
 | Create | 宿主适配契约(Codex/Claude Code/Hermes/Pi/Kimi CLI) | 1.1 Stable；非 Codex 实测非阻断 | 1.1.0 | host-adapters、Case E fixture |
@@ -22,10 +24,11 @@
 | Improve | 隔离候选、失败模式、复杂度 diff、维护记录 | 已交付 | 1.0 稳定 | `improve`、verify/undo |
 | Improve | hotfix/feature/refactor 维护分流 | P2 任务，尚未实现 | 1.1.1 | 1.1.1 Handoff/Sprint |
 | Improve | 当前阻断与结构债务分离、分级回归 | P2 任务，尚未实现 | 1.1.1 | 1.1.1 Handoff/Sprint |
+| Improve | 有限修复轮数、完成门与延后债务收敛 | Implemented in working tree | Next maintenance window | maintenance plan/record、convergence fields、maintenance tests |
 | Versioning | SemVer 建议、Changelog 与 MaintenanceRecord 闭环 | P2 任务，尚未实现 | 1.1.1 | 1.1.1 Handoff/Sprint |
 | Evolve | 脱敏 run、候选、Pareto、Shadow/Canary/Active | 已交付 | 1.0 稳定 | evolution/release plan |
 | Release | 预览、审批、验证、回滚证据 | 1.0 Stable | 1.0 稳定 | release plan、release installer |
-| Governance | Product/Architecture/Spec/Plan/ADR/Sprint/Changelog | 已交付 | 1.0 稳定 | `docs/` |
+| Governance | 所有 Skill 的 mini 治理，复杂/商业 Skill 的完整 Product/Architecture/Spec/Plan/ADR/Sprint/Changelog | 已交付（完整门禁待验证） | Cross-version | `references/mini-governance.md`、`docs/` |
 | Packaging | wheel、安装 smoke、版本兼容矩阵 | 1.0 Stable | 1.0 稳定 | 1.0 spec/plan、兼容指南、release evidence |
 | Contract | 稳定 CLI、JSON、contract schema 与迁移 | 1.0 Stable | 1.0 稳定 | 1.0 spec/plan、公开契约 |
 | Blueprint | 组件角色、执行拓扑、治理等级三轴描述 | Schema/模型已交付，inventory 待开发 | 2.0.0 | `blueprint.py`、schema、2.0 spec/plan |

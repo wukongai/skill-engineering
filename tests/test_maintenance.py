@@ -42,6 +42,7 @@ def plan_for(root: Path, target: Path, candidate: Path, **kwargs):
         expected_behavior="只有明确请求才触发",
         regression_cases=["tests/cases/trigger.yaml"],
         profile="team",
+        acceptance_cases=kwargs.pop("acceptance_cases", ["tests/cases/trigger.yaml"]),
         **kwargs,
     )
 
@@ -54,6 +55,69 @@ def test_missing_maintenance_intent_or_regression_blocks_apply(tmp_path: Path):
     assert any(item["rule_id"] == "MAINT106" and item["level"] == "FAIL" for item in plan.findings)
     with pytest.raises(SystemExit, match="preflight"):
         apply_improvement_plan(root, plan)
+
+
+def test_maintenance_plan_exposes_convergence_gate_and_deferred_debt(tmp_path: Path):
+    root, target, candidate = setup_pair(tmp_path)
+    retained = target / "references" / "legacy.md"
+    retained.parent.mkdir()
+    retained.write_text("legacy structure\n", encoding="utf-8")
+    plan = plan_for(
+        root,
+        target,
+        candidate,
+        maintenance_goal="收窄触发边界",
+        baseline_version="1.0.0",
+        max_repair_rounds=2,
+    )
+
+    assert plan.maintenance_goal == "收窄触发边界"
+    assert plan.baseline_version == "1.0.0"
+    assert plan.max_repair_rounds == 2
+    assert plan.acceptance_cases == ["tests/cases/trigger.yaml"]
+    assert plan.repair_round == 0
+    assert plan.preflight["convergence"]["status"] == "converged"
+    assert "当前阻断项清零" in plan.completion_gate
+    assert plan.deferred_debt
+    assert plan.convergence["next_action"] == "建立独立 refactor/backlog 计划"
+
+
+def test_acceptance_cases_are_separate_from_regression_cases(tmp_path: Path):
+    root, target, candidate = setup_pair(tmp_path)
+    plan = plan_for(
+        root,
+        target,
+        candidate,
+        acceptance_cases=["tests/cases/current.yaml"],
+    )
+
+    assert plan.regression_cases == ["tests/cases/trigger.yaml"]
+    assert plan.acceptance_cases == ["tests/cases/current.yaml"]
+    assert plan.convergence["regression_required"] == ["tests/cases/trigger.yaml"]
+    assert plan.convergence["acceptance_cases"] == ["tests/cases/current.yaml"]
+
+
+def test_maintenance_plan_rejects_unbounded_repair_rounds(tmp_path: Path):
+    root, target, candidate = setup_pair(tmp_path)
+    with pytest.raises(SystemExit, match="1..3"):
+        plan_for(root, target, candidate, max_repair_rounds=4)
+
+
+def test_verify_increments_round_and_hard_stops_after_limit(tmp_path: Path, monkeypatch):
+    root, target, candidate = setup_pair(tmp_path)
+    plan = plan_for(root, target, candidate, max_repair_rounds=1)
+    record = apply_improvement_plan(root, plan)
+    monkeypatch.setattr(
+        "skill_engineering.maintenance._audit_tree",
+        lambda _path, _profile: {"status": "blocked", "lint": {}, "doctor": {}},
+    )
+
+    verified = verify_improvement(root, record.id)
+
+    assert verified.repair_round == 1
+    assert verified.status == "needs_improvement"
+    assert verified.convergence["status"] == "needs_improvement"
+    assert verified.convergence["next_action"] == "建立新的候选修复计划"
 
 
 def test_complexity_delta_detects_prompt_debt_growth(tmp_path: Path):

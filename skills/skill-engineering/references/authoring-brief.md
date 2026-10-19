@@ -1,6 +1,6 @@
 # Authoring Brief 契约
 
-Authoring Brief 是候选生成前必须形成的结构化、可检查的需求契约。它把用户的真实任务固定下来，让预览、门禁、评审和维护都引用同一份事实，而不是依赖对话记忆。
+Authoring Brief 是候选生成前必须形成的结构化、可检查的需求契约，也是 Mini Governance Record 中 mini Product 与 mini Spec 的主要事实源。它把用户的真实任务固定下来，让预览、门禁、评审和维护都引用同一份事实，而不是依赖对话记忆；Native Plan 对应 mini Plan。
 
 ## 使用时机
 
@@ -26,6 +26,15 @@ Authoring Brief 是候选生成前必须形成的结构化、可检查的需求�
 | `examples` | 至少一个成功示例；有风险时补失败或反例。 | 否 |
 | `verification` | 结构检查、脚本测试和真实任务试用的安排。 | 是 |
 | `host_requirements` | 需要的宿主工具能力（读写文件、终端、审批），不硬编码单一宿主名称。 | 否 |
+| `mission` | 本 Skill 当前要完成的业务任务。 | 是 |
+| `owned_capabilities` | Agent 负责的判断、动作和交付。 | 是 |
+| `excluded_capabilities` | 明确不负责的相邻任务。 | 是 |
+| `allowed_context` | 允许使用的输入、角色、阶段和证据范围。 | 否 |
+| `drift_signals` | 表示对话已经偏离目标的信号。 | 是 |
+| `redirect_strategy` | 偏离时拉回、停车或正式切换任务的处理方式。 | 否 |
+| `stop_conditions` | 必须停止追问、交付、等待证据或请求确认的条件。 | 是 |
+| `acceptance_cases` | 证明边界成立的正例、反例和异常例。 | 是 |
+| `behavior_cases` | 创建前行为测试矩阵，至少覆盖成功、反例、偏题、信息不足和失败/审批。 | 是 |
 
 ## 就绪判定
 

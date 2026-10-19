@@ -28,7 +28,7 @@ existing Skill project
   -> resume the approved lifecycle
 ```
 
-Product and version management are downstream of the artifact decision for a new request. They are an entrypoint only when resuming an already-established Skill product.
+Mini Product / mini Spec / mini Plan are downstream of the artifact decision for every new Skill request. Full Product and version management remain downstream of the artifact decision for complex, production, commercial, or multi-version Skill work; they are also an entrypoint when resuming an already-established Skill product.
 
 ## Conversational layer
 
@@ -90,7 +90,7 @@ Product / Constitution
   -> version / changelog / release decision
 ```
 
-This governance layer is not injected into every generated Skill. Simple Skills stay minimal; production and commercial Skills progressively adopt the artifacts justified by their risk and expected lifetime.
+Every generated Skill receives a lightweight Mini Governance Record with a Boundary Contract and behavior-test matrix. Simple Skills stay minimal at the candidate-file level; production and commercial Skills progressively adopt the full artifacts justified by their risk and expected lifetime. Maintenance plans must also declare a bounded convergence gate so structural debt cannot create an endless inspection loop.
 
 ## 2.0 Blueprint boundary
 

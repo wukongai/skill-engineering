@@ -13,7 +13,19 @@ from typing import Any
 from .journey import AuthoringBrief
 
 # 缺少任一字段时 Brief 不得进入候选生成（保持 needs_discovery）。
-REQUIRED_BRIEF_FIELDS = ("goal", "positive_triggers", "negative_triggers", "verification")
+REQUIRED_BRIEF_FIELDS = (
+    "goal",
+    "positive_triggers",
+    "negative_triggers",
+    "verification",
+    "mission",
+    "owned_capabilities",
+    "excluded_capabilities",
+    "drift_signals",
+    "stop_conditions",
+    "acceptance_cases",
+    "behavior_cases",
+)
 
 REDACTED = "[redacted]"
 

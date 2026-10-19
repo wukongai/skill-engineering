@@ -198,14 +198,21 @@ def create_improvement_plan(
     root_cause_layer: str = "",
     expected_behavior: str = "",
     regression_cases: list[str] | None = None,
+    acceptance_cases: list[str] | None = None,
     no_regression_reason: str = "",
     profile: str = "team",
     deletions: list[str] | None = None,
+    maintenance_goal: str = "",
+    baseline_version: str = "",
+    max_repair_rounds: int = 3,
 ) -> BuildPlan:
     target = target.expanduser().resolve()
     candidate = candidate.expanduser().resolve()
     regression_cases = regression_cases or []
+    acceptance_cases = list(acceptance_cases or regression_cases)
     deletions = list(dict.fromkeys(_safe_relative(item).as_posix() for item in (deletions or [])))
+    if max_repair_rounds < 1 or max_repair_rounds > 3:
+        raise SystemExit("max_repair_rounds 必须在 1..3 之间,避免无限维护循环。")
     if not (target / "SKILL.md").is_file():
         raise SystemExit(f"改进目标不是有效 Skill:{target}")
     if not (candidate / "SKILL.md").is_file():
@@ -382,6 +389,22 @@ def create_improvement_plan(
                 "warn": sum(item["level"] == "WARN" for item in findings),
             },
         }
+        deferred_debt = [item["message"] for item in findings if item["level"] == "WARN"]
+        completion_gate = [
+            "当前阻断项清零",
+            "当前回归用例通过",
+            "计划内 lint/Doctor 验证完成",
+        ]
+        preflight["convergence"] = {
+            "status": "blocked" if blocked else "converged",
+            "blocking_findings": [item["message"] for item in findings if item["level"] == "FAIL"],
+            "regression_required": list(regression_cases),
+            "acceptance_cases": list(acceptance_cases),
+            "deferred_debt": deferred_debt,
+            "completion_gate": completion_gate,
+            "max_repair_rounds": max_repair_rounds,
+            "next_action": "建立独立 refactor/backlog 计划" if deferred_debt else "进入 Verify",
+        }
 
     plan = BuildPlan(
         id=new_id("improve"),
@@ -401,6 +424,7 @@ def create_improvement_plan(
         root_cause_layer=root_cause_layer.strip(),
         expected_behavior=expected_behavior.strip(),
         regression_cases=regression_cases,
+        acceptance_cases=acceptance_cases,
         no_regression_reason=no_regression_reason.strip(),
         profile=profile,
         deletions=deletions,
@@ -408,6 +432,12 @@ def create_improvement_plan(
         complexity={"before": before, "after": after, "delta": delta},
         findings=findings,
         preflight=preflight,
+        maintenance_goal=maintenance_goal.strip() or expected_behavior.strip(),
+        baseline_version=baseline_version.strip() or "legacy",
+        max_repair_rounds=max_repair_rounds,
+        completion_gate=completion_gate,
+        deferred_debt=deferred_debt,
+        convergence=preflight["convergence"],
     )
     plan.plan_hash = _plan_hash(plan)
     save_build_plan(root, plan)
@@ -508,6 +538,7 @@ def apply_improvement_plan(root: Path, plan: BuildPlan) -> MaintenanceRecord:
         root_cause_layer=plan.root_cause_layer,
         expected_behavior=plan.expected_behavior,
         regression_cases=plan.regression_cases,
+            acceptance_cases=plan.acceptance_cases,
         no_regression_reason=plan.no_regression_reason,
         profile=plan.profile,
         actions=actions,
@@ -520,6 +551,13 @@ def apply_improvement_plan(root: Path, plan: BuildPlan) -> MaintenanceRecord:
         status="applying",
         verification={},
         undo_available=False,
+        maintenance_goal=plan.maintenance_goal,
+        baseline_version=plan.baseline_version,
+        max_repair_rounds=plan.max_repair_rounds,
+        repair_round=0,
+        completion_gate=plan.completion_gate,
+        deferred_debt=plan.deferred_debt,
+        convergence=plan.convergence,
     )
 
     try:
@@ -580,10 +618,26 @@ def apply_improvement_plan(root: Path, plan: BuildPlan) -> MaintenanceRecord:
 
 def verify_improvement(root: Path, record_id: str) -> MaintenanceRecord:
     record = load_maintenance_record(root, record_id)
+    record.repair_round += 1
     current = fingerprint_path(Path(record.target))
     drifted = current != record.after_fingerprint
     audit = _audit_tree(Path(record.target), record.profile) if not drifted else {}
     passed = record.status == "applied" and not drifted and audit.get("status") == "pass"
+    if passed:
+        record.convergence = {
+            **record.convergence,
+            "status": "converged",
+            "repair_round": record.repair_round,
+            "next_action": "进入维护历史观察",
+        }
+    else:
+        record.status = "needs_improvement"
+        record.convergence = {
+            **record.convergence,
+            "status": "needs_improvement",
+            "repair_round": record.repair_round,
+            "next_action": "建立新的候选修复计划",
+        }
     record.verification = {
         "status": "passed" if passed else "failed",
         "checked_at": now_iso(),
@@ -597,13 +651,13 @@ def verify_improvement(root: Path, record_id: str) -> MaintenanceRecord:
 
 def undo_improvement(root: Path, record_id: str) -> MaintenanceRecord:
     record = load_maintenance_record(root, record_id)
-    if record.status != "applied":
-        raise SystemExit(f"维护记录当前不可撤销:{record.status}")
     if fingerprint_path(Path(record.target)) != record.after_fingerprint:
         record.undo_available = False
         record.verification = {"status": "failed", "checked_at": now_iso(), "drifted": True}
         save_maintenance_record(root, record)
         raise SystemExit("目标 Skill 已发生漂移,不能安全撤销本次修改。")
+    if record.status != "applied":
+        raise SystemExit(f"维护记录当前不可撤销:{record.status}")
     _restore_from_backup(record)
     restored = fingerprint_path(Path(record.target))
     if restored != record.before_fingerprint:
@@ -635,6 +689,8 @@ def format_improvement_plan(plan: BuildPlan) -> str:
         f"目标：{plan.target}",
         f"将修改 {len(plan.files)} 个文件，显式删除 {len(plan.deletions)} 个文件。",
         f"根入口预计变化 {delta.get('skill_md_lines', 0):+d} 行。",
+        f"本轮验收案例 {len(plan.acceptance_cases)} 个，历史回归案例 {len(plan.regression_cases)} 个。",
+        f"本次维护最多修复 {plan.max_repair_rounds} 轮；结构债务不阻断本次交付。",
         "目前尚未写入任何文件。",
     ]
     if plan.findings:
@@ -677,6 +733,7 @@ def format_maintenance_record(record: MaintenanceRecord) -> str:
                 f"本次完成 {len(record.actions)} 个文件动作。",
                 "当前内容与已验证的候选一致。",
                 f"可以安全撤销：{'是' if record.undo_available else '否'}。",
+                f"延后结构债务：{len(record.deferred_debt)} 项。",
             ],
             next_action="继续用真实任务观察效果；需要时可撤销本次修改。",
             technical_details=[f"record={record.id}"],

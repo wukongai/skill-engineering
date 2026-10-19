@@ -11,5 +11,5 @@
 7. 推荐一种选择:不新增、复用已有 Skill、Plugin/runtime、Script、项目规则、Profile、归档/替换或新 Skill。
 8. 用户确认创建/扩展 Skill 后,读取 `references/authoring-brief.md` 形成 Authoring Brief;`goal`、`positive_triggers`、`negative_triggers`、`verification` 任一缺失时保持 `needs_discovery`,只问能补齐缺失字段的问题。
 9. Brief 就绪后,再判断 atomic、orchestrator、router、adapter 或 composite。
-10. 只有复杂、生产、商业或多版本 Skill 才进入 Product/版本/Backlog/Spec/Plan 治理。
+10. 确认创建或扩展 Skill 后，所有 Skill 先进入 mini Product/mini Spec/mini Plan；复杂、生产、商业或多版本 Skill 再升级到完整 Product/版本/Backlog/Spec/Plan 治理。
 11. 涉及 global 暴露、Plugin 启用或外部副作用时先停下确认。

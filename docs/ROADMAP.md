@@ -15,6 +15,10 @@
 
 当前代码包和最新正式发布版本均为 `1.1.0` Stable（Native Authoring）。发布前 Codex 真实 E2E 与工程门禁已经通过；正式 Tag 的远程安装、新手创建、真实使用、失败修复、维护记录与 undo 已在独立 Codex 项目完成。`1.1.1/2.0` 开发中不表示已发布或可以替代当前 1.x 稳定契约。
 
+跨版本治理原则：所有 Skill 创建或扩展先形成 mini Product、mini Spec、mini Plan；复杂、生产、商业或多版本 Skill 再升级完整治理。该原则的 Spec/Plan 见 [`Universal Mini Governance`](specs/2026-10-20-universal-mini-governance-spec.md)。
+
+创建与维护增强：所有 Skill 的 mini Spec 增加 Boundary Contract 和行为测试矩阵；维护计划增加有限修复轮数与收敛门，避免结构债务造成无限体检循环。当前实现与验证记录见 [`Boundary Contract、Skill TDD 与维护收敛`](specs/2026-10-20-boundary-tdd-convergence-spec.md)。
+
 ## `0.1.x`：本地生命周期基线
 
 ### 已交付能力

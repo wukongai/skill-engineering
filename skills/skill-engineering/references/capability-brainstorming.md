@@ -69,9 +69,9 @@
 
 ## 进入后续阶段
 
-确定创建或扩展 Skill 后：
+确定创建或扩展 Skill 后，所有 Skill 都先进入轻量 mini 治理；复杂、生产、商业或多版本 Skill 再升级完整治理：
 
 1. 选择 atomic/orchestrator/router/adapter/composite；
 2. 选择轻量、团队/生产或商业/工业治理等级；
 3. 定义输入、输出、停止点、安全和失败路径；
-4. 只有复杂、多版本或商业 Skill 才进入 Product、版本、Backlog、Spec/Plan、ADR 和 Sprint 治理。
+4. 所有 Skill 先形成 mini Product、mini Spec、mini Plan；只有复杂、多版本或商业 Skill 才在其上增加完整 Product、版本、Backlog、Spec/Plan、ADR 和 Sprint 治理。

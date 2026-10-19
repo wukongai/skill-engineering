@@ -136,7 +136,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     improve.add_argument("--expected-behavior", default="")
     improve.add_argument("--regression-case", action="append", default=[])
+    improve.add_argument("--acceptance-case", action="append", default=[])
     improve.add_argument("--no-regression-reason", default="")
+    improve.add_argument("--maintenance-goal", default="")
+    improve.add_argument("--baseline-version", default="")
+    improve.add_argument("--max-repair-rounds", type=int, default=3)
     improve.add_argument("--profile", choices=["personal", "team", "production"], default="team")
     improve.add_argument("--delete", action="append", default=[])
     improve.add_argument("--plan", dest="plan_id")
@@ -438,9 +442,13 @@ def main(argv: list[str] | None = None) -> int:
             root_cause_layer=args.root_cause_layer,
             expected_behavior=args.expected_behavior,
             regression_cases=args.regression_case,
+            acceptance_cases=args.acceptance_case,
             no_regression_reason=args.no_regression_reason,
             profile=args.profile,
             deletions=args.delete,
+            maintenance_goal=args.maintenance_goal,
+            baseline_version=args.baseline_version,
+            max_repair_rounds=args.max_repair_rounds,
         )
         _emit(value, format_improvement_plan(value), args.json)
         return 0 if value.preflight.get("status") == "pass" else 1

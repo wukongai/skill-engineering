@@ -60,6 +60,18 @@ outputs:
     type: json-or-text
     required: false
     contract: "候选生成前的结构化需求契约;缺 goal/触发/反触发/verification 时保持 needs_discovery。"
+  - name: boundary_contract
+    type: json-or-text
+    required: false
+    contract: "mini Spec 的业务边界契约;缺 mission、能力归属、不负责范围、偏题信号、停止条件或行为案例时保持 needs_discovery。"
+  - name: behavior_test_matrix
+    type: json-or-text
+    required: false
+    contract: "创建前登记成功、反例、偏题、信息不足和失败/审批案例;静态结构分数不能替代行为证据。"
+  - name: mini_governance_record
+    type: json-or-text
+    required: false
+    contract: "所有 Skill 创建或扩展前的脱敏 mini Product、mini Spec、mini Plan 记录;复杂、生产、商业或多版本 Skill 在此基础上升级完整治理。"
   - name: creation_review
     type: json-or-text
     required: false
@@ -83,6 +95,10 @@ outputs:
   - name: maintenance_record
     type: json-or-text
     required: false
+  - name: convergence_record
+    type: json-or-text
+    required: false
+    contract: "维护目标、baseline、acceptance_cases、regression_cases、最大修复轮数、repair_round、完成门、当前阻断与延后债务;达到完成门后收敛,超限或阻断时进入 needs_improvement。"
   - name: change_record
     type: json-or-text
     required: false
@@ -107,7 +123,7 @@ outputs:
   - name: governance_plan
     type: files-or-text
     required: false
-    contract: "只为复杂、生产、商业或多版本 Skill 补齐必要的产品与开发事实源。"
+    contract: "只为复杂、生产、商业或多版本 Skill 在 mini 治理之上补齐必要的完整产品与开发事实源。"
 
 stops:
   - name: awaiting_scope_confirmation
@@ -286,6 +302,7 @@ tests:
     - tests/product-positioning.yaml
     - tests/native-authoring-cases.yaml
     - tests/native-authoring-behavior.yaml
+    - tests/business-agent-boundary-cases.yaml
     - tests/host-adapter-fixtures.yaml
 
 evaluation:

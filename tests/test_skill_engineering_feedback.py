@@ -65,6 +65,45 @@ def test_skill_engineering_routes_complex_and_commercial_skill_governance():
     assert "complex_or_commercial_feature_without_spec_and_plan" in set(contract["forbidden"])
 
 
+def test_every_skill_starts_with_mini_governance_and_complex_skills_upgrade():
+    skill_text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
+    mini = (SKILL_DIR / "references" / "mini-governance.md").read_text(encoding="utf-8")
+    product = (ROOT / "docs" / "PRODUCT.md").read_text(encoding="utf-8")
+    architecture = (ROOT / "docs" / "architecture.md").read_text(encoding="utf-8")
+    contract = yaml.safe_load((SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8"))
+
+    assert "references/mini-governance.md" in skill_text
+    assert "references/boundary-contract.md" in skill_text
+    assert "mini Product" in mini
+    assert "mini Spec" in mini
+    assert "mini Plan" in mini
+    assert "所有新建或扩展的 Skill 都先" in mini
+    assert "复杂、生产、商业或多版本 Skill" in mini
+    assert "mini_governance_record" in {item["name"] for item in contract["outputs"]}
+    assert "boundary_contract" in {item["name"] for item in contract["outputs"]}
+    assert "behavior_test_matrix" in {item["name"] for item in contract["outputs"]}
+    assert "convergence_record" in {item["name"] for item in contract["outputs"]}
+    assert "mini Product / mini Spec / mini Plan" in product
+    assert "Every generated Skill receives a lightweight Mini Governance Record" in architecture
+
+
+def test_business_agent_boundary_fixture_covers_drift_and_convergence():
+    cases = yaml.safe_load(
+        (SKILL_DIR / "tests" / "business-agent-boundary-cases.yaml").read_text(encoding="utf-8")
+    )["cases"]
+    assert {item["id"] for item in cases} == {
+        "private-board-topic-drift-to-copywriting",
+        "private-board-personal-advice-boundary",
+        "private-board-implementation-detail-parking",
+        "business-agent-converges-after-sufficient-evidence",
+        "business-agent-explicit-task-switch",
+    }
+    for case in cases:
+        assert case["source_pattern"] in {"private-board", "business-agent"}
+        assert case["given"] and case["expect"] and case["must_not"]
+        assert case["must_not"]
+
+
 def test_skill_engineering_discovers_before_creating_or_governing_new_skill():
     skill_text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
     discovery = (SKILL_DIR / "references" / "capability-brainstorming.md").read_text(

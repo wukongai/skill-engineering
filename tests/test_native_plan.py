@@ -53,6 +53,24 @@ def _write_brief(project: Path, brief_id: str = "brief-demo") -> Path:
                 "positive_triggers": ["整理会议纪要"],
                 "negative_triggers": ["音频转写"],
                 "verification": ["真实会议记录试运行"],
+                "mission": "把会议记录整理成可执行的行动项",
+                "owned_capabilities": ["提取决定", "识别负责人"],
+                "excluded_capabilities": ["音频转写", "发送任务通知"],
+                "drift_signals": ["开始讨论会议以外的业务决策"],
+                "stop_conditions": ["输入不是会议记录时停止"],
+                "acceptance_cases": ["有负责人和截止时间的行动项被正确提取"],
+                "behavior_cases": [
+                    {
+                        "id": "success",
+                        "given": "有会议记录",
+                        "expect": "提取决定",
+                        "must_not": ["猜测"],
+                        "assertions": {
+                            "must_include": ["提取明确"],
+                            "must_not_include": ["伪造"],
+                        },
+                    }
+                ],
                 "examples": ["输入会议文本，输出决定"],
                 "schema_version": "1",
             }
@@ -117,7 +135,27 @@ def test_preview_writes_plan_but_not_target(tmp_path: Path):
     assert payload["brief"]["id"] == "brief-demo"
     assert payload["candidate"]["files"]
     assert payload["creation_review"]["status"] == "pass"
+    assert payload["behavior_tests"]["status"] == "passed"
+    assert payload["behavior_tests"]["passed"] == 1
     assert not target.exists()
+
+
+def test_preview_rejects_failed_behavior_case(tmp_path: Path):
+    project = tmp_path / "project"
+    project.mkdir()
+    _write_brief(project)
+    brief_path = project / ".skill-engineering" / "authoring-briefs" / "brief-demo.json"
+    brief = json.loads(brief_path.read_text(encoding="utf-8"))
+    brief["behavior_cases"][0]["assertions"]["must_include"] = ["不存在的行为"]
+    brief_path.write_text(json.dumps(brief, ensure_ascii=False), encoding="utf-8")
+    candidate = _write_candidate(tmp_path / "candidate")
+    target = project / ".agents" / "skills" / "meeting-summary"
+    plan = tmp_path / "plan.json"
+
+    result = _preview(project, candidate, target, plan)
+
+    assert result.returncode != 0
+    assert "行为案例" in result.stderr
 
 
 def test_preview_rejects_raw_brief_path_and_loads_brief_id(tmp_path: Path):

@@ -1,8 +1,8 @@
 # 复杂与商业 Skill 开发治理
 
-这份规范用于生命周期长、多人维护、生产复用、商业交付或高风险 Skill。简单 atomic Skill 不需要复制完整项目结构。
+这份规范用于在所有 Skill 的 mini Product、mini Spec、mini Plan 之上继续升级治理的生命周期长、多人维护、生产复用、商业交付或高风险 Skill。简单 atomic Skill 不需要复制完整项目结构，但不能跳过 mini 治理。
 
-本阶段只在能力探索已经决定“创建或扩展 Skill”后进入。新需求尚未完成产物判断时,先使用 `capability-brainstorming.md`,不得提前创建产品和版本工件。
+本阶段只在能力探索已经决定“创建或扩展 Skill”并完成 mini 治理后进入。新需求尚未完成产物判断时,先使用 `capability-brainstorming.md`,不得提前创建完整产品和版本工件。
 
 ## 何时升级治理
 

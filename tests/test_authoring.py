@@ -33,6 +33,15 @@ def _complete_brief() -> AuthoringBrief:
         examples=["示例输入 -> 示例输出"],
         verification=["结构检查", "真实会议记录试运行"],
         host_requirements=["读写文件"],
+        mission="把会议记录整理成可执行的行动项",
+        owned_capabilities=["提取决定", "识别负责人"],
+        excluded_capabilities=["音频转写", "发送任务通知"],
+        allowed_context=["用户提供的会议记录"],
+        drift_signals=["开始讨论会议以外的业务决策"],
+        redirect_strategy=["说明偏离并拉回会议行动项"],
+        stop_conditions=["输入不是会议记录时停止"],
+        acceptance_cases=["有负责人和截止时间的行动项被正确提取"],
+        behavior_cases=["成功", "反例", "偏题", "信息不足", "工具失败"],
     )
 
 
@@ -66,6 +75,18 @@ def test_complete_brief_is_ready_for_candidate_generation():
     brief = _complete_brief()
     assert missing_required_fields(brief) == []
     assert brief_ready_for_candidate(brief)
+
+
+def test_boundary_and_behavior_contract_are_required_before_candidate_generation():
+    brief = _complete_brief()
+    brief.mission = ""
+    brief.drift_signals = []
+    brief.behavior_cases = []
+
+    missing = missing_required_fields(brief)
+
+    assert {"mission", "drift_signals", "behavior_cases"} <= set(missing)
+    assert not brief_ready_for_candidate(brief)
 
 
 def test_sanitize_brief_redacts_credentials_without_mutating_original():

@@ -169,6 +169,7 @@ class BuildPlan:
     root_cause_layer: str = ""
     expected_behavior: str = ""
     regression_cases: list[str] = field(default_factory=list)
+    acceptance_cases: list[str] = field(default_factory=list)
     no_regression_reason: str = ""
     profile: str = "team"
     content_status: str = ""  # ""=legacy 1.x;scaffold_only | content_complete(1.1)
@@ -178,6 +179,13 @@ class BuildPlan:
     complexity: dict[str, Any] = field(default_factory=dict)
     findings: list[dict[str, Any]] = field(default_factory=list)
     preflight: dict[str, Any] = field(default_factory=dict)
+    maintenance_goal: str = ""
+    baseline_version: str = ""
+    max_repair_rounds: int = 3
+    repair_round: int = 0
+    completion_gate: list[str] = field(default_factory=list)
+    deferred_debt: list[str] = field(default_factory=list)
+    convergence: dict[str, Any] = field(default_factory=dict)
     postflight: dict[str, Any] = field(default_factory=dict)
     plan_hash: str = ""
     record_id: str | None = None
@@ -274,6 +282,7 @@ class MaintenanceRecord:
     root_cause_layer: str
     expected_behavior: str
     regression_cases: list[str]
+    acceptance_cases: list[str]
     no_regression_reason: str
     profile: str
     actions: list[dict[str, Any]]
@@ -286,6 +295,13 @@ class MaintenanceRecord:
     status: str
     verification: dict[str, Any]
     undo_available: bool
+    maintenance_goal: str = ""
+    baseline_version: str = ""
+    max_repair_rounds: int = 3
+    repair_round: int = 0
+    completion_gate: list[str] = field(default_factory=list)
+    deferred_debt: list[str] = field(default_factory=list)
+    convergence: dict[str, Any] = field(default_factory=dict)
     undone_at: str | None = None
     schema_version: str = SCHEMA_VERSION
     created_at: str = field(default_factory=now_iso)
@@ -313,6 +329,15 @@ class AuthoringBrief:
     examples: list[str] = field(default_factory=list)
     verification: list[str] = field(default_factory=list)
     host_requirements: list[str] = field(default_factory=list)
+    mission: str = ""
+    owned_capabilities: list[str] = field(default_factory=list)
+    excluded_capabilities: list[str] = field(default_factory=list)
+    allowed_context: list[str] = field(default_factory=list)
+    drift_signals: list[str] = field(default_factory=list)
+    redirect_strategy: list[str] = field(default_factory=list)
+    stop_conditions: list[str] = field(default_factory=list)
+    acceptance_cases: list[str] = field(default_factory=list)
+    behavior_cases: list[str] = field(default_factory=list)
     status: str = "draft"
     schema_version: str = SCHEMA_VERSION
     created_at: str = field(default_factory=now_iso)
@@ -466,7 +491,11 @@ def save_maintenance_record(root: Path, record: MaintenanceRecord) -> Path:
 
 
 def load_maintenance_record(root: Path, record_id: str) -> MaintenanceRecord:
-    return _load_contract(root, "maintenance-records", record_id, MaintenanceRecord)
+    _validate_identifier(record_id)
+    data = _load_json(local_state_root(root) / "maintenance-records" / f"{record_id}.json")
+    data.setdefault("acceptance_cases", list(data.get("regression_cases", [])))
+    data.setdefault("repair_round", 0)
+    return MaintenanceRecord(**data)
 
 
 def list_maintenance_records(root: Path) -> list[MaintenanceRecord]:
@@ -476,7 +505,10 @@ def list_maintenance_records(root: Path) -> list[MaintenanceRecord]:
     records: list[MaintenanceRecord] = []
     for path in sorted(folder.glob("*.json"), reverse=True):
         try:
-            records.append(MaintenanceRecord(**_load_json(path)))
+            data = _load_json(path)
+            data.setdefault("acceptance_cases", list(data.get("regression_cases", [])))
+            data.setdefault("repair_round", 0)
+            records.append(MaintenanceRecord(**data))
         except (SystemExit, TypeError):
             continue
     return records

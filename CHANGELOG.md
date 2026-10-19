@@ -6,6 +6,8 @@
 
 ### Planning
 
+- 已建立跨版本 Mini Governance 原则：所有 Skill 先经过 mini Product、mini Spec、mini Plan，复杂或商业 Skill 再升级完整治理；实现与全量门禁仍在当前工作区验证。
+- 工作区新增 Boundary Contract、可执行创建行为测试 Runner、有限维护轮次状态机和 acceptance_cases 契约；全量回归与 BT-3b 独立评审已完成。
 - `1.1.1` 已登记为 2026-08-01 非计划 P2 任务，计划增加维护分级、技术债分流、分级回归和版本记录闭环；尚未实现。
 - `2.0.0` Architecture Guardian Phase 1 在 1.1 发布线收口期间暂停。
 
