@@ -41,7 +41,7 @@
 
 ## 长期记录
 
-当前强制维护审查增量：[需求与验收](specs/2026-10-29-mandatory-architecture-review-spec.md) · [实施计划](plans/2026-10-29-mandatory-architecture-review-plan.md) · [专项迭代](sprints/2026-10-29-mandatory-architecture-review.md) · [验证记录](testing/2026-10-29-mandatory-architecture-review.md) · [默认强制决定](adr/0011-mandatory-maintenance-architecture-review.md)。状态：本地实现、安装核对与验证完成，未发布；取代上一轮缺声明仍可写入的兼容策略。
+当前强制维护审查增量：[需求与验收](specs/2026-10-29-mandatory-architecture-review-spec.md) · [实施计划](plans/2026-10-29-mandatory-architecture-review-plan.md) · [专项迭代](sprints/2026-10-29-mandatory-architecture-review.md) · [验证记录](testing/2026-10-29-mandatory-architecture-review.md) · [默认强制决定](adr/0011-mandatory-maintenance-architecture-review.md)。状态：实现、安装核对与验证完成，源码已提交并推送独立分支，未发布；取代上一轮缺声明仍可写入的兼容策略。
 
 - `adr/`：跨版本架构决策。
 - `logs/daily/`：当天事实、验证和未解决问题。

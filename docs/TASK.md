@@ -11,7 +11,7 @@
 - [x] MR-2：CLI/Active 同一审查输入与 Skill 规范同步。
 - [x] MR-3：独立评审、精确应用、同一计划验证与完整门禁。
 - [x] MR-4：既有安装入口同步核对、仓库外实测及[验证记录](testing/2026-10-29-mandatory-architecture-review.md)回填。
-- [ ] MR-5：按后续授权提交独立范围并推送，实际状态见[源码交付记录](testing/2026-10-29-mandatory-architecture-review.md#提交范围复验与远程交付)。
+- [x] MR-5：按后续授权提交独立范围并推送，实际状态见[源码交付记录](testing/2026-10-29-mandatory-architecture-review.md#提交范围复验与远程交付)。
 
 本轮收紧未发布维护写入策略，正式版本保持 1.1.0，不扩展其他 Sprint 或公开发布。
 

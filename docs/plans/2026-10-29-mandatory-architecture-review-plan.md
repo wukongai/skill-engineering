@@ -63,7 +63,9 @@
 
 - [x] 审计混合dirty，剔除SEC102、项目收尾、边界确认和本地未推送Skill Dissect提交。
 - [x] 从远程main建立独立codex分支，350项干净提交候选回归及所有工程门禁通过。
-- [ ] 提交本轮精确范围并推送GitHub分支。
-- [ ] 回填实际提交号、远程核验与最终文档状态。
+- [x] 提交本轮精确范围并推送GitHub分支。
+- [x] 回填实际提交号、远程核验与最终文档状态。
 
 [提交复验与交付记录](../testing/2026-10-29-mandatory-architecture-review.md#提交范围复验与远程交付)为本次源码交付事实源。
+
+实际功能提交：[4df144c](https://github.com/wukongai/skill-engineering/commit/4df144c770b48a445e9f4e06932c17ca8d710c9f)，已推送并核对远端一致；文档收尾随随后提交交付。

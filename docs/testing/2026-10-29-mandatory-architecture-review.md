@@ -56,10 +56,10 @@ Codex与共享Agent入口仍是指向本仓库Skill目录的两处符号链接�
 
 ## 提交范围复验与远程交付
 
-状态：干净提交候选验证完成，提交与推送已获用户授权，正在执行；不创建Tag或正式Release。
+状态：Done；独立范围功能提交已推送GitHub并完成远程提交号核验；文档收尾随随后提交交付。不创建Tag或正式Release。
 
 本轮从远程main的 `dec50013024efc29ff0864db0ed6fcd263fee366` 建立 `codex/maintenance-architecture-review`，推送目标为[GitHub仓库](https://github.com/wukongai/skill-engineering)。原main另有未推送的Skill Dissect文档提交，原工作区还包含SEC102、项目收尾和边界确认改动；均不进入本次提交。共享文档和Skill入口仅提取本轮段落，原工作区保留。
 
 独立提交候选实际运行350项pytest全部通过（4.55秒），Ruff、官方Skill validation、Content Gate、production Doctor100/A零问题、portable self-test、credential lint、1.1.0版本一致性和diff检查通过。本节之前的316/404/443及29项CLI记录属于原工作区各轮真实执行，保留原上下文；不把它们冒充干净提交候选的计数。
 
-提交范围为架构审查、CLI/Core双门、Active接入、相关测试、Skill规范与项目文档，共51个文件；未包含其他任务实现及新文档。最终提交号与远程核验结果在本节追加，机器状态见[本轮证据](2026-10-29-mandatory-architecture-review-evidence.json)。
+提交范围为架构审查、CLI/Core双门、Active接入、相关测试、Skill规范与项目文档，共51个文件；未包含其他任务实现及新文档。[功能提交 4df144c](https://github.com/wukongai/skill-engineering/commit/4df144c770b48a445e9f4e06932c17ca8d710c9f) 已推送至[交付分支](https://github.com/wukongai/skill-engineering/tree/codex/maintenance-architecture-review)，远程提交号与本地一致。文档收尾提交位于该功能提交之后；机器状态见[本轮证据](2026-10-29-mandatory-architecture-review-evidence.json)。

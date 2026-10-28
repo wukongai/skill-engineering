@@ -283,7 +283,7 @@
     "errors": 0
   },
   "source_delivery": {
-    "status": "validated_awaiting_commit_push",
+    "status": "pushed",
     "authorization": "explicit_user_request_2026-10-29",
     "remote": "origin",
     "remote_url": "https://github.com/wukongai/skill-engineering.git",
@@ -316,6 +316,11 @@
       "documents": 35,
       "local_references": 271,
       "errors": 0
-    }
+    },
+    "feature_commit": "4df144c770b48a445e9f4e06932c17ca8d710c9f",
+    "feature_commit_parent": "dec50013024efc29ff0864db0ed6fcd263fee366",
+    "remote_verified_commit": "4df144c770b48a445e9f4e06932c17ca8d710c9f",
+    "documentation_closeout": "included_in_followup_commit",
+    "original_main_preserved": true
   }
 }
