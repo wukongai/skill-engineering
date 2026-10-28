@@ -8,6 +8,6 @@
 4. 盘点已有 Product、Architecture、Roadmap、Backlog、Task、Spec、Plan、ADR、Sprint、Daily Log、Version 和 Changelog 等价工件。
 5. 只补缺失的单一事实源，不平行创建重复文档。
 6. 新功能先进入 Backlog；确认进入当前版本后再建立 Task、Spec 和 Plan。
-7. 修改放到独立候选，使用维护计划检查复杂度和回归证据。
+7. 已有 Skill 的扩展、重构或维护规划先进入[维护架构审查阶段](../architecture-review/INSTRUCTIONS.md)，修改仍放到独立候选并使用原维护计划；全新创建沿用 Native Authoring。
 8. 发布前对齐代码、文档、版本、Changelog、Sprint 和验证结果。
 9. commit、push、tag、公开发布或 Global 安装前分别停止并请求明确确认。

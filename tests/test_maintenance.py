@@ -33,6 +33,10 @@ def setup_pair(tmp_path: Path) -> tuple[Path, Path, Path]:
 
 
 def plan_for(root: Path, target: Path, candidate: Path, **kwargs):
+    if "architecture_review" not in kwargs:
+        kwargs["architecture_review"] = architecture_input(
+            root, target, candidate, deletions=kwargs.get("deletions")
+        )
     return create_improvement_plan(
         root,
         target,
@@ -41,7 +45,7 @@ def plan_for(root: Path, target: Path, candidate: Path, **kwargs):
         root_cause_layer="trigger",
         expected_behavior="只有明确请求才触发",
         regression_cases=["tests/cases/trigger.yaml"],
-        profile="team",
+        profile=kwargs.pop("profile", "team"),
         acceptance_cases=kwargs.pop("acceptance_cases", ["tests/cases/trigger.yaml"]),
         **kwargs,
     )
@@ -245,3 +249,309 @@ def test_production_requires_regression_case(tmp_path: Path):
 
     assert plan.preflight["status"] == "blocked"
     assert any(item["rule_id"] == "MAINT106" and item["level"] == "FAIL" for item in plan.findings)
+
+
+def architecture_input(root, target, candidate, *, deletions=None, full=True):
+    import json
+    import tempfile
+
+    from test_architecture_review import declaration
+
+    from skill_engineering.journey import fingerprint_path
+    from skill_engineering.maintenance import _copy_effective_tree
+
+    value = declaration(full=full)
+    if full:
+        with tempfile.TemporaryDirectory() as directory:
+            effective = Path(directory) / "effective"
+            _copy_effective_tree(target, candidate, effective, deletions or [])
+            value["full_review"].update(
+                target_fingerprint=fingerprint_path(target),
+                candidate_fingerprint=fingerprint_path(candidate),
+                effective_fingerprint=fingerprint_path(effective),
+            )
+    path = root / "architecture.json"
+    path.write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
+    return path
+
+
+@pytest.mark.parametrize("profile", ["personal", "team", "production"])
+def test_missing_architecture_declaration_blocks_all_profiles_before_writes(tmp_path, profile):
+    from skill_engineering.journey import fingerprint_path
+    from skill_engineering.maintenance import _copy_effective_tree, format_improvement_plan
+
+    root, target, candidate = setup_pair(tmp_path)
+    before = fingerprint_path(target)
+    plan = plan_for(root, target, candidate, architecture_review=None, profile=profile)
+    report = plan.preflight["architecture_review"]
+    assert report["status"] == "blocked"
+    assert plan.preflight["status"] == plan.convergence["status"] == "blocked"
+    assert any(item["rule_id"] == "MAINT111" and item["level"] == "FAIL" for item in plan.findings)
+    assert report["input_fingerprints"]["target"] == before
+    assert report["input_fingerprints"]["candidate"] == fingerprint_path(candidate)
+    effective = tmp_path / "measured-effective"
+    _copy_effective_tree(target, candidate, effective, [])
+    assert report["input_fingerprints"]["effective"] == fingerprint_path(effective)
+    preview = format_improvement_plan(plan)
+    assert "声明" in preview
+    assert "历史债务未评估" in preview
+    assert "已知开放架构债务：0 项" not in preview
+    with pytest.raises(SystemExit):
+        apply_improvement_plan(root, plan)
+    assert fingerprint_path(target) == before
+    assert not (root / ".skill-engineering" / "maintenance-records").exists()
+    assert not (root / ".skill-engineering" / "maintenance-backups").exists()
+
+
+def historical_unreviewed_record(root, target, candidate):
+    from skill_engineering.journey import save_maintenance_record
+
+    record = apply_improvement_plan(root, plan_for(root, target, candidate))
+    record.preflight.pop("architecture_review", None)
+    save_maintenance_record(root, record)
+    return record
+
+
+def test_legacy_unreviewed_history_verify_and_undo_remain_compatible(tmp_path):
+    from skill_engineering.maintenance import format_maintenance_record
+
+    root, target, candidate = setup_pair(tmp_path)
+    record = historical_unreviewed_record(root, target, candidate)
+    assert "架构未审查" in format_maintenance_record(record)
+    assert verify_improvement(root, record.id).verification["status"] == "passed"
+    assert undo_improvement(root, record.id).status == "undone"
+
+
+def test_legacy_saved_plan_hash_is_not_changed_on_load(tmp_path):
+    from skill_engineering.journey import load_build_plan, save_build_plan
+    from skill_engineering.maintenance import _plan_hash
+
+    root, target, candidate = setup_pair(tmp_path)
+    plan = plan_for(root, target, candidate)
+    plan.preflight.pop("architecture_review", None)
+    plan.plan_hash = _plan_hash(plan)
+    save_build_plan(root, plan)
+    loaded = load_build_plan(root, plan.id)
+    assert "architecture_review" not in loaded.preflight
+    assert loaded.plan_hash == plan.plan_hash == _plan_hash(loaded)
+    with pytest.raises(SystemExit, match="架构"):
+        apply_improvement_plan(root, loaded)
+    assert loaded.plan_hash == plan.plan_hash == _plan_hash(loaded)
+    assert not (root / ".skill-engineering" / "maintenance-records").exists()
+
+
+@pytest.mark.parametrize("snapshot", [None, {"status": "unreviewed"}])
+def test_legacy_unreviewed_plan_feedback_requires_new_preview(tmp_path, snapshot):
+    from skill_engineering.maintenance import format_improvement_plan
+
+    root, target, candidate = setup_pair(tmp_path)
+    plan = plan_for(root, target, candidate)
+    if snapshot is None:
+        plan.preflight.pop("architecture_review")
+    else:
+        plan.preflight["architecture_review"] = snapshot
+    feedback = format_improvement_plan(plan)
+    assert "当前不能应用" in feedback
+    assert "重新生成预览" in feedback
+    assert "是否继续应用" not in feedback
+    assert "方案已经准备好" not in feedback
+
+
+def test_cumulative_debt_above_single_declaration_limit_can_apply(tmp_path):
+    import json
+
+    root, target, candidate = setup_pair(tmp_path)
+    for round_number in range(2):
+        (candidate / "SKILL.md").write_text(
+            skill_text(f"窄触发修订 {round_number}。"), encoding="utf-8"
+        )
+        path = architecture_input(root, target, candidate)
+        value = json.loads(path.read_text(encoding="utf-8"))
+        value["budgets"]["open_debt"] = 200
+        value["debt"] = [
+            {"id": f"debt-{round_number}-{number}", "summary": "已审阅的延后结构改进"}
+            for number in range(70)
+        ]
+        path.write_text(json.dumps(value), encoding="utf-8")
+        plan = plan_for(root, target, candidate, architecture_review=path)
+        assert plan.preflight["status"] == "pass"
+        assert len(plan.preflight["architecture_review"]["debt"]) == 70 * (round_number + 1)
+        record = apply_improvement_plan(root, plan)
+        assert verify_improvement(root, record.id).verification["status"] == "passed"
+
+
+def test_architecture_failures_update_both_gates_and_block_apply(tmp_path):
+    root, target, candidate = setup_pair(tmp_path)
+    path = architecture_input(root, target, candidate, full=False)
+    plan = plan_for(root, target, candidate, architecture_review=path)
+    assert plan.preflight["status"] == "blocked"
+    assert plan.preflight["finding_counts"]["fail"] >= 1
+    assert plan.convergence["status"] == "blocked"
+    assert plan.convergence["blocking_findings"]
+    with pytest.raises(SystemExit, match="preflight"):
+        apply_improvement_plan(root, plan)
+
+
+def test_overlay_and_delete_fingerprints_bind_full_review_and_plan_hash(tmp_path):
+    import json
+
+    root, target, candidate = setup_pair(tmp_path)
+    retained = target / "references" / "keep.md"
+    retained.parent.mkdir()
+    retained.write_text("keep\n", encoding="utf-8")
+    obsolete = target / "references" / "obsolete.md"
+    obsolete.write_text("obsolete\n", encoding="utf-8")
+    path = architecture_input(root, target, candidate, deletions=["references/obsolete.md"])
+    plan = plan_for(root, target, candidate, architecture_review=path,
+                    deletions=["references/obsolete.md"])
+    assert plan.preflight["architecture_review"]["status"] == "pass"
+    # A changed external declaration cannot change the already previewed plan.
+    path.write_text(json.dumps({"schema_version": "invalid"}), encoding="utf-8")
+    record = apply_improvement_plan(root, plan)
+    assert retained.exists() and not obsolete.exists()
+    report = record.preflight["architecture_review"]
+    assert report["input_fingerprints"]["effective"] == record.after_fingerprint
+    assert verify_improvement(root, record.id).verification["status"] == "passed"
+    assert undo_improvement(root, record.id).status == "undone"
+
+
+def test_architecture_snapshot_tampering_is_rejected_by_existing_hash(tmp_path):
+    root, target, candidate = setup_pair(tmp_path)
+    path = architecture_input(root, target, candidate)
+    plan = plan_for(root, target, candidate, architecture_review=path)
+    plan.preflight["architecture_review"]["status"] = "unreviewed"
+    with pytest.raises(SystemExit, match="plan hash"):
+        apply_improvement_plan(root, plan)
+
+
+def test_invalid_architecture_input_leaves_no_saved_plan(tmp_path):
+    root, target, candidate = setup_pair(tmp_path)
+    path = root / "invalid.json"
+    path.write_text('{"raw_prompt":"private"}', encoding="utf-8")
+    with pytest.raises(SystemExit):
+        plan_for(root, target, candidate, architecture_review=path)
+    assert not (root / ".skill-engineering" / "build-plans").exists()
+
+
+def test_verified_full_review_becomes_baseline_across_two_small_applied_changes(tmp_path):
+    import json
+
+    root, target, candidate = setup_pair(tmp_path)
+    first = plan_for(root, target, candidate,
+                     architecture_review=architecture_input(root, target, candidate))
+    baseline = apply_improvement_plan(root, first)
+    original = (candidate / "SKILL.md").read_text(encoding="utf-8")
+    (candidate / "SKILL.md").write_text(
+        original + "\n".join(f"稳定说明 {index}" for index in range(6)) + "\n", encoding="utf-8"
+    )
+    path = architecture_input(root, target, candidate, full=False)
+    value = json.loads(path.read_text(encoding="utf-8"))
+    value["baseline_record_id"] = baseline.id
+    path.write_text(json.dumps(value), encoding="utf-8")
+    unverified = plan_for(root, target, candidate, architecture_review=path)
+    assert unverified.preflight["status"] == "blocked"
+    verify_improvement(root, baseline.id)
+    second = plan_for(root, target, candidate, architecture_review=path)
+    assert second.preflight["status"] == "pass"
+    local = apply_improvement_plan(root, second)
+    verify_improvement(root, local.id)
+    (candidate / "SKILL.md").write_text(
+        original + "\n".join(f"稳定说明 {index}" for index in range(12)) + "\n", encoding="utf-8"
+    )
+    third = plan_for(root, target, candidate,
+                     architecture_review=architecture_input(root, target, candidate, full=False))
+    report = third.preflight["architecture_review"]
+    assert report["baseline"]["record_id"] == baseline.id
+    assert report["complexity"]["cumulative_delta"]["skill_md_lines"] == 12
+    assert third.preflight["status"] == "blocked"
+
+
+def test_architecture_review_does_not_execute_candidate_script_or_evidence(tmp_path):
+    import json
+
+    root, target, candidate = setup_pair(tmp_path)
+    script = candidate / "scripts" / "never.py"
+    script.parent.mkdir()
+    script.write_text('raise AssertionError("candidate must never execute")\n', encoding="utf-8")
+    path = architecture_input(root, target, candidate)
+    value = json.loads(path.read_text(encoding="utf-8"))
+    marker = root / "must-not-exist"
+    value["full_review"]["evidence_summary"] = f"reviewed; touch {marker}"
+    path.write_text(json.dumps(value), encoding="utf-8")
+    plan = plan_for(root, target, candidate, architecture_review=path)
+    assert plan.preflight["architecture_review"]["status"] == "pass"
+    assert not marker.exists()
+
+
+def test_split_preview_explains_decision_and_architecture_debt_gate(tmp_path):
+    import json
+
+    from skill_engineering.maintenance import format_improvement_plan
+
+    root, target, candidate = setup_pair(tmp_path)
+    path = architecture_input(root, target, candidate)
+    value = json.loads(path.read_text(encoding="utf-8"))
+    value["requirement"]["decision"] = "split"
+    path.write_text(json.dumps(value), encoding="utf-8")
+    text = format_improvement_plan(plan_for(root, target, candidate, architecture_review=path))
+    assert "需求裁决：拆分" in text
+    assert "独立计划" in text
+    assert "结构债务不阻断本次交付" not in text
+
+
+def test_legacy_history_limitations_and_known_debt_count_are_visible_in_preview(tmp_path):
+    from skill_engineering.maintenance import format_improvement_plan, format_maintenance_record
+
+    root, target, candidate = setup_pair(tmp_path)
+    old = historical_unreviewed_record(root, target, candidate)
+    verify_improvement(root, old.id)
+    (candidate / "SKILL.md").write_text(skill_text("另一处窄触发修改。"), encoding="utf-8")
+    plan = plan_for(root, target, candidate,
+                    architecture_review=architecture_input(root, target, candidate))
+    preview = format_improvement_plan(plan)
+    assert "已知开放架构债务：0 项" in preview
+    assert "历史记录缺少结构化债务" in preview
+    assert "不能推断债务已清零" in preview
+    applied = format_maintenance_record(apply_improvement_plan(root, plan))
+    assert "已知开放架构债务：0 项" in applied
+    assert "历史记录缺少结构化债务" in applied
+
+
+@pytest.mark.parametrize("mutation", ["missing", "unreviewed", "blocked", "schema", "decision",
+                                      "missing_gate", "unsatisfied_gate", "missing_inputs",
+                                      "target", "candidate", "effective", "evidence", "thin_pass"])
+def test_apply_rejects_invalid_frozen_architecture_even_with_valid_old_hash(tmp_path, mutation):
+    from skill_engineering.journey import fingerprint_path
+    from skill_engineering.maintenance import _plan_hash
+
+    root, target, candidate = setup_pair(tmp_path)
+    before = fingerprint_path(target)
+    plan = plan_for(root, target, candidate)
+    report = plan.preflight["architecture_review"]
+    if mutation == "missing":
+        plan.preflight.pop("architecture_review")
+    elif mutation in {"unreviewed", "blocked"}:
+        report["status"] = mutation
+    elif mutation == "schema":
+        report["schema_version"] = "unknown"
+    elif mutation == "decision":
+        report["requirement_decision"] = "split"
+    elif mutation == "missing_gate":
+        report.pop("whole_review")
+    elif mutation == "unsatisfied_gate":
+        report["whole_review"]["status"] = "not_required"
+    elif mutation == "missing_inputs":
+        report.pop("input_fingerprints")
+    elif mutation in {"target", "candidate", "effective"}:
+        report["input_fingerprints"][mutation] = "d" * 64
+    elif mutation == "evidence":
+        report["whole_review"]["evidence"]["effective_fingerprint"] = "d" * 64
+    else:
+        plan.preflight["architecture_review"] = {"status": "pass"}
+    # Model an already frozen old artifact, rather than relying on hash drift.
+    plan.plan_hash = _plan_hash(plan)
+    with pytest.raises(SystemExit, match="架构"):
+        apply_improvement_plan(root, plan)
+    assert fingerprint_path(target) == before
+    assert not (root / ".skill-engineering" / "maintenance-records").exists()
+    assert not (root / ".skill-engineering" / "maintenance-backups").exists()

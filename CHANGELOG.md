@@ -4,6 +4,14 @@
 
 ## Unreleased
 
+### Fixed
+
+- 默认强制维护架构审查：缺声明预览阻断，旧未审查计划 Apply 拒绝，Active 接入同一输入与应用门；保留旧计划读取、Verify/Undo 和原哈希。修复累计债务误套单次输入上限及旧计划误提示审批；已安装入口一致，独立提交候选350项回归通过；原工作区29项仓库外CLI实测另有历史证据。见[强制审查验证](docs/testing/2026-10-29-mandatory-architecture-review.md)。
+
+### Added
+
+- 本地未发布增量：在原维护链路增加内部架构审查阶段及 `improve --architecture-review`，支持需求归属、完整候选评审、跨版本基线与已知债务。复用原计划哈希/Apply/Verify/Undo，原可选接入已由上方强制写入策略收紧，历史未审查记录仍可读；同秒历史按指纹因果顺序处理，歧义保守保留，凭证形态在声明持久化前拒绝。正式版本保持 1.1.0，具体结果见[本轮测试记录](docs/testing/2026-10-29-maintenance-architecture-review.md)。
+
 ### Planning
 
 - 已建立跨版本 Mini Governance 原则：所有 Skill 先经过 mini Product、mini Spec、mini Plan，复杂或商业 Skill 再升级完整治理；实现与全量门禁仍在当前工作区验证。

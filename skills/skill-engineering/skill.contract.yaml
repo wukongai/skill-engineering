@@ -36,6 +36,10 @@ inputs:
     required: false
     values: [personal, team, production]
     default: personal
+  - name: architecture_review_path
+    type: path
+    required: false
+    contract: "已有 Skill 维护与 Active 更新的必需脱敏声明；Agent 准备此输入，字段只在 references/architecture-review.md 维护。全新创建及只读操作不要求此输入，因此非全局 required。"
 
 outputs:
   - name: user_status_summary
@@ -99,6 +103,10 @@ outputs:
     type: json-or-text
     required: false
     contract: "维护目标、baseline、acceptance_cases、regression_cases、最大修复轮数、repair_round、完成门、当前阻断与延后债务;达到完成门后收敛,超限或阻断时进入 needs_improvement。"
+  - name: architecture_review
+    type: json-or-text
+    required: false
+    contract: "原 preflight 内的维护架构审查快照；分别说明本次完成与整体架构状态、累计增长、历史债务及证据限制。新维护缺声明为 blocked；unreviewed 仅显示历史，不允许新应用。声明通过不等于真实行为通过；字段见 references/architecture-review.md。"
   - name: change_record
     type: json-or-text
     required: false
@@ -152,6 +160,9 @@ delegates:
   - name: skill-engineering improve
     kind: cli
     when: "记录失败模式和根因,对比独立候选目录,生成复杂度增量与确定性 preflight,再按同一计划更新。"
+  - name: architecture review stage
+    kind: workflow
+    when: "已有 Skill 扩展、重构或规划维护；内部阶段组织归属、旧结构处置与独立评审，再交回同一 improve 计划。普通小修保持轻量，全新创建继续 Native Authoring。"
   - name: skill-engineering verify-improvement
     kind: cli
     when: "按维护记录复验修改结果和漂移。"
@@ -304,6 +315,7 @@ tests:
     - tests/native-authoring-behavior.yaml
     - tests/business-agent-boundary-cases.yaml
     - tests/host-adapter-fixtures.yaml
+    - tests/architecture-review-cases.json
 
 evaluation:
   score_scope: structural_readiness

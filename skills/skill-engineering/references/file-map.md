@@ -18,6 +18,8 @@ flowchart TD
   R --> D6["review 阶段"]
   R --> D7["evaluate 阶段"]
   R --> D8["evolve 阶段"]
+  D2 --> D9["architecture-review 阶段：已有 Skill 维护"]
+  D6 --> D9
 
   D1 --> S["references/selection-matrix.md"]
   D1 --> AB["references/authoring-brief.md"]
@@ -31,6 +33,7 @@ flowchart TD
   D6 --> RA["references/rule-authoring.md"]
   D7 --> ES["references/evaluation-standard.md"]
   D8 --> EV["references/evolution-standard.md"]
+  D9 --> AR["references/architecture-review.md"]
 
   D4 --> CLI1["skill-engineering doctor"]
   D5 --> CLI2["Agent Skill Hub install audit"]
@@ -55,6 +58,7 @@ flowchart TD
 | `references/quality-score-standard.md` | 0-100 质量评分维度、等级和使用方式。 | 需要解释分数、低分建议或安装前评估时读。 |
 | `references/install-governance.md` | global/project/profile/direct/plugin/archive 暴露模型。 | 审计安装范围和 profile 决策时读。 |
 | `references/maintenance-protocol.md` | 修复流程和根因层级。 | 修复或 review 旧 skill 时读。 |
+| `references/architecture-review.md` | 维护架构声明的单一字段规范、两层完成门、累计预算、历史债务与独立评审证据。 | 已有 Skill 扩展、重构或规划维护时按需读；普通小修保持轻量。 |
 | `references/rule-authoring.md` | 如何新增规则而不制造规则堆。 | 添加或调整 lint/doctor 规则时读。 |
 | `references/evaluation-standard.md` | 类型感知、证据 coverage、utility claim 和 case portfolio 标准。 | 评测或横向比较 skill 时读。 |
 | `references/evolution-standard.md` | A3 证据、候选、评测、版本与发布边界。 | 用户要求 Skill 根据真实运行结果自进化时读。 |
@@ -64,6 +68,7 @@ flowchart TD
 | `stages/doctor/INSTRUCTIONS.md` | 内部 workflow step:体检单个 skill。 | 检查已有 skill 健康度时读。 |
 | `stages/install-audit/INSTRUCTIONS.md` | 内部 workflow step:审计安装暴露和路由成本。 | 检查 global/project/plugin/profile 时读。 |
 | `stages/review/INSTRUCTIONS.md` | 内部 workflow step:审核一次 skill 变更。 | 接受修复或 PR 前读。 |
+| `stages/architecture-review/INSTRUCTIONS.md` | 内部 workflow step:组织能力归属、旧结构处置及完整候选审查，交回原维护引擎。 | 已有 Skill 维护中读；全新创建不要求历史基线。 |
 | `stages/evaluate/INSTRUCTIONS.md` | 内部 workflow step:区分静态 readiness 与真实 utility。 | 评测、打分或比较 skill 时读。 |
 | `stages/evolve/INSTRUCTIONS.md` | 内部 workflow step:自动形成候选并推进到 Shadow/Release Plan。 | 自进化或周期性优化 Skill 时读。 |
 | `scripts/content_gate.py` | 内容完整性门禁;只用标准库,宿主有 Python 即可运行。 | 候选预览/Apply 前检查占位、空资源、断链和凭证。 |
@@ -72,4 +77,5 @@ flowchart TD
 | `scripts/skill_self_test.py` | 创建后声明式自动化测试(门禁、portable review、临时副本内真实运行 manifest 测试)。 | 创建完成后一键复跑;样例任务层由宿主 Agent 完成。 |
 | `scripts/doctor_skill.py` | 对完整 Python CLI Doctor 的薄包装;缺少 CLI 时不影响 portable 创建评审。 | 维护者需要额外 contract/provider/evaluation 规则时可选使用。 |
 | `tests/self-test.json` | portable runner 的脚本 allowlist、stdin、退出码、输出与 timeout 断言。 | 有确定性脚本的 Skill 创建评审和写后自测时读取。 |
+| `tests/architecture-review-cases.json` | 架构声明读取器正反例；由仓库 pytest 对真实 loader 执行。 | 验证字段类型、安全和声明接入；不作为行为效果证据。 |
 | `scripts/render_report.py` | 把 JSON doctor 报告渲染成 Markdown。 | 需要分享审计报告时用。 |

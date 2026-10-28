@@ -11,5 +11,5 @@
 7. 使用真实 Agent rollout 或可信 harness 生成 baseline/candidate result artifact,再运行 `evolution submit-results`。
 8. 运行 `evolution select`;把 Pareto 推荐候选的 diff、复杂度和行为证据讲清楚。
 9. 对选定候选运行 `evolution version`;版本自动进入 Shadow。
-10. 需要 Canary/Active 时生成 `release-plan`,展示范围、before/after、验证和回滚后暂停。
+10. 需要 Canary/Active 时生成 `release-plan`，展示范围、before/after、验证和回滚后暂停；Active 先按[架构审查阶段](../architecture-review/INSTRUCTIONS.md)完成维护声明，缺声明不能更新 maintained source。
 11. 用户明确批准后运行 `release --plan ID --apply`,随后返回 ReleaseRecord、验证结果和 `release-rollback` 入口。

@@ -1,0 +1,321 @@
+{
+  "schema_version": "1",
+  "status": "pass",
+  "official_release_version": "1.1.0",
+  "public_release_performed": false,
+  "implementation": {
+    "manifest_sha256": "1d7e6e070e0b6a64f3a63dee4debea56134ca4315644852581070e659e6d1eef",
+    "core_and_test_files": 10,
+    "skill_files": 7,
+    "deletions": 0,
+    "unchanged_protected_files": 281,
+    "unrelated_hash_mismatches": 0
+  },
+  "tests": {
+    "baseline_passed": 404,
+    "final_passed": 443,
+    "final_elapsed_seconds": 4.78,
+    "red_core": {
+      "failed": 19,
+      "passed": 102
+    },
+    "red_cli": {
+      "failed": 15,
+      "passed": 15
+    },
+    "red_skill_contract_failed": 1,
+    "red_cumulative_debt": {
+      "failed": 1,
+      "passed": 4
+    },
+    "red_legacy_feedback_failed": 2
+  },
+  "independent_review": {
+    "spec_compliance": "pass",
+    "code_quality": "pass",
+    "unresolved_findings": 0,
+    "closed_findings": [
+      "cumulative_debt_batch_limit",
+      "legacy_plan_misleading_apply_prompt"
+    ],
+    "skill_whole_review": {
+      "target_fingerprint": "ee2492ebbb6e14c32de9fb6047d79d87a85952b57920061f8b0a1894cbeca4f2",
+      "candidate_fingerprint": "79417f45c22106f855360bcc9ef8fd611aa325920960e8e77843c8f593da360e",
+      "effective_fingerprint": "79417f45c22106f855360bcc9ef8fd611aa325920960e8e77843c8f593da360e",
+      "checked_areas": [
+        "ownership",
+        "routing",
+        "interfaces",
+        "state",
+        "failure",
+        "rollback"
+      ],
+      "conclusion": "pass",
+      "reviewer": "Codex independent subagent /root/maintenance_gates; did not generate the candidate",
+      "evidence_summary": "已独立审查真实目标与完整 overlay 有效候选，未参与候选生成。实际目录均为77个有效项、形状相同，仅修改SKILL.md、architecture-review/maintenance-protocol/evolution-standard三个reference、architecture-review/evolve两个内部阶段及skill.contract.yaml；无显式删除、缺失旧文件或symlink，故effective与candidate指纹一致。ownership：新增要求归属于原维护流程，不新增顶层Skill、审查引擎或第二套写入链路；routing：新建继续Native Authoring，已有Skill每次维护均准备轻量声明，首次无有效整体基线及边界/预算/债务/历史歧义触发完整独立评审，Active走相同维护门；interfaces：JSON字段唯一参考为references/architecture-review.md，contract说明该输入对维护和Active必需、对新建和只读操作非全局必需，Apply只用冻结快照且拒绝补传声明升级旧审批；state：原计划哈希与maintenance records承载快照，整体基线要求同目标、applied、正式Verify及有效完整评审，局部维护不刷新基线，unreviewed仅用于历史显示；failure：缺声明、旧缺字段/unreviewed计划、split/defer、指纹漂移及整体门缺证据均明确阻断并重新预览，历史债务未知不包装为清零；rollback：保留原postflight自动恢复、Verify/history/安全Undo及发布审批验证回滚，Shadow/Canary不新增维护历史要求。未发现Critical或Important架构问题。结论仅覆盖此Skill候选文案、接口及完整工作流审查；CLI预览/Apply硬门实现、自动化回归与外部console验证须单独完成；未运行候选脚本，不证明真实任务效用。"
+    }
+  },
+  "self_hosted_maintenance": {
+    "plan_id": "improve-20261028224106-d9afd375",
+    "plan_hash": "26a6cf90def2eed4f0f011859bab53e92e6680f44cdd21d1f4b45ca7155b7170",
+    "record_id": "maintenance-20261028224118-8df16b99",
+    "apply_status": "applied",
+    "verification_status": "passed",
+    "drifted": false,
+    "architecture_status": "pass",
+    "whole_review_status": "accepted"
+  },
+  "installation": {
+    "action": "already_linked_to_current_source",
+    "entries": [
+      {
+        "host": "codex",
+        "kind": "symlink",
+        "same_source": true,
+        "content_fingerprint": "79417f45c22106f855360bcc9ef8fd611aa325920960e8e77843c8f593da360e"
+      },
+      {
+        "host": "agents",
+        "kind": "symlink",
+        "same_source": true,
+        "content_fingerprint": "79417f45c22106f855360bcc9ef8fd611aa325920960e8e77843c8f593da360e"
+      }
+    ],
+    "global_environment_changed": false,
+    "new_global_exposure": false
+  },
+  "installed_cli": {
+    "runtime": ".venv/bin/skill-engineering",
+    "outside_repository_cwd": true,
+    "pythonpath_removed": true,
+    "check_count": 29,
+    "checks": [
+      {
+        "name": "improve-help",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "active-help",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "legacy-plan-show",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "legacy-plan-readable-status",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "legacy-plan-apply-refused",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "missing-declaration-personal",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "missing-personal-apply-refused",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "missing-declaration-team",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "missing-team-apply-refused",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "missing-declaration-production",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "missing-production-apply-refused",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "old-plan-cannot-add-review",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "split-blocked",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "split-apply-refused",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "defer-blocked",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "defer-apply-refused",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "stale-review-blocked",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "full-review-accepted",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "candidate-drift-apply-refused",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "first-apply",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "first-verify",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "local-six-lines",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "second-apply",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "second-verify",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "cumulative-twelve-lines-blocked",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "cumulative-apply-refused",
+        "status": "pass",
+        "exit_code": 1
+      },
+      {
+        "name": "undo-second",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "undo-first",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "journey-complete",
+        "status": "pass",
+        "exit_code": 0
+      }
+    ],
+    "old_plan_readable": true,
+    "old_hash_preserved": true,
+    "old_unreviewed_apply_blocked": true,
+    "all_profiles_missing_declaration_blocked": true,
+    "target_restored": true,
+    "installed_unchanged_during_smoke": true,
+    "cumulative_lines": 12,
+    "budget_lines": 10,
+    "whole_baseline_retained": true
+  },
+  "sample_evidence": {
+    "kind": "reused_identical_synthetic_fixture",
+    "review_fingerprints_rechecked": true,
+    "result_assertions_rerun": true,
+    "new_model_rollout_performed": false,
+    "long_term_utility_verified": false
+  },
+  "gates": {
+    "ruff": "pass",
+    "skill_validation": {
+      "status": "pass"
+    },
+    "content_gate": {
+      "status": "pass"
+    },
+    "production_doctor": {
+      "status": "pass",
+      "score": 100,
+      "grade": "A",
+      "issues": 0
+    },
+    "portable_self_test": {
+      "status": "pass",
+      "target_unchanged": true,
+      "utility_claim": false
+    },
+    "credential_lint": "pass",
+    "release_consistency": "pass",
+    "diff_check": "pass"
+  },
+  "references": {
+    "status": "pass",
+    "documents": 35,
+    "local_references": 286,
+    "errors": 0
+  },
+  "source_delivery": {
+    "status": "validated_awaiting_commit_push",
+    "authorization": "explicit_user_request_2026-10-29",
+    "remote": "origin",
+    "remote_url": "https://github.com/wukongai/skill-engineering.git",
+    "branch": "codex/maintenance-architecture-review",
+    "base_commit": "dec50013024efc29ff0864db0ed6fcd263fee366",
+    "selected_files": 51,
+    "clean_candidate_tests_passed": 350,
+    "clean_candidate_elapsed_seconds": 4.55,
+    "clean_candidate_gates": {
+      "validation": "pass",
+      "content": "pass",
+      "doctor": {
+        "status": "pass",
+        "score": 100,
+        "grade": "A"
+      },
+      "selftest": "pass",
+      "credentials": "pass",
+      "version": "pass"
+    },
+    "excluded_tasks": [
+      "SEC102",
+      "project-closeout",
+      "skill-boundary-confirmation",
+      "local-unpushed-Skill-Dissect-commit"
+    ],
+    "tag_or_release_performed": false,
+    "clean_import_verified": true,
+    "clean_candidate_references": {
+      "documents": 35,
+      "local_references": 271,
+      "errors": 0
+    }
+  }
+}

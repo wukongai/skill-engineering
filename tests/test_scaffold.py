@@ -172,6 +172,8 @@ def test_name_must_be_hyphen_case(tmp_path):
 
 
 def test_improvement_plan_summarizes_impact_and_applies_after_preview(tmp_path: Path):
+    from test_maintenance import architecture_input
+
     root = make_root(tmp_path)
     target = tmp_path / "demo-skill"
     candidate = tmp_path / "candidate"
@@ -190,6 +192,7 @@ def test_improvement_plan_summarizes_impact_and_applies_after_preview(tmp_path: 
         root_cause_layer="trigger",
         expected_behavior="新描述只触发明确能力",
         no_regression_reason="仅收窄 metadata,由 lint 和 Doctor 验证。",
+        architecture_review=architecture_input(root, target, candidate),
     )
     assert plan.operation == "improve"
     assert (target / "SKILL.md").read_text(encoding="utf-8") == old
@@ -225,3 +228,17 @@ def test_improvement_plan_rejects_stale_target(tmp_path: Path):
 
     with pytest.raises(SystemExit, match="过期"):
         apply_build_plan(root, plan)
+
+
+def test_scaffold_proxy_cannot_apply_unreviewed_old_plan(tmp_path):
+    from test_maintenance import plan_for, setup_pair
+
+    from skill_engineering.maintenance import _plan_hash
+
+    root, target, candidate = setup_pair(tmp_path)
+    plan = plan_for(root, target, candidate)
+    plan.preflight.pop("architecture_review")
+    plan.plan_hash = _plan_hash(plan)
+    with pytest.raises(SystemExit, match="架构"):
+        apply_build_plan(root, plan)
+    assert not (root / ".skill-engineering" / "maintenance-records").exists()

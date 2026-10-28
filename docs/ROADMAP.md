@@ -19,6 +19,10 @@
 
 创建与维护增强：所有 Skill 的 mini Spec 增加 Boundary Contract 和行为测试矩阵；维护计划增加有限修复轮数与收敛门，避免结构债务造成无限体检循环。当前实现与验证记录见 [`Boundary Contract、Skill TDD 与维护收敛`](specs/2026-10-20-boundary-tdd-convergence-spec.md)。
 
+本轮授权的未发布增量：[内部维护架构审查](specs/2026-10-29-maintenance-architecture-review-spec.md)已完成本地实现、独立评审与工程验证，状态见[专项 Sprint](sprints/2026-10-29-maintenance-architecture-review.md)。只增加原维护链路的声明/累计事实门禁，不改变正式版本，不替代 1.1.1 或完整 2.0 排期。
+
+后续[CLI 默认强制审查](specs/2026-10-29-mandatory-architecture-review-spec.md)已本地完成并验证，覆盖新预览、旧计划 Apply 和 Active 复用入口；既有安装同步核对与仓库外实测通过。仍为未发布增量，不改变上述版本排期。
+
 ## `0.1.x`：本地生命周期基线
 
 ### 已交付能力

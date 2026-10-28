@@ -8,6 +8,8 @@ Current stable release: [`1.1.0`](https://github.com/wukongai/skill-engineering/
 
 Skill Engineering is a meta-Skill for creating, auditing, and maintaining Agent Skills. You describe the work you want done. It first decides whether a Skill is justified, then makes responsibilities, trigger boundaries, outputs, risks, and verification explicit. Nothing is written until you approve the plan.
 
+The source working tree now requires architecture review for maintenance: missing declarations block preview, old unreviewed plans cannot apply, and Active updates use the same gate. Requirement decisions, cumulative growth against a whole-review baseline, and known-debt tracking reuse the existing maintenance flow. This increment remains unreleased. See the [maintenance guide](docs/guides/skill-maintenance-standard.md#内部架构审查未发布增量) for scope and evidence limits. The official release remains `1.1.0`.
+
 [Install now](#installation) · [Why it exists](#why-skill-engineering) · [See real use cases](#four-real-use-cases) · [Explore the roadmap](#roadmap)
 
 ## Installation

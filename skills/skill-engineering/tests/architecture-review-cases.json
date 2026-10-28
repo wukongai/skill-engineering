@@ -1,0 +1,19 @@
+{
+  "schema_version": "1",
+  "base": "references/architecture-review.md 的唯一 JSON 示例",
+  "scope": "声明读取器的确定性契约案例；不代表真实行为评测或独立评审已完成",
+  "cases": [
+    {"id": "extend-valid", "valid": true, "changes": []},
+    {"id": "refactor-valid", "valid": true, "changes": [{"path": ["requirement", "decision"], "value": "refactor"}]},
+    {"id": "split-valid-declaration", "valid": true, "changes": [{"path": ["requirement", "decision"], "value": "split"}]},
+    {"id": "defer-valid-declaration", "valid": true, "changes": [{"path": ["requirement", "decision"], "value": "defer"}]},
+    {"id": "schema-number-rejected", "valid": false, "changes": [{"path": ["schema_version"], "value": 1}]},
+    {"id": "unknown-field-rejected", "valid": false, "changes": [{"path": ["unexpected"], "value": "无效扩展"}]},
+    {"id": "boolean-budget-rejected", "valid": false, "changes": [{"path": ["budgets", "open_debt"], "value": true}]},
+    {"id": "negative-budget-rejected", "valid": false, "changes": [{"path": ["budgets", "skill_md_lines"], "value": -1}]},
+    {"id": "duplicate-debt-rejected", "valid": false, "changes": [{"path": ["debt"], "value": [{"id": "routing-debt", "summary": "路由待收敛"}, {"id": "routing-debt", "summary": "同项重复"}]}]},
+    {"id": "unknown-boundary-rejected", "valid": false, "changes": [{"path": ["requirement", "touched_boundaries"], "value": ["unknown-area"]}]},
+    {"id": "invalid-conclusion-rejected", "valid": false, "changes": [{"path": ["full_review", "conclusion"], "value": "automatic-approval"}]},
+    {"id": "secret-input-rejected", "valid": false, "inject_secret": true, "changes": []}
+  ]
+}

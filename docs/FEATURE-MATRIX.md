@@ -22,6 +22,8 @@
 | Doctor | JSON 与 SARIF 2.1.0 报告 | 1.0 Stable | 1.0 稳定 | `--format sarif` |
 | Evaluate | baseline/holdout/high-risk/negative-transfer | 已交付 | 1.0 稳定 | `evaluate`、evaluation docs |
 | Improve | 隔离候选、失败模式、复杂度 diff、维护记录 | 已交付 | 1.0 稳定 | `improve`、verify/undo |
+| Improve | 内部架构审查、需求裁决与累计预算/债务 | 本地实现与验证完成（未发布） | 本轮未发布增量 | [维护架构需求](specs/2026-10-29-maintenance-architecture-review-spec.md)、[验证记录](testing/2026-10-29-maintenance-architecture-review.md) |
+| Improve | CLI 默认强制架构审查、旧计划写入资格、Active 同门禁 | 本地实现与安装复验完成（未发布） | 本轮未发布增量 | [强制审查需求](specs/2026-10-29-mandatory-architecture-review-spec.md)、[验证记录](testing/2026-10-29-mandatory-architecture-review.md) |
 | Improve | hotfix/feature/refactor 维护分流 | P2 任务，尚未实现 | 1.1.1 | 1.1.1 Handoff/Sprint |
 | Improve | 当前阻断与结构债务分离、分级回归 | P2 任务，尚未实现 | 1.1.1 | 1.1.1 Handoff/Sprint |
 | Improve | 有限修复轮数、完成门与延后债务收敛 | Implemented in working tree | Next maintenance window | maintenance plan/record、convergence fields、maintenance tests |

@@ -1,0 +1,195 @@
+{
+  "schema_version": "1",
+  "status": "pass",
+  "installation_action": "no_op_already_linked_to_current_source",
+  "entries": [
+    {
+      "host": "codex",
+      "kind": "symlink",
+      "same_source": true,
+      "content_fingerprint": "ee2492ebbb6e14c32de9fb6047d79d87a85952b57920061f8b0a1894cbeca4f2"
+    },
+    {
+      "host": "agents",
+      "kind": "symlink",
+      "same_source": true,
+      "content_fingerprint": "ee2492ebbb6e14c32de9fb6047d79d87a85952b57920061f8b0a1894cbeca4f2"
+    }
+  ],
+  "runtime": {
+    "kind": "existing_project_virtualenv",
+    "project_relative_cli": ".venv/bin/skill-engineering",
+    "outside_repository_cwd": true,
+    "pythonpath_removed_for_cli": true,
+    "shell_path_exposes_cli": false,
+    "global_environment_changed": false
+  },
+  "cli_checks": [
+    {
+      "name": "outside-cli-help",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "journey-start",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "legacy-unreviewed",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "missing-full-review",
+      "status": "pass",
+      "exit_code": 1
+    },
+    {
+      "name": "missing-review-apply-refused",
+      "status": "pass",
+      "exit_code": 1
+    },
+    {
+      "name": "split-blocked",
+      "status": "pass",
+      "exit_code": 1
+    },
+    {
+      "name": "split-apply-refused",
+      "status": "pass",
+      "exit_code": 1
+    },
+    {
+      "name": "defer-blocked",
+      "status": "pass",
+      "exit_code": 1
+    },
+    {
+      "name": "defer-apply-refused",
+      "status": "pass",
+      "exit_code": 1
+    },
+    {
+      "name": "stale-review-blocked",
+      "status": "pass",
+      "exit_code": 1
+    },
+    {
+      "name": "full-review-accepted",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "candidate-drift-apply-refused",
+      "status": "pass",
+      "exit_code": 1
+    },
+    {
+      "name": "first-apply",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "first-verify",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "local-six-lines",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "second-apply",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "second-verify",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "cumulative-twelve-lines-blocked",
+      "status": "pass",
+      "exit_code": 1
+    },
+    {
+      "name": "cumulative-apply-refused",
+      "status": "pass",
+      "exit_code": 1
+    },
+    {
+      "name": "undo-second",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "undo-first",
+      "status": "pass",
+      "exit_code": 0
+    },
+    {
+      "name": "journey-complete",
+      "status": "pass",
+      "exit_code": 0
+    }
+  ],
+  "cli_check_count": 22,
+  "workflow": {
+    "status": "pass",
+    "agent_trial": "pass",
+    "target_restored": true,
+    "installed_unchanged": true,
+    "baseline_record": "maintenance-20261028214647-676cb529",
+    "local_record": "maintenance-20261028214648-d9b2bd7b",
+    "cumulative_lines": 12,
+    "budget_lines": 10,
+    "whole_baseline_retained": true
+  },
+  "independent_review": {
+    "target_fingerprint": "0dbb24e0c6bc019c31792fe95510158eab766d115e25b1fafdf9e347061e322b",
+    "candidate_fingerprint": "cdaafaeeefb680ce3d0200b0e85d2529b1f4895e313ca03fc3dde8587102ada1",
+    "effective_fingerprint": "cdaafaeeefb680ce3d0200b0e85d2529b1f4895e313ca03fc3dde8587102ada1",
+    "checked_areas": [
+      "ownership",
+      "routing",
+      "interfaces",
+      "state",
+      "failure",
+      "rollback"
+    ],
+    "conclusion": "pass",
+    "reviewer": "独立评审者 /root/workflow_review，未参与候选构建",
+    "evidence_summary": "已完整检查四个 Skill 文件。扩展归属既有会议行动项提取，仅增加原句依据 evidence，保留 action、owner、deadline；触发和输入不变，输出契约与格式同步。缺失信息使用未提及，无持久状态、外部动作或脚本；恢复仍依原维护链路。本结论不证明长期效果或其他输入的普遍效用。"
+  },
+  "agent_sample": {
+    "synthetic": true,
+    "input_count": 1,
+    "actions": 2,
+    "missing_deadline_preserved": true,
+    "original_evidence_retained": true
+  },
+  "gates": {
+    "pytest_passed": 404,
+    "ruff": "pass",
+    "installed_validation": "pass",
+    "installed_content_gate": "pass",
+    "installed_production_doctor": "pass",
+    "installed_portable_self_test": "pass",
+    "credential_lint": "pass",
+    "release_consistency": "pass",
+    "references": "pass",
+    "diff_check": "pass",
+    "document_regression_passed": 43
+  },
+  "official_release_version": "1.1.0",
+  "public_release_performed": false,
+  "long_term_utility_verified": false,
+  "references": {
+    "documents": 28,
+    "local_references": 227,
+    "errors": 0
+  }
+}

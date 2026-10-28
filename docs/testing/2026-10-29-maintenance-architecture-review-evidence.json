@@ -1,0 +1,62 @@
+{
+  "schema_version": "1",
+  "scope": "local_unreleased",
+  "release_version": "1.1.0",
+  "maintenance": {
+    "plan_id": "improve-20261028211128-035d61f6",
+    "plan_hash": "493c0dd48c6672cd86d34ea2d2e8e644ae293977523f5cd78035c98b5c3aa6c9",
+    "record_id": "maintenance-20261028211143-6b4e61a5",
+    "status": "applied",
+    "verification": "passed",
+    "drifted": false,
+    "architecture": "pass",
+    "input_fingerprints": {
+      "target": "8f96cbb8ec5e44f7954929900a133766a547e0aeeefef8b85f51a5891ea46eca",
+      "candidate": "ee2492ebbb6e14c32de9fb6047d79d87a85952b57920061f8b0a1894cbeca4f2",
+      "effective": "ee2492ebbb6e14c32de9fb6047d79d87a85952b57920061f8b0a1894cbeca4f2"
+    },
+    "skill_files": 11,
+    "code_test_files": 8
+  },
+  "structure": {
+    "entry_lines_delta": 1,
+    "duplicate_instructions_delta": 0
+  },
+  "tests": {
+    "baseline_passed": 316,
+    "working_tree_passed": 404,
+    "package_declaration_cases": 12,
+    "document_regression_passed": 43
+  },
+  "review": {
+    "spec": "pass",
+    "quality": "pass",
+    "round_1_important": 3,
+    "round_2_unresolved_important": 0
+  },
+  "gates": {
+    "pytest": "pass",
+    "ruff": "pass",
+    "skill_validation": "pass",
+    "content_gate": "pass",
+    "production_doctor": "pass",
+    "portable_self_test": "pass",
+    "document_regression": "pass",
+    "credential_lint": "pass",
+    "release_consistency": "pass",
+    "links": "pass",
+    "diff_check": "pass"
+  },
+  "limitations": [
+    "Architecture evidence is a host/human declaration, not semantic proof.",
+    "Long-term real host utility has not been verified.",
+    "Shared legacy redaction, repair-round enforcement and behavior runner remain separate backlog work."
+  ],
+  "references": {
+    "documents": 27,
+    "local_references": 215,
+    "errors": 0
+  },
+  "concurrent_document_index_update_preserved": true,
+  "followup_installed_verification": "2026-10-29-installed-architecture-review-evidence.json"
+}

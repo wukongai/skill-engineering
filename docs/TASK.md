@@ -4,6 +4,28 @@
 正式 Tag 的完整新手用户回归已在独立 Codex 项目完成。`1.1.1` 维护分级与版本管理
 已获准启动；`2.0.0` Architecture Guardian Phase 1 暂停，保持开发预览。
 
+## Done：CLI 强制维护架构审查（2026-10-29，后续授权）
+
+- [x] MR-0：404 项基线、独立候选与[需求合同](specs/2026-10-29-mandatory-architecture-review-spec.md)、[实施计划](plans/2026-10-29-mandatory-architecture-review-plan.md)、[架构决定](adr/0011-mandatory-maintenance-architecture-review.md)、[专项迭代](sprints/2026-10-29-mandatory-architecture-review.md)已落地。
+- [x] MR-1：缺声明预览阻断、旧计划 Apply 防绕过、历史恢复兼容。
+- [x] MR-2：CLI/Active 同一审查输入与 Skill 规范同步。
+- [x] MR-3：独立评审、精确应用、同一计划验证与完整门禁。
+- [x] MR-4：既有安装入口同步核对、仓库外实测及[验证记录](testing/2026-10-29-mandatory-architecture-review.md)回填。
+- [ ] MR-5：按后续授权提交独立范围并推送，实际状态见[源码交付记录](testing/2026-10-29-mandatory-architecture-review.md#提交范围复验与远程交付)。
+
+本轮收紧未发布维护写入策略，正式版本保持 1.1.0，不扩展其他 Sprint 或公开发布。
+
+## Done：维护架构审查阶段（2026-10-29，前轮授权）
+
+- [x] AR-0：完成现有能力盘点、316 项原测试基线、隔离候选与受保护改动指纹。
+- [x] AR-1：先落地 [需求合同](specs/2026-10-29-maintenance-architecture-review-spec.md)、[实施计划](plans/2026-10-29-maintenance-architecture-review-plan.md)、[架构决策](adr/0010-internal-maintenance-architecture-review.md)和[专项 Sprint](sprints/2026-10-29-maintenance-architecture-review.md)。
+- [x] AR-2：内部阶段、四类需求裁决、整体审查、累计预算/债务与原维护引擎接入。
+- [x] AR-3：TDD、旧计划兼容、同一候选维护应用、独立评审与全量门禁。
+- [x] AR-4：更新使用说明、事实源状态和[本轮测试记录](testing/2026-10-29-maintenance-architecture-review.md)。
+- [x] AR-5：按用户后续授权核对既有安装入口，并完成[仓库外架构流程实测](testing/2026-10-29-installed-architecture-review-smoke.md)。原实现已完成，此项为新增安装跟进验证。
+
+本轮为用户明确授权的未发布增量；正式版本保持 1.1.0，不关闭其他 Sprint。完整 Guardian、自动行为 runner 和维护轮次上限修复保留后续范围。
+
 ## In Progress：Universal Mini Governance（跨版本治理原则）
 
 - [x] MG-0：确认所有 Skill 先经过 mini Product、mini Spec、mini Plan，复杂或商业 Skill 再升级完整治理。

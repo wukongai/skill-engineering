@@ -37,7 +37,11 @@
 - V1.1 三方评估：[`testing/2026-07-31-v1.1-three-way-evaluation.md`](testing/2026-07-31-v1.1-three-way-evaluation.md)
 - V1.1.1 维护分级与版本管理 Handoff：[`handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md`](handoffs/2026-08-01-v1.1.1-maintenance-versioning-next.md)
 
+- 本轮维护架构审查：[需求与验收](specs/2026-10-29-maintenance-architecture-review-spec.md) · [实施计划](plans/2026-10-29-maintenance-architecture-review-plan.md) · [专项迭代](sprints/2026-10-29-maintenance-architecture-review.md) · [验证记录](testing/2026-10-29-maintenance-architecture-review.md) · [安装流程实测](testing/2026-10-29-installed-architecture-review-smoke.md) · [内部阶段决策](adr/0010-internal-maintenance-architecture-review.md)。本轮未发布增量，正式版本保持 1.1.0。
+
 ## 长期记录
+
+当前强制维护审查增量：[需求与验收](specs/2026-10-29-mandatory-architecture-review-spec.md) · [实施计划](plans/2026-10-29-mandatory-architecture-review-plan.md) · [专项迭代](sprints/2026-10-29-mandatory-architecture-review.md) · [验证记录](testing/2026-10-29-mandatory-architecture-review.md) · [默认强制决定](adr/0011-mandatory-maintenance-architecture-review.md)。状态：本地实现、安装核对与验证完成，未发布；取代上一轮缺声明仍可写入的兼容策略。
 
 - `adr/`：跨版本架构决策。
 - `logs/daily/`：当天事实、验证和未解决问题。

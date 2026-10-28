@@ -19,6 +19,12 @@ Skill Engineering 的核心竞争力是“架构优先的快速生成 + 全生�
 - `2.0.x`：在不破坏 1.x 输入的前提下，引入 Blueprint/IR 和 Architecture Guardian；
 - 任何版本都不把静态分数冒充真实任务效用，也不自动 Global 发布。
 
+## 当前未发布增量
+
+当前授权增量：[内部维护架构审查阶段](specs/2026-10-29-maintenance-architecture-review-spec.md)已完成本地实现、独立评审与工程验证；在现有维护链路增加需求归属、整体审查和累计债务保护，保持唯一 Skill 入口及正式 1.1.0 版本。该增量不代表完整 2.0 Guardian 已交付。
+
+后续[CLI 强制审查](specs/2026-10-29-mandatory-architecture-review-spec.md)已实现并验证：新维护缺声明默认阻断，旧未审查计划不能应用，Active 复用同一门禁；历史读取/恢复保持。两处既有安装链接已同步核对，仓库外流程实测通过。
+
 ## 目标用户
 
 - 不熟悉 Skill 工程规范、只会描述业务目标的普通用户；

@@ -150,6 +150,25 @@ def validated_candidate(env: dict[str, Path], *, description: str = "用于修�
     return proposal, dataset, selected[0]
 
 
+def active_architecture_input(env, version):
+    from test_maintenance import architecture_input
+
+    source = Path(version.source_path)
+    target_files = {path.relative_to(env["skill"]).as_posix()
+                    for path in env["skill"].rglob("*") if path.is_file()}
+    source_files = {path.relative_to(source).as_posix()
+                    for path in source.rglob("*") if path.is_file()}
+    deletions = sorted(target_files - source_files - {"SKILL.md"})
+    return architecture_input(env["root"], env["skill"], source, deletions=deletions)
+
+
+def active_plan(env, version):
+    return create_release_plan(
+        env["root"], version.id, "active", active_source=env["skill"],
+        architecture_review=active_architecture_input(env, version),
+    )
+
+
 def test_record_run_rejects_credentials_and_redacts_sensitive_summary(env):
     secret = write_run(
         env,
@@ -342,7 +361,7 @@ def test_active_release_requires_approval_verifies_and_rolls_back(env):
     _, _, candidate = validated_candidate(env)
     version = version_candidate(env["root"], candidate.id, "2.0.0")
     before = (env["skill"] / "SKILL.md").read_text(encoding="utf-8")
-    plan = create_release_plan(env["root"], version.id, "active", active_source=env["skill"])
+    plan = active_plan(env, version)
     with pytest.raises(SystemExit, match="批准"):
         apply_release_plan(env["root"], plan.id, approved=False)
 
@@ -375,7 +394,92 @@ def test_canary_release_installs_version_and_rollback_removes_it(env):
 def test_release_plan_rejects_source_drift(env):
     _, _, candidate = validated_candidate(env)
     version = version_candidate(env["root"], candidate.id, "3.0.0")
-    plan = create_release_plan(env["root"], version.id, "active", active_source=env["skill"])
+    plan = active_plan(env, version)
     (env["skill"] / "SKILL.md").write_text(skill_text("人工并发修改。"), encoding="utf-8")
     with pytest.raises(SystemExit, match="Active source 已漂移"):
         apply_release_plan(env["root"], plan.id, approved=True)
+
+
+def test_active_release_without_review_cannot_create_applicable_parent_plan(env):
+    from skill_engineering.journey import fingerprint_path
+
+    _, _, candidate = validated_candidate(env)
+    version = version_candidate(env["root"], candidate.id, "4.0.0")
+    before = fingerprint_path(env["skill"])
+    with pytest.raises(SystemExit, match="--architecture-review"):
+        create_release_plan(env["root"], version.id, "active", active_source=env["skill"])
+    plans = env["root"] / ".skill-engineering" / "evolution" / "release-plans"
+    assert not list(plans.glob("*.json"))
+    assert fingerprint_path(env["skill"]) == before
+
+
+def test_active_release_rejected_review_cannot_create_parent_plan(env):
+    _, _, candidate = validated_candidate(env)
+    version = version_candidate(env["root"], candidate.id, "4.0.1")
+    review = active_architecture_input(env, version)
+    declaration = json.loads(review.read_text(encoding="utf-8"))
+    declaration["full_review"]["conclusion"] = "changes_requested"
+    review.write_text(json.dumps(declaration, ensure_ascii=False), encoding="utf-8")
+    with pytest.raises(SystemExit, match="架构|审查"):
+        create_release_plan(env["root"], version.id, "active", active_source=env["skill"],
+                            architecture_review=review)
+    assert not list((env["root"] / ".skill-engineering" / "evolution" / "release-plans").glob("*.json"))
+
+
+@pytest.mark.parametrize("channel", ["shadow", "canary"])
+def test_non_active_release_rejects_unused_architecture_declaration(env, channel):
+    _, _, candidate = validated_candidate(env)
+    version = version_candidate(env["root"], candidate.id, "4.1.0")
+    with pytest.raises(SystemExit, match="Active"):
+        create_release_plan(
+            env["root"], version.id, channel, project=env["project"],
+            architecture_review=env["root"] / "unused-review.json",
+        )
+
+
+def test_shadow_release_does_not_require_maintenance_review(env):
+    _, _, candidate = validated_candidate(env)
+    version = version_candidate(env["root"], candidate.id, "4.2.0")
+    assert create_release_plan(env["root"], version.id, "shadow").channel == "shadow"
+
+
+@pytest.mark.parametrize("legacy_review", [None, {"status": "unreviewed"}])
+def test_active_release_cannot_apply_legacy_unreviewed_child_plan(env, legacy_review):
+    from skill_engineering.journey import fingerprint_path, load_build_plan, save_build_plan
+    from skill_engineering.maintenance import _plan_hash
+
+    _, _, candidate = validated_candidate(env)
+    version = version_candidate(env["root"], candidate.id, "4.3.0")
+    plan = active_plan(env, version)
+    child = load_build_plan(env["root"], plan.child_plan_id)
+    if legacy_review is None:
+        child.preflight.pop("architecture_review")
+    else:
+        child.preflight["architecture_review"] = legacy_review
+    child.plan_hash = _plan_hash(child)
+    save_build_plan(env["root"], child)
+    before = fingerprint_path(env["skill"])
+    with pytest.raises(SystemExit, match="架构|审查"):
+        apply_release_plan(env["root"], plan.id, approved=True)
+    assert fingerprint_path(env["skill"]) == before
+    assert not (env["root"] / ".skill-engineering" / "maintenance-backups").exists()
+    assert not list((env["root"] / ".skill-engineering" / "evolution" / "release-records").glob("*.json"))
+
+
+def test_active_release_cli_forwards_frozen_review_into_maintenance_child(env, capsys):
+    from skill_engineering.cli import main
+    from skill_engineering.journey import load_build_plan
+
+    _, _, candidate = validated_candidate(env)
+    version = version_candidate(env["root"], candidate.id, "4.4.0")
+    review = active_architecture_input(env, version)
+    assert main([
+        "--root", str(env["root"]), "release-plan", "--version", version.id,
+        "--channel", "active", "--active-source", str(env["skill"]),
+        "--architecture-review", str(review), "--json",
+    ]) == 0
+    plan = json.loads(capsys.readouterr().out)
+    child = load_build_plan(env["root"], plan["child_plan_id"])
+    assert child.preflight["architecture_review"]["status"] == "pass"
+    review.write_text("invalid JSON after preview", encoding="utf-8")
+    assert apply_release_plan(env["root"], plan["id"], approved=True).verification["status"] == "passed"

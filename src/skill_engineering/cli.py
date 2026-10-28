@@ -141,6 +141,10 @@ def build_parser() -> argparse.ArgumentParser:
     improve.add_argument("--maintenance-goal", default="")
     improve.add_argument("--baseline-version", default="")
     improve.add_argument("--max-repair-rounds", type=int, default=3)
+    improve.add_argument(
+        "--architecture-review", type=Path,
+        help="新预览必需；--plan 查看或应用使用冻结快照，不需重新提供声明。",
+    )
     improve.add_argument("--profile", choices=["personal", "team", "production"], default="team")
     improve.add_argument("--delete", action="append", default=[])
     improve.add_argument("--plan", dest="plan_id")
@@ -210,6 +214,10 @@ def build_parser() -> argparse.ArgumentParser:
     release_plan.add_argument("--channel", choices=["shadow", "canary", "active"], required=True)
     release_plan.add_argument("--project", type=Path)
     release_plan.add_argument("--active-source", type=Path)
+    release_plan.add_argument(
+        "--architecture-review", type=Path,
+        help="Active 维护预览必需的架构声明；Shadow/Canary 不接受此参数。",
+    )
     release_plan.add_argument("--json", action="store_true")
     release = sub.add_parser("release")
     release.add_argument("--plan", required=True, dest="plan_id")
@@ -425,6 +433,8 @@ def main(argv: list[str] | None = None) -> int:
         )
 
         if args.plan_id:
+            if args.architecture_review is not None:
+                raise SystemExit("--plan 使用已冻结的审查快照；补交或修改声明必须重新预览。")
             value = load_build_plan(root, args.plan_id)
             if not args.apply:
                 _emit(value, format_improvement_plan(value), args.json)
@@ -449,6 +459,7 @@ def main(argv: list[str] | None = None) -> int:
             maintenance_goal=args.maintenance_goal,
             baseline_version=args.baseline_version,
             max_repair_rounds=args.max_repair_rounds,
+            architecture_review=args.architecture_review,
         )
         _emit(value, format_improvement_plan(value), args.json)
         return 0 if value.preflight.get("status") == "pass" else 1
@@ -510,6 +521,7 @@ def main(argv: list[str] | None = None) -> int:
             args.channel,
             project=args.project,
             active_source=args.active_source,
+            architecture_review=args.architecture_review,
         )
         _emit(value, format_release_plan_feedback(value), args.json)
         return 0

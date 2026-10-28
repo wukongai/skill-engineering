@@ -1,5 +1,11 @@
 # Backlog
 
+## 维护架构审查的后续边界
+
+[本轮内部审查专项](sprints/2026-10-29-maintenance-architecture-review.md)仅实现声明与确定性事实门禁。完整架构语义/Blueprint 继续归属 2.0；真实模型运行与验收执行证据归属现有 Behavior Evaluation Lab。维护轮次上限的执行与跨计划归并仍需单独测试和修复，不以本轮架构审查宣称完成。
+
+本轮独立评审还发现共享 Authoring 文本脱敏对部分带前缀凭证赋值的覆盖不足；本轮只在新增架构声明入口拒绝这些形态，共享输入治理的扩展与迁移需另行回归，不能宣称所有旧入口已修复。
+
 Backlog 保存尚未进入当前 Sprint 的候选能力。进入实现前必须升级为 Spec、Plan 和 Task。
 
 Blueprint/IR 与 Architecture Guardian 已经从 Backlog 升级到独立

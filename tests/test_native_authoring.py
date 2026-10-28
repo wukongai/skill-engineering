@@ -6,8 +6,12 @@ NA-0 固化 Hermes“只生成骨架并提前报告完成”的失败场景；
 
 from __future__ import annotations
 
+import copy
+import json
+import re
 from pathlib import Path
 
+import pytest
 import yaml
 
 
@@ -154,3 +158,98 @@ def test_native_authoring_regression_cases_registered():
 
     contract = yaml.safe_load((SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8"))
     assert "tests/native-authoring-cases.yaml" in contract["tests"]["regression_cases"]
+
+
+def _architecture_example() -> dict:
+    reference = SKILL_DIR / "references" / "architecture-review.md"
+    assert reference.is_file(), "架构审查的单一声明规范尚未交付"
+    examples = re.findall(r"```json\n(.*?)\n```", reference.read_text(encoding="utf-8"), re.S)
+    assert len(examples) == 1, "声明字段只维护一份完整 JSON 示例"
+    return json.loads(examples[0])
+
+
+def test_architecture_review_is_an_internal_reachable_stage():
+    stage = SKILL_DIR / "stages" / "architecture-review" / "INSTRUCTIONS.md"
+    assert stage.is_file(), "缺少内部架构审查阶段"
+    assert not list((SKILL_DIR / "stages").rglob("SKILL.md"))
+    root_text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
+    assert "stages/architecture-review/INSTRUCTIONS.md" in root_text
+    for name in ["design", "review", "project-governance"]:
+        text = (SKILL_DIR / "stages" / name / "INSTRUCTIONS.md").read_text(encoding="utf-8")
+        assert "../architecture-review/INSTRUCTIONS.md" in text, name
+    for source in [stage, SKILL_DIR / "references" / "architecture-review.md"]:
+        text = source.read_text(encoding="utf-8")
+        for target in re.findall(r"\]\(([^)]+)\)", text):
+            assert (source.parent / target.split("#", 1)[0]).is_file(), target
+
+
+def test_architecture_review_declaration_matches_spec_and_is_registered():
+    declaration = _architecture_example()
+    assert declaration["schema_version"] == "1"
+    assert set(declaration) == {
+        "schema_version", "requirement", "budgets", "debt", "resolved_debt_ids", "full_review"
+    }
+    assert set(declaration["requirement"]) == {
+        "summary", "decision", "rationale", "owner", "replacement_plan",
+        "protected_behaviors", "touched_boundaries"
+    }
+    assert set(declaration["budgets"]) == {
+        "skill_md_lines", "instruction_files", "duplicate_instruction_lines", "open_debt"
+    }
+    assert set(declaration["full_review"]) == {
+        "target_fingerprint", "candidate_fingerprint", "effective_fingerprint",
+        "checked_areas", "conclusion", "reviewer", "evidence_summary"
+    }
+    assert set(declaration["full_review"]["checked_areas"]) == {
+        "ownership", "routing", "interfaces", "state", "failure", "rollback"
+    }
+    contract = yaml.safe_load((SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8"))
+    assert "architecture_review" in {item["name"] for item in contract["outputs"]}
+    assert "architecture review stage" in {item["name"] for item in contract["delegates"]}
+    assert "tests/architecture-review-cases.json" in contract["tests"]["regression_cases"]
+
+
+def test_maintenance_architecture_review_defaults_to_required_without_affecting_creation():
+    contract = yaml.safe_load((SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8"))
+    entry = next(item for item in contract["inputs"] if item["name"] == "architecture_review_path")
+    assert entry["required"] is False  # Creation and read-only intents have no maintenance input.
+    assert "维护" in entry["contract"] and "必需" in entry["contract"]
+    reference = (SKILL_DIR / "references" / "architecture-review.md").read_text(encoding="utf-8")
+    for phrase in ["缺少声明", "阻断", "旧计划", "重新预览", "Active", "不提供跳过"]:
+        assert phrase in reference, phrase
+    assert "本次维护允许继续" not in reference
+    assert "--architecture-review" in (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
+    evolution = (SKILL_DIR / "references" / "evolution-standard.md").read_text(encoding="utf-8")
+    assert "--architecture-review" in evolution
+
+
+def test_architecture_review_portable_cases_validate_actual_loader(tmp_path):
+    cases_path = SKILL_DIR / "tests" / "architecture-review-cases.json"
+    assert cases_path.is_file(), "缺少随 Skill 交付的声明校验案例"
+    suite = json.loads(cases_path.read_text(encoding="utf-8"))
+    cases = suite["cases"]
+    assert len({case["id"] for case in cases}) == len(cases)
+    assert {case["id"] for case in cases} >= {
+        "extend-valid", "refactor-valid", "split-valid-declaration", "defer-valid-declaration",
+        "schema-number-rejected", "unknown-field-rejected", "boolean-budget-rejected",
+        "negative-budget-rejected", "duplicate-debt-rejected", "unknown-boundary-rejected",
+        "invalid-conclusion-rejected", "secret-input-rejected"
+    }
+    from skill_engineering.architecture_review import load_architecture_declaration
+
+    for case in cases:
+        declaration = copy.deepcopy(_architecture_example())
+        for change in case.get("changes", []):
+            destination = declaration
+            for part in change["path"][:-1]:
+                destination = destination[part]
+            destination[change["path"][-1]] = change["value"]
+        if case.get("inject_secret"):
+            declaration["requirement"]["summary"] = "api" + "_key" + "=" + "SYNTHETIC_VALUE"
+        source = tmp_path / f"{case['id']}.json"
+        source.write_text(json.dumps(declaration, ensure_ascii=False), encoding="utf-8")
+        if case["valid"]:
+            assert load_architecture_declaration(source)["schema_version"] == "1", case["id"]
+        else:
+            with pytest.raises((ValueError, SystemExit), match=".+"):
+                load_architecture_declaration(source)

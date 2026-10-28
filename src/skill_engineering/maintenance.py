@@ -13,6 +13,11 @@ from typing import Any
 
 import yaml
 
+from .architecture_review import (
+    assess_architecture,
+    load_architecture_declaration,
+    validate_architecture_snapshot,
+)
 from .journey import (
     BuildFile,
     BuildPlan,
@@ -205,9 +210,13 @@ def create_improvement_plan(
     maintenance_goal: str = "",
     baseline_version: str = "",
     max_repair_rounds: int = 3,
+    architecture_review: Path | None = None,
 ) -> BuildPlan:
     target = target.expanduser().resolve()
     candidate = candidate.expanduser().resolve()
+    architecture_declaration = (
+        load_architecture_declaration(architecture_review) if architecture_review is not None else None
+    )
     regression_cases = regression_cases or []
     acceptance_cases = list(acceptance_cases or regression_cases)
     deletions = list(dict.fromkeys(_safe_relative(item).as_posix() for item in (deletions or [])))
@@ -380,10 +389,26 @@ def create_improvement_plan(
                     "先修复 FAIL,重新生成维护计划。",
                 )
             )
+        architecture = assess_architecture(
+            declaration=architecture_declaration,
+            target=target,
+            target_fingerprint=fingerprint_path(target),
+            candidate_fingerprint=fingerprint_path(candidate),
+            effective_fingerprint=fingerprint_path(effective),
+            complexity={"before": before, "after": after, "delta": delta},
+            findings=findings,
+            history=list_maintenance_records(root),
+        )
+        for message in architecture["blocking_findings"]:
+            findings.append(_finding(
+                "MAINT111", "FAIL", message,
+                "补齐需求裁决或完整候选的独立架构评审,再重新生成维护计划。",
+            ))
         blocked = any(item["level"] == "FAIL" for item in findings)
         preflight = {
             "status": "blocked" if blocked else "pass",
             "audit": audit,
+            "architecture_review": architecture,
             "finding_counts": {
                 "fail": sum(item["level"] == "FAIL" for item in findings),
                 "warn": sum(item["level"] == "WARN" for item in findings),
@@ -487,6 +512,15 @@ def apply_improvement_plan(root: Path, plan: BuildPlan) -> MaintenanceRecord:
         raise SystemExit("维护计划已过期:候选 Skill 发生变化,请重新生成。")
     if plan.preflight.get("status") != "pass":
         raise SystemExit("维护计划未通过 preflight,不能应用。")
+    with tempfile.TemporaryDirectory(prefix="skill-engineering-architecture-apply-") as directory:
+        effective = Path(directory) / "effective"
+        _copy_effective_tree(target, candidate, effective, plan.deletions)
+        validate_architecture_snapshot(
+            plan.preflight.get("architecture_review"),
+            target_fingerprint=plan.target_fingerprint,
+            candidate_fingerprint=plan.candidate_fingerprint,
+            effective_fingerprint=fingerprint_path(effective),
+        )
 
     record_id = new_id("maintenance")
     backup_dir = local_state_root(root) / "maintenance-backups" / record_id
@@ -683,18 +717,26 @@ def maintenance_history(root: Path, target: Path | None = None) -> list[Maintena
 def format_improvement_plan(plan: BuildPlan) -> str:
     from .interaction import UserFeedback
 
-    blocked = plan.preflight.get("status") != "pass"
     delta = plan.complexity.get("delta", {})
+    architecture = plan.preflight.get("architecture_review", {})
+    blocked = plan.preflight.get("status") != "pass" or architecture.get("status") != "pass"
+    architecture_decision = architecture.get("requirement_decision")
     impact = [
         f"目标：{plan.target}",
         f"将修改 {len(plan.files)} 个文件，显式删除 {len(plan.deletions)} 个文件。",
         f"根入口预计变化 {delta.get('skill_md_lines', 0):+d} 行。",
         f"本轮验收案例 {len(plan.acceptance_cases)} 个，历史回归案例 {len(plan.regression_cases)} 个。",
-        f"本次维护最多修复 {plan.max_repair_rounds} 轮；结构债务不阻断本次交付。",
+        f"本次维护最多修复 {plan.max_repair_rounds} 轮；累计架构债务由独立架构门判断。",
         "目前尚未写入任何文件。",
     ]
+    impact.extend(_architecture_impact(plan.preflight))
     if plan.findings:
         impact.append(f"预检发现 {len(plan.findings)} 个需要处理的问题。")
+    next_action = "先修复预检问题，再重新生成方案。" if blocked else "确认实际修改范围后，再决定是否应用。"
+    if architecture_decision in {"split", "defer"}:
+        next_action = "按需求裁决建立独立计划，再重新评审候选。"
+    elif architecture.get("status") != "pass":
+        next_action = "补齐架构审查声明及所需整体评审，再重新生成预览。"
     return UserFeedback(
         status="blocked" if blocked else "awaiting-approval",
         result=(
@@ -703,14 +745,38 @@ def format_improvement_plan(plan: BuildPlan) -> str:
             else f"{plan.skill_name} 的改进方案已经准备好。"
         ),
         impact=impact,
-        next_action=(
-            "先修复预检问题，再重新生成方案。"
-            if blocked
-            else "确认实际修改范围后，再决定是否应用。"
-        ),
+        next_action=next_action,
         decision="是否继续应用这次修改？" if not blocked else "",
         technical_details=[f"plan={plan.id}", f"root_cause={plan.root_cause_layer}"],
     ).render()
+
+
+def _architecture_impact(preflight: dict[str, Any]) -> list[str]:
+    report = preflight.get("architecture_review", {})
+    if report.get("status", "unreviewed") == "unreviewed":
+        return ["架构未审查（unreviewed）；本次静态维护检查不代表整体架构通过。"]
+    if report.get("status") == "blocked" and "declaration" not in report.get("input_fingerprints", {}):
+        return ["缺少架构审查声明；历史债务未评估。"]
+    whole = report.get("whole_review", {})
+    label = {
+        "accepted": "已通过宿主/人工声明性评审",
+        "not_required": "未触发整体评审",
+    }.get(whole.get("status"), "整体评审尚未通过")
+    decision = {"extend": "扩展", "refactor": "重构", "split": "拆分", "defer": "延后"}.get(
+        report.get("requirement_decision"), "未知"
+    )
+    result = [f"需求裁决：{decision}。", f"整体架构：{label}；真实任务行为仍需独立证据。"]
+    delta = report.get("complexity", {}).get("cumulative_delta")
+    if delta is None:
+        result.append("累计复杂度：尚无有效整体基线。")
+    else:
+        result.append(f"相对整体基线的根入口累计变化：{delta.get('skill_md_lines', 0):+d} 行。")
+    result.append(f"已知开放架构债务：{len(report.get('debt', []))} 项。")
+    exceeded = report.get("complexity", {}).get("budget_exceeded", [])
+    if exceeded:
+        result.append(f"累计预算超限事实保留：{', '.join(exceeded)}。")
+    result.extend(f"限制：{item}" for item in report.get("limitations", []))
+    return result
 
 
 def format_maintenance_record(record: MaintenanceRecord) -> str:
@@ -734,6 +800,7 @@ def format_maintenance_record(record: MaintenanceRecord) -> str:
                 "当前内容与已验证的候选一致。",
                 f"可以安全撤销：{'是' if record.undo_available else '否'}。",
                 f"延后结构债务：{len(record.deferred_debt)} 项。",
+                *_architecture_impact(record.preflight),
             ],
             next_action="继续用真实任务观察效果；需要时可撤销本次修改。",
             technical_details=[f"record={record.id}"],
@@ -745,6 +812,7 @@ def format_maintenance_record(record: MaintenanceRecord) -> str:
         impact=[
             "写入后验证没有完整通过。",
             "系统已经恢复修改前内容。" if restored else "请先确认目标是否已经安全恢复。",
+            *_architecture_impact(record.preflight),
         ],
         next_action="检查失败原因，修复候选后重新生成修改方案。",
         technical_details=[f"record={record.id}", f"status={record.status}"],

@@ -31,7 +31,7 @@ A3 自动完成观察、提案、数据集、候选、评测、压缩推荐、�
 1. 仅 recommended 候选可生成不可变 SkillVersion。
 2. 生成版本后自动指向 Shadow,不改变真实 source/profile。
 3. Canary 复用安装计划,只进入指定窄项目。
-4. Active 复用维护计划更新 maintained source。
+4. Active 复用维护计划更新 maintained source；按[维护架构审查规范](architecture-review.md)对完整版本候选形成声明，再用 `release-plan --channel active --architecture-review PATH` 预览。缺声明或旧未审查子计划不能应用。
 5. Canary/Active 必须先展示 Release Plan;批准、应用、验证、回滚都按记录执行。
 6. version、channel、target 或 plan hash 漂移时废弃旧计划并重建。
 

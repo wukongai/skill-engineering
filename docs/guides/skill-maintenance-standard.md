@@ -14,7 +14,9 @@
 ## 标准流程
 
 ```text
-独立候选目录
+需求归属与旧结构处置
+  -> 独立候选目录
+  -> 按需整体评审与架构声明
   -> improve preview
   -> 文件增删改 + 复杂度变化 + preflight
   -> 用户确认同一 Plan ID
@@ -29,6 +31,7 @@
 ```bash
 skill-engineering improve /path/to/skill \
   --candidate /path/to/candidate \
+  --architecture-review /path/to/review.json \
   --failure-mode "description 过宽导致误触发" \
   --root-cause-layer trigger \
   --expected-behavior "只有明确请求才触发" \
@@ -50,7 +53,21 @@ skill-engineering undo-improvement --record RECORD_ID --apply
 - 跨入口、references、stages 的重复长指令;
 - 候选未包含但默认保留的旧文件。
 
-MAINT101-110 区分 WARN 与 FAIL。最终快照得分相同,不代表修改过程没有增加债务;因此必须同时看 delta。
+MAINT101-110 区分 WARN 与 FAIL。最终快照得分相同,不代表修改过程没有增加债务;因此必须同时看 delta。当前源码增量的 MAINT111 负责架构声明阻断，沿用同一 preflight/Apply 边界。
+
+## 内部架构审查（未发布增量）
+
+本节对应当前源码工作区；正式 `1.1.0` 安装不因此自动升级。Agent 维护已有 Skill 时先判断扩展、重构、拆分或延后，说明旧结构保留/替换/退役及受保护行为。全新创建继续 Native Authoring。
+
+高级 CLI 的新维护预览必须提供 `--architecture-review /path/to/review.json`；宿主 Agent 根据实际候选准备声明，无需用户手工提醒。完整字段只在[架构审查规范](../../skills/skill-engineering/references/architecture-review.md#声明字段)维护，避免另一份 JSON 合同。缺声明返回阻断预览与实际指纹，退出码为 1。所有 profile 一致，无跳过开关；普通小修仍可用轻量声明。
+
+首次没有有效基线、边界变化、累计预算超限、重复开放债务、预算调整或历史顺序不明确时，要求独立评审完整 effective candidate。可先用轻量声明生成受阻预览取得真实指纹；独立评审后补齐声明并生成最终计划。原目标、候选、overlay/显式删除后的完整树分别绑定，不将最终 plan hash 反存进声明。
+
+前三项结构预算使用相对上次整体审查基线的净增长；开放债务使用全部未关闭 ID 的绝对数量。局部修改不刷新整体基线。同秒历史以原 before/after 指纹确定因果顺序，无法唯一确定则保守保留已知债务并要求整体审查。
+
+审查报告保存到原 `preflight.architecture_review` 并受原计划哈希保护。Apply 重新核对冻结快照及实际完整候选指纹。旧缺声明或 unreviewed 计划必须补审后重新预览；历史查看、Verify 和安全 Undo 保持，不补字段、不重算旧哈希。按同一计划 Apply 时不再次提供声明，补传参数会被拒绝。Active 更新使用 `release-plan --channel active --architecture-review /path/to/review.json`，复用同一维护门禁；Shadow/Canary 不接收此维护参数。split/defer 或所需完整评审未通过时不能应用；通过后仍只走原 Apply/Postflight/Verify/Undo。案例登记不等于已执行回归，架构声明不等于真实行为效用；反馈必须披露历史覆盖限制。
+
+[原阶段需求](../specs/2026-10-29-maintenance-architecture-review-spec.md) · [默认强制审查需求](../specs/2026-10-29-mandatory-architecture-review-spec.md) · [当前验证记录](../testing/2026-10-29-mandatory-architecture-review.md)
 
 ## 删除规则
 

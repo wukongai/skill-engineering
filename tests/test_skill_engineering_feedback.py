@@ -135,3 +135,26 @@ def test_product_positioning_keeps_fast_creation_and_lifecycle_together():
     contract = yaml.safe_load((SKILL_DIR / "skill.contract.yaml").read_text(encoding="utf-8"))
     assert "快速生成从第一版开始就符合工程规范" in contract["purpose"]
     assert "tests/product-positioning.yaml" in contract["tests"]["regression_cases"]
+
+
+def test_architecture_review_feedback_separates_local_global_and_behavior_evidence():
+    reference = SKILL_DIR / "references" / "architecture-review.md"
+    assert reference.is_file(), "未提供架构审查反馈与证据规范"
+    text = reference.read_text(encoding="utf-8")
+    for phrase in [
+        "本次维护完成门", "整体架构完成门", "unreviewed", "独立评审者",
+        "完整 effective candidate", "真实行为测试", "静态结构", "累计增长", "唯一下一步",
+        "--architecture-review", "preflight.architecture_review", "同一 plan id"
+    ]:
+        assert phrase in text, phrase
+    maintenance = (SKILL_DIR / "references" / "maintenance-protocol.md").read_text(
+        encoding="utf-8"
+    )
+    governance = (SKILL_DIR / "references" / "development-governance.md").read_text(
+        encoding="utf-8"
+    )
+    assert "architecture-review.md" in maintenance
+    assert "architecture-review.md" in governance
+    assert "stages/architecture-review/INSTRUCTIONS.md" in (
+        SKILL_DIR / "references" / "file-map.md"
+    ).read_text(encoding="utf-8")
