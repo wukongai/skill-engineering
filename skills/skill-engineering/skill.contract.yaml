@@ -43,6 +43,14 @@ inputs:
     type: path
     required: false
     contract: "已有 Skill 维护与 Active 更新的必需脱敏声明；Agent 准备此输入，字段只在 references/architecture-review.md 维护。全新创建及只读操作不要求此输入，因此非全局 required。"
+  - name: boundary_confirmation_path
+    type: path
+    required: false
+    contract: "新 Native Preview 的当前边界确认 JSON；只在创建适用，字段、来源限制与兼容规则仅在 references/boundary-confirmation.md 维护。"
+  - name: boundary_review_path
+    type: path
+    required: false
+    contract: "新维护与 Active 预览的必需脱敏边界声明，与架构审查并列；changed 绑定当前确认，unchanged 说明理由并保持历史未知。仅适用于维护，因此非全局 required。"
 
 outputs:
   - name: user_status_summary
@@ -66,15 +74,23 @@ outputs:
   - name: authoring_brief
     type: json-or-text
     required: false
-    contract: "候选生成前的结构化需求契约;缺 goal/触发/反触发/verification 时保持 needs_discovery。"
+    contract: "候选生成前的结构化需求契约；新创建核对业务就绪、当前边界确认与类型案例，空排除或反触发须符合确认细则，不表示无限职责。"
   - name: boundary_contract
     type: json-or-text
     required: false
-    contract: "mini Spec 的业务边界契约;缺 mission、能力归属、不负责范围、偏题信号、停止条件或行为案例时保持 needs_discovery。"
+    contract: "mini Spec 的业务边界契约；提案做/不做/完成条件并复用用户明确表达，缺正向职责、适用边界或停止条件时保持 needs_discovery。已确认无额外排除允许空清单。"
   - name: behavior_test_matrix
     type: json-or-text
     required: false
-    contract: "创建前登记成功、反例、偏题、信息不足和失败/审批案例;静态结构分数不能替代行为证据。"
+    contract: "创建前按 references/boundary-confirmation.md 的能力矩阵登记适用类别和实际有效断言；静态结构与候选文本通过都不能替代真实行为证据。"
+  - name: boundary_confirmation
+    type: json-or-text
+    required: false
+    contract: "绑定当前业务投影的脱敏用户确认，来源字段不证明真人身份；业务变化后重新确认，同一语义恢复不反复问。"
+  - name: boundary_review
+    type: json-or-text
+    required: false
+    contract: "原 preflight 内并列的边界判定快照，绑定 target/candidate/effective；新计划必需，旧合法计划保持兼容且缺新事实时报告 legacy_unknown，不补造历史批准。"
   - name: mini_governance_record
     type: json-or-text
     required: false
@@ -137,6 +153,8 @@ outputs:
     contract: "只为复杂、生产、商业或多版本 Skill 在 mini 治理之上补齐必要的完整产品与开发事实源。"
 
 stops:
+  - name: awaiting_boundary_confirmation
+    condition: "新创建或业务边界变化尚无当前有效确认；可继续只读探索和草稿，不能应用新边界。"
   - name: awaiting_scope_confirmation
     condition: "将引入新的 global skill、plugin 或生产级 workflow。"
   - name: awaiting_user_approval
@@ -242,6 +260,8 @@ forbidden:
   - reporting_scaffold_only_as_complete_creation
   - claiming_validated_without_real_task_trial
   - presenting_structural_score_as_utility
+  - fabricating_boundary_confirmation
+  - claiming_candidate_text_as_runtime_success
 
 state:
   files:
@@ -295,6 +315,7 @@ scripts:
   - path: scripts/native_plan.py
     required_flags:
       - "preview"
+      - "--boundary-confirmation"
       - "apply"
       - "verify"
   - path: scripts/skill_self_test.py

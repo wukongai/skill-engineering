@@ -747,11 +747,14 @@ def create_release_plan(
     project: Path | None = None,
     active_source: Path | None = None,
     architecture_review: Path | None = None,
+    boundary_review: Path | None = None,
 ) -> ReleasePlan:
     if channel not in {"shadow", "canary", "active"}:
         raise SystemExit(f"未知 release channel:{channel}")
     if architecture_review is not None and channel != "active":
         raise SystemExit("架构审查声明仅用于 Active 维护预览；Shadow/Canary 不接受此参数。")
+    if boundary_review is not None and channel != "active":
+        raise SystemExit("边界审查声明仅用于 Active 维护预览；Shadow/Canary 不接受此参数。")
     version = _load(root, "versions", version_id, SkillVersion)
     version_source = Path(version.source_path)
     if fingerprint_path(version_source) != version.source_fingerprint:
@@ -801,10 +804,12 @@ def create_release_plan(
             profile="team",
             deletions=deletions,
             architecture_review=architecture_review,
+            boundary_review=boundary_review,
         )
         if maintenance_plan.preflight.get("status") != "pass":
             raise SystemExit(
-                "Active 维护预检被阻断；请补齐或修正架构审查声明（--architecture-review）及预检问题，"
+                "Active 维护预检被阻断；请补齐或修正架构审查声明（--architecture-review）、"
+                "边界声明（--boundary-review）及预检问题，"
                 "再重新生成 release-plan。未生成可应用的 Active 发布计划。"
             )
         child_plan_id = maintenance_plan.id

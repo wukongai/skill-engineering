@@ -117,3 +117,57 @@ def test_save_authoring_brief_redacts_disk_without_mutating_input(tmp_path):
     assert "DEMO_SECRET_VALUE" not in payload
     assert "[redacted]" in payload
     assert "DEMO_SECRET_VALUE" in brief.goal
+
+
+def _confirmation(brief):
+    from dataclasses import asdict
+    from skill_engineering.boundary_policy import boundary_fingerprint
+    return {
+        "schema_version": "1", "subject_id": brief.id,
+        "boundary_fingerprint": boundary_fingerprint(asdict(brief)),
+        "status": "confirmed", "source": "explicit_cli_argument",
+        "summary": "测试操作员确认合成范围，不代表实际用户确认记录。",
+        "excluded_decision": "listed" if brief.excluded_capabilities else "none",
+        "behavior_policy": {
+            "interaction": "single_turn", "uses_tools": False, "has_side_effects": False,
+            "rationale": "一次处理已提供文本，无外部工具或动作。",
+        },
+    }
+
+
+def test_current_readiness_requires_confirmation_without_rewriting_legacy():
+    brief = _complete_brief()
+    assert brief_ready_for_candidate(brief)
+    assert not brief_ready_for_candidate(brief, require_confirmation=True)
+    assert "boundary_confirmation" in missing_required_fields(brief, require_confirmation=True)
+
+
+def test_confirmed_empty_exclusion_readiness_remains_narrow():
+    brief = _complete_brief()
+    brief.excluded_capabilities = []
+    brief.negative_triggers = []
+    assert not brief_ready_for_candidate(brief)
+    receipt = _confirmation(brief)
+    assert brief_ready_for_candidate(brief, receipt, require_confirmation=True)
+    assert brief.owned_capabilities == ["提取决定", "识别负责人"]
+
+
+def test_changed_business_boundary_invalidates_readiness():
+    brief = _complete_brief()
+    receipt = _confirmation(brief)
+    brief.mission = "改为另一个任务"
+    assert not brief_ready_for_candidate(brief, receipt, require_confirmation=True)
+
+
+def test_timestamps_do_not_invalidate_business_confirmation():
+    brief = _complete_brief()
+    receipt = _confirmation(brief)
+    brief.updated_at = "2099-01-01T00:00:00+00:00"
+    assert brief_ready_for_candidate(brief, receipt, require_confirmation=True)
+
+
+def test_pending_confirmation_is_not_readiness():
+    brief = _complete_brief()
+    receipt = _confirmation(brief)
+    receipt["status"] = "pending"
+    assert not brief_ready_for_candidate(brief, receipt, require_confirmation=True)

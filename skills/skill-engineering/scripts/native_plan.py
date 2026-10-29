@@ -107,13 +107,48 @@ def _read_json(path: Path, label: str) -> dict[str, object]:
     return payload
 
 
+def _read_confirmation(path: Path) -> dict[str, object]:
+    """Read bounded, unambiguous UTF-8 confirmation JSON without raw excerpts."""
+    if not path.is_file() or path.is_symlink():
+        raise PlanError("边界确认须为普通JSON文件。")
+
+    def unique_pairs(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError("重复JSON键")
+            value[key] = item
+        return value
+
+    def reject_constant(_value):
+        raise ValueError("非有限JSON数值")
+
+    try:
+        with path.open("rb") as stream:
+            raw = stream.read(65537)
+        if len(raw) > 65536:
+            raise ValueError("输入超限")
+        payload = json.loads(
+            raw.decode("utf-8"), object_pairs_hook=unique_pairs,
+            parse_constant=reject_constant,
+        )
+    except (OSError, ValueError, RecursionError) as exc:
+        raise PlanError("边界确认JSON无效、重复键或超过64KiB，请修正后重试。") from exc
+    if not isinstance(payload, dict):
+        raise PlanError("边界确认顶层必须是JSON对象。")
+    return payload
+
+
 def _brief_path(project: Path, brief_id: str) -> Path:
     if not IDENTIFIER_RE.fullmatch(brief_id):
         raise PlanError(f"Brief id 格式无效:{brief_id}")
     return project / ".skill-engineering" / "authoring-briefs" / f"{brief_id}.json"
 
 
-def _brief_snapshot(project: Path, brief_id: str) -> dict[str, object]:
+def _brief_snapshot(
+    project: Path, brief_id: str, *, confirmation: dict[str, object] | None = None,
+    require_confirmation: bool = False,
+) -> dict[str, object]:
     path = _brief_path(project, brief_id)
     payload = _read_json(path, "Authoring Brief")
     if str(payload.get("schema_version")) != BRIEF_SCHEMA_VERSION:
@@ -124,59 +159,49 @@ def _brief_snapshot(project: Path, brief_id: str) -> dict[str, object]:
     serialized = json.dumps(payload, ensure_ascii=False)
     if any(pattern.search(serialized) for pattern in gate.SECRET_PATTERNS):
         raise PlanError("Authoring Brief 仍包含敏感值,请先脱敏并重新保存。")
-    missing = [
-        key
-        for key in REQUIRED_BRIEF_FIELDS
-        if not payload.get(key)
-    ]
+    policy = _load_sibling("boundary_policy.py", "skill_engineering_native_boundary")
+    confirmed = None
+    if require_confirmation:
+        if confirmation is None:
+            raise PlanError("新预览缺少用户边界确认，请先确认做什么与不做什么。")
+        try:
+            confirmed = policy.validate_confirmation(payload, confirmation, subject_id=brief_id)
+        except policy.BoundaryError as exc:
+            raise PlanError(f"Authoring Brief 边界确认未通过:{exc}") from exc
+    required = list(REQUIRED_BRIEF_FIELDS)
+    if confirmed is not None:
+        required.remove("negative_triggers")
+        if confirmed["excluded_decision"] == "none":
+            required.remove("excluded_capabilities")
+        required.append("redirect_strategy")
+    missing = [key for key in required if not payload.get(key)]
     if missing:
         raise PlanError(f"Authoring Brief 尚未就绪,缺少:{', '.join(missing)}")
-    return {
+    result = {
         "id": brief_id,
         "behavior_cases": payload.get("behavior_cases", []),
         "path": path.relative_to(project).as_posix(),
         "fingerprint": _sha256_bytes(_canonical_bytes(payload)),
     }
+    if confirmed is not None:
+        result["boundary_policy_version"] = "1"
+        result["boundary"] = policy.boundary_projection(payload)
+        result["boundary_confirmation"] = confirmed
+    return result
 
 
-def _run_behavior_cases(candidate: Path, cases: object) -> dict[str, object]:
-    """Execute deterministic assertions declared in the Authoring Brief."""
-    if not isinstance(cases, list):
-        return {"status": "uncovered", "total": 0, "passed": 0, "failed": 0, "uncovered": 1}
+def _run_behavior_cases(
+    candidate: Path, cases: object, *, policy: dict[str, object] | None = None,
+    boundary: dict[str, object] | None = None,
+) -> dict[str, object]:
+    """Use the generated standard-library rule source in Skill-only installs."""
+    rules = _load_sibling("boundary_policy.py", "skill_engineering_native_behavior")
     texts = "\n".join(
         path.read_text(encoding="utf-8")
         for path in sorted(candidate.rglob("*.md"))
         if path.is_file() and not path.is_symlink()
     )
-    reports: list[dict[str, object]] = []
-    for index, case in enumerate(cases):
-        if not isinstance(case, dict):
-            reports.append({"id": str(case) or f"case-{index}", "status": "uncovered"})
-            continue
-        case_id = str(case.get("id") or f"case-{index}")
-        assertions = case.get("assertions")
-        if not all(case.get(key) for key in ("given", "expect", "must_not")) or not isinstance(assertions, dict):
-            reports.append({"id": case_id, "status": "uncovered"})
-            continue
-        missing = [value for value in assertions.get("must_include", []) if value not in texts]
-        forbidden = [value for value in assertions.get("must_not_include", []) if value in texts]
-        reports.append({
-            "id": case_id,
-            "status": "passed" if not missing and not forbidden else "failed",
-            "missing": missing,
-            "forbidden": forbidden,
-        })
-    passed = sum(item["status"] == "passed" for item in reports)
-    failed = sum(item["status"] == "failed" for item in reports)
-    uncovered = sum(item["status"] == "uncovered" for item in reports)
-    return {
-        "status": "failed" if failed else "uncovered" if uncovered else "passed",
-        "total": len(reports),
-        "passed": passed,
-        "failed": failed,
-        "uncovered": uncovered,
-        "cases": reports,
-    }
+    return rules.run_text_cases(texts, cases, policy=policy, boundary=boundary)
 
 
 def _manifest(root: Path) -> list[dict[str, object]]:
@@ -269,6 +294,7 @@ def preview_plan(
     plan_path: Path,
     *,
     profile: str = "personal",
+    boundary_confirmation: Path | None = None,
 ) -> dict[str, object]:
     project = project.expanduser().resolve()
     candidate = candidate.expanduser().resolve()
@@ -279,7 +305,12 @@ def preview_plan(
     if target.exists() or target.is_symlink():
         raise PlanError(f"target 已存在,Native create 不覆盖:{target}")
 
-    brief = _brief_snapshot(project, brief_id)
+    if boundary_confirmation is None:
+        raise PlanError("新预览缺少用户边界确认，请提供 --boundary-confirmation。")
+    confirmation = _read_confirmation(boundary_confirmation)
+    brief = _brief_snapshot(
+        project, brief_id, confirmation=confirmation, require_confirmation=True,
+    )
     candidate_snapshot = _snapshot(candidate)
     gate = _load_sibling("content_gate.py", "skill_engineering_content_gate")
     review = _load_sibling("creation_review.py", "skill_engineering_creation_review")
@@ -287,7 +318,14 @@ def preview_plan(
     creation_review = review.review_candidate(candidate, profile)
     if gate_findings or creation_review["status"] != "pass":
         raise PlanError("candidate 未通过 Content Gate / portable creation review。")
-    behavior_tests = _run_behavior_cases(candidate, brief["behavior_cases"])
+    try:
+        behavior_tests = _run_behavior_cases(
+            candidate, brief["behavior_cases"],
+            policy=brief["boundary_confirmation"]["behavior_policy"],
+            boundary=brief["boundary"],
+        )
+    except ValueError as exc:
+        raise PlanError(f"行为案例输入无效:{exc}") from exc
     if behavior_tests["status"] != "passed":
         raise PlanError("candidate 未通过 Authoring Brief 中声明的行为案例。")
 
@@ -359,7 +397,31 @@ def _assert_apply_inputs(
     brief_plan = plan["brief"]
     if not isinstance(brief_plan, dict):
         raise PlanError("Native plan Brief 结构无效。")
-    current_brief = _brief_snapshot(project, str(brief_plan.get("id") or ""))
+    policy_fields = {"boundary_policy_version", "boundary", "boundary_confirmation"}
+    present_policy_fields = policy_fields.intersection(brief_plan)
+    if present_policy_fields and present_policy_fields != policy_fields:
+        raise PlanError("边界确认快照不完整，不能退回旧计划路径。")
+    new_policy = bool(present_policy_fields)
+    current_brief = _brief_snapshot(
+        project, str(brief_plan.get("id") or ""),
+        confirmation=brief_plan.get("boundary_confirmation"),
+        require_confirmation=new_policy,
+    )
+    if new_policy:
+        if brief_plan["boundary_policy_version"] != "1":
+            raise PlanError("边界策略版本不受支持。")
+        if current_brief != brief_plan:
+            raise PlanError("Authoring Brief 或边界内容与冻结确认不一致。")
+        try:
+            behavior = _run_behavior_cases(
+                candidate, current_brief["behavior_cases"],
+                policy=current_brief["boundary_confirmation"]["behavior_policy"],
+                boundary=current_brief["boundary"],
+            )
+        except ValueError as exc:
+            raise PlanError(f"冻结行为案例无效:{exc}") from exc
+        if behavior["status"] != "passed" or behavior != plan.get("behavior_tests"):
+            raise PlanError("冻结行为检查与当前候选不一致，请重新预览。")
     if current_brief["fingerprint"] != brief_plan.get("fingerprint"):
         raise PlanError("Authoring Brief fingerprint 漂移,拒绝 Apply。")
     expected_preflight = target_plan.get("preflight")
@@ -412,6 +474,9 @@ def apply_plan(plan_path: Path, candidate: Path, target: Path) -> dict[str, obje
         "plan_id": plan["id"],
         "target": str(target),
         "fingerprint": plan["candidate"]["fingerprint"],
+        "boundary_confirmation_status": (
+            "confirmed" if "boundary_policy_version" in plan["brief"] else "legacy_unknown"
+        ),
     }
 
 
@@ -439,6 +504,9 @@ def verify_plan(plan_path: Path, target: Path) -> dict[str, object]:
         "plan_id": plan["id"],
         "target": str(target),
         "fingerprint": actual["fingerprint"],
+        "boundary_confirmation_status": (
+            "confirmed" if "boundary_policy_version" in plan["brief"] else "legacy_unknown"
+        ),
     }
 
 
@@ -454,6 +522,8 @@ def _emit(payload: dict[str, object], as_json: bool) -> None:
         print("等待用户确认后,使用同一 plan/candidate/target 执行 apply。")
     else:
         print(f"目标:{payload['target']}")
+        if payload.get("boundary_confirmation_status") == "legacy_unknown":
+            print("历史计划没有本轮边界确认记录，按原规则执行，不表示已确认业务边界。")
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -466,6 +536,7 @@ def _parser() -> argparse.ArgumentParser:
     preview = subparsers.add_parser("preview", allow_abbrev=False)
     preview.add_argument("--project", type=Path, required=True)
     preview.add_argument("--brief-id", required=True)
+    preview.add_argument("--boundary-confirmation", type=Path)
     preview.add_argument("--candidate", type=Path, required=True)
     preview.add_argument("--target", type=Path, required=True)
     preview.add_argument("--plan", type=Path, required=True)
@@ -500,6 +571,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.target,
                 args.plan,
                 profile=args.profile,
+                boundary_confirmation=args.boundary_confirmation,
             )
             payload = {**payload, "status": "preview_ready"}
         elif args.command == "apply":

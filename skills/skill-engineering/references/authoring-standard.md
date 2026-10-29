@@ -15,13 +15,14 @@
 
 ## 完整候选生成(1.1 Native Authoring)
 
+- 先按[边界确认细则](boundary-confirmation.md)提出做/不做/完成条件并绑定用户明确表达，按任务能力安排文本案例；不把参考文章变成所有 Skill 的每轮主持流程。
 - 候选必须按 Authoring Brief 直接生成任务专属内容,不依赖官方 `skill-creator` 或其他宿主专用 Creator。
 - 不得先把空骨架写入正式目标,再把补内容留给用户或下一次任务;候选一律先落隔离候选目录。
 - 只有一个 `SKILL.md` 的 atomic Skill 也必须包含足以完成真实任务的专属规则、工作流和边界;简单不等于简陋。
 - `SKILL.md` 不得残留“只说执行单一职责、没有任务细节”的通用 fallback 语句。
 - 每个 references/scripts/assets/templates/tests 条目都必须有真实内容和明确读取或执行入口;不需要的目录不创建。
 - 声明的脚本必须真实存在并通过运行测试;复杂工作流必须包含失败与部分成功处理。
-- 完整候选通过门禁后使用 `scripts/native_plan.py preview` 固定脱敏 Brief、
+- 完整候选通过门禁后使用 `scripts/native_plan.py preview --boundary-confirmation <JSON路径>` 固定脱敏 Brief、确认与类型策略、
   文件 manifest、candidate fingerprint、target preflight 和 portable 创建评审；
   用户确认后只能对同一 plan/candidate/target 执行 `apply`，写后用 `verify` 复验。
 - Native Plan 的 hash 用于防止无意漂移和陈旧计划，不把能够修改并重算 hash 的

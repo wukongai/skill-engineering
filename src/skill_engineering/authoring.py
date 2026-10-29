@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 import re
-from dataclasses import replace
+from dataclasses import asdict, replace
 from typing import Any
 
 from .journey import AuthoringBrief
@@ -50,15 +50,38 @@ def _is_missing(value: Any) -> bool:
     return False
 
 
-def missing_required_fields(brief: AuthoringBrief) -> list[str]:
-    """返回候选生成前仍缺失的必填字段；空列表表示可以进入候选生成。"""
-    return [
-        name for name in REQUIRED_BRIEF_FIELDS if _is_missing(getattr(brief, name, None))
-    ]
+def missing_required_fields(
+    brief: AuthoringBrief, confirmation: dict[str, Any] | None = None, *,
+    require_confirmation: bool = False,
+) -> list[str]:
+    """Legacy readiness remains readable; new creation requires confirmed scope."""
+    required = list(REQUIRED_BRIEF_FIELDS)
+    new_policy = require_confirmation or confirmation is not None
+    confirmation_missing = False
+    if new_policy:
+        from .boundary_policy import BoundaryError, validate_confirmation
+
+        try:
+            confirmed = validate_confirmation(asdict(brief), confirmation, subject_id=brief.id)
+            required.remove("negative_triggers")
+            if confirmed["excluded_decision"] == "none":
+                required.remove("excluded_capabilities")
+        except BoundaryError:
+            confirmation_missing = True
+        required.append("redirect_strategy")
+    missing = [name for name in required if _is_missing(getattr(brief, name, None))]
+    if confirmation_missing:
+        missing.append("boundary_confirmation")
+    return missing
 
 
-def brief_ready_for_candidate(brief: AuthoringBrief) -> bool:
-    return not missing_required_fields(brief)
+def brief_ready_for_candidate(
+    brief: AuthoringBrief, confirmation: dict[str, Any] | None = None, *,
+    require_confirmation: bool = False,
+) -> bool:
+    return not missing_required_fields(
+        brief, confirmation, require_confirmation=require_confirmation,
+    )
 
 
 def _redact(text: str) -> str:

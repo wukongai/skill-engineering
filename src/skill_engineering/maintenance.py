@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import shutil
+import stat
 import tempfile
 import uuid
 from dataclasses import asdict
@@ -18,6 +20,7 @@ from .architecture_review import (
     load_architecture_declaration,
     validate_architecture_snapshot,
 )
+from .boundary_policy import BoundaryError, assess_boundary, validate_boundary_snapshot
 from .journey import (
     BuildFile,
     BuildPlan,
@@ -51,6 +54,46 @@ PROFILES = {"personal", "team", "production"}
 IGNORED_PARTS = {".git", ".skill-engineering", "__pycache__", ".pytest_cache", ".ruff_cache"}
 GATE_TERMS = ("门禁", "CRITICAL", "禁止", "绝对禁止", "硬门禁", "红线")
 INCIDENT_RE = re.compile(r"本日实测|踩坑|事故|失败\s*\d*\s*次|实证灾难|复盘")
+MAX_BOUNDARY_INPUT_BYTES = 128 * 1024
+
+
+def _boundary_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON key")
+        result[key] = value
+    return result
+
+
+def _reject_boundary_constant(value: str) -> None:
+    raise ValueError("non-JSON number")
+
+
+def _load_boundary_declaration(path: Path) -> dict[str, Any]:
+    """Read bounded strict JSON without retaining raw input in raised errors."""
+    try:
+        flags = os.O_RDONLY | getattr(os, "O_NONBLOCK", 0) | getattr(os, "O_NOFOLLOW", 0)
+        if path.expanduser().is_symlink():
+            raise ValueError("symlink")
+        with os.fdopen(os.open(path.expanduser(), flags), "rb") as source:
+            if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
+                raise ValueError("not regular")
+            raw = source.read(MAX_BOUNDARY_INPUT_BYTES + 1)
+        if len(raw) > MAX_BOUNDARY_INPUT_BYTES:
+            raise ValueError("oversized")
+        value = json.loads(raw.decode("utf-8"), object_pairs_hook=_boundary_json_object,
+                           parse_constant=_reject_boundary_constant)
+        if not isinstance(value, dict):
+            raise ValueError("not object")
+    except (OSError, UnicodeError, ValueError, RecursionError):
+        raise SystemExit("边界声明必须是大小不超过 128 KiB 的普通 UTF-8 JSON object 文件。") from None
+    return value
+
+
+def _markdown_text(root: Path) -> str:
+    return "\n\n".join(_read_utf8(path) for path in _iter_files(root)
+                       if path.suffix.lower() == ".md")
 
 
 def _safe_relative(raw: str) -> PurePosixPath:
@@ -70,6 +113,29 @@ def _iter_files(root: Path) -> list[Path]:
         for path in root.rglob("*")
         if path.is_file() and not IGNORED_PARTS.intersection(path.relative_to(root).parts)
     )
+
+
+def _assert_no_internal_symlinks(root: Path) -> None:
+    """Inspect entries without following directory links, including ignored paths."""
+    if not root.is_dir():
+        return
+
+    def unreadable(error: OSError) -> None:
+        raise SystemExit("无法完整检查维护树的内部 symlink；请先修正目录访问权限。") from None
+
+    for directory, directories, files in os.walk(root, followlinks=False, onerror=unreadable):
+        for name in directories + files:
+            path = Path(directory) / name
+            if path.is_symlink():
+                raise SystemExit(f"维护树内部不得包含 symlink:{path}")
+
+
+def _assert_copy_trees(target: Path, candidate: Path, destination: Path) -> None:
+    _assert_no_internal_symlinks(target)
+    _assert_no_internal_symlinks(candidate)
+    if destination.is_symlink():
+        raise SystemExit("维护临时输出不得使用 symlink。")
+    _assert_no_internal_symlinks(destination)
 
 
 def _read_utf8(path: Path) -> str:
@@ -166,6 +232,7 @@ def _audit_tree(path: Path, profile: str) -> dict[str, Any]:
 def _copy_effective_tree(
     target: Path, candidate: Path, destination: Path, deletions: list[str]
 ) -> None:
+    _assert_copy_trees(target, candidate, destination)
     shutil.copytree(
         target,
         destination,
@@ -185,6 +252,57 @@ def _copy_effective_tree(
             dest.unlink()
         elif dest.exists():
             raise SystemExit(f"显式删除只支持文件:{raw}")
+
+
+def _candidate_changes(target: Path, candidate: Path) -> tuple[list[BuildFile], set[str]]:
+    _assert_no_internal_symlinks(target)
+    _assert_no_internal_symlinks(candidate)
+    files: list[BuildFile] = []
+    candidate_relatives: set[str] = set()
+    for source in _iter_files(candidate):
+        if source.is_symlink():
+            raise SystemExit(f"候选目录不得用 symlink 覆盖 Skill 文件:{source}")
+        relative = source.relative_to(candidate)
+        candidate_relatives.add(relative.as_posix())
+        content = _read_utf8(source)
+        destination = target / relative
+        if destination.is_symlink():
+            raise SystemExit(f"维护闭环不直接覆盖 Skill 内部 symlink:{destination}")
+        current = _read_utf8(destination) if destination.is_file() else None
+        if current != content:
+            files.append(BuildFile(
+                relative.as_posix(), content,
+                "更新已有文件。" if current is not None else "增加候选方案明确声明的新文件。",
+            ))
+    return files, candidate_relatives
+
+
+def _copy_planned_tree(target: Path, candidate: Path, destination: Path, plan: BuildPlan) -> None:
+    """Bind the exact write set to the candidate before constructing actual output."""
+    _assert_copy_trees(target, candidate, destination)
+    expected, _ = _candidate_changes(target, candidate)
+    writes = [(_safe_relative(item.relative_path).as_posix(), item.content) for item in plan.files]
+    if len({path for path, _ in writes}) != len(writes) or sorted(writes) != sorted(
+        (item.relative_path, item.content) for item in expected
+    ):
+        raise SystemExit("维护计划写入内容与当前候选差异不一致；请重新生成预览。")
+    deletions = [_safe_relative(raw).as_posix() for raw in plan.deletions]
+    if len(set(deletions)) != len(deletions):
+        raise SystemExit("维护计划包含重复删除项；请重新生成预览。")
+    for raw in deletions:
+        path = target / raw
+        if raw == "SKILL.md" or path.is_symlink() or not path.is_file():
+            raise SystemExit("维护计划包含无效删除项；请重新生成预览。")
+    shutil.copytree(
+        target, destination, symlinks=True,
+        ignore=shutil.ignore_patterns(*IGNORED_PARTS),
+    )
+    for raw, content in writes:
+        path = destination / raw
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
+    for raw in deletions:
+        (destination / raw).unlink()
 
 
 def _plan_hash(plan: BuildPlan) -> str:
@@ -211,11 +329,17 @@ def create_improvement_plan(
     baseline_version: str = "",
     max_repair_rounds: int = 3,
     architecture_review: Path | None = None,
+    boundary_review: Path | None = None,
 ) -> BuildPlan:
     target = target.expanduser().resolve()
     candidate = candidate.expanduser().resolve()
+    _assert_no_internal_symlinks(target)
+    _assert_no_internal_symlinks(candidate)
     architecture_declaration = (
         load_architecture_declaration(architecture_review) if architecture_review is not None else None
+    )
+    boundary_declaration = (
+        _load_boundary_declaration(boundary_review) if boundary_review is not None else None
     )
     regression_cases = regression_cases or []
     acceptance_cases = list(acceptance_cases or regression_cases)
@@ -242,27 +366,7 @@ def create_improvement_plan(
         if path.is_symlink() or not path.is_file():
             raise SystemExit(f"显式删除目标不是现有文件:{raw}")
 
-    files: list[BuildFile] = []
-    candidate_relatives: set[str] = set()
-    for source in _iter_files(candidate):
-        if source.is_symlink():
-            raise SystemExit(f"候选目录不得用 symlink 覆盖 Skill 文件:{source}")
-        relative = source.relative_to(candidate)
-        candidate_relatives.add(relative.as_posix())
-        content = _read_utf8(source)
-        destination = target / relative
-        if destination.is_symlink():
-            raise SystemExit(f"维护闭环不直接覆盖 Skill 内部 symlink:{destination}")
-        current = _read_utf8(destination) if destination.is_file() else None
-        if current == content:
-            continue
-        files.append(
-            BuildFile(
-                relative.as_posix(),
-                content,
-                "更新已有文件。" if current is not None else "增加候选方案明确声明的新文件。",
-            )
-        )
+    files, candidate_relatives = _candidate_changes(target, candidate)
 
     deletion_set = set(deletions)
     retained = [
@@ -404,11 +508,27 @@ def create_improvement_plan(
                 "MAINT111", "FAIL", message,
                 "补齐需求裁决或完整候选的独立架构评审,再重新生成维护计划。",
             ))
+        boundary = assess_boundary(
+            boundary_declaration,
+            target_fingerprint=fingerprint_path(target),
+            candidate_fingerprint=fingerprint_path(candidate),
+            effective_fingerprint=fingerprint_path(effective),
+            architecture_boundary_changed=(
+                "boundary_changed" in architecture.get("whole_review", {}).get("reasons", [])
+            ),
+            candidate_text=_markdown_text(effective),
+        )
+        for message in boundary["blocking_findings"]:
+            findings.append(_finding(
+                "MAINT112", "FAIL", message,
+                "提供 --boundary-review，确认业务边界及适用行为案例后重新生成维护计划。",
+            ))
         blocked = any(item["level"] == "FAIL" for item in findings)
         preflight = {
             "status": "blocked" if blocked else "pass",
             "audit": audit,
             "architecture_review": architecture,
+            "boundary_review": boundary,
             "finding_counts": {
                 "fail": sum(item["level"] == "FAIL" for item in findings),
                 "warn": sum(item["level"] == "WARN" for item in findings),
@@ -506,6 +626,8 @@ def apply_improvement_plan(root: Path, plan: BuildPlan) -> MaintenanceRecord:
         raise SystemExit("维护计划内容或 plan hash 已漂移,请重新生成计划。")
     target = Path(plan.target)
     candidate = Path(plan.candidate or "")
+    _assert_no_internal_symlinks(target)
+    _assert_no_internal_symlinks(candidate)
     if fingerprint_path(target) != plan.target_fingerprint:
         raise SystemExit("维护计划已过期:目标 Skill 发生变化,请重新生成。")
     if fingerprint_path(candidate) != plan.candidate_fingerprint:
@@ -514,13 +636,33 @@ def apply_improvement_plan(root: Path, plan: BuildPlan) -> MaintenanceRecord:
         raise SystemExit("维护计划未通过 preflight,不能应用。")
     with tempfile.TemporaryDirectory(prefix="skill-engineering-architecture-apply-") as directory:
         effective = Path(directory) / "effective"
-        _copy_effective_tree(target, candidate, effective, plan.deletions)
+        _copy_planned_tree(target, candidate, effective, plan)
         validate_architecture_snapshot(
             plan.preflight.get("architecture_review"),
             target_fingerprint=plan.target_fingerprint,
             candidate_fingerprint=plan.candidate_fingerprint,
             effective_fingerprint=fingerprint_path(effective),
         )
+        if "boundary_review" in plan.preflight:
+            try:
+                boundary = plan.preflight["boundary_review"]
+                architecture_changed = (
+                    "boundary_changed" in plan.preflight["architecture_review"]
+                    .get("whole_review", {}).get("reasons", [])
+                )
+                if not isinstance(boundary, dict) or (
+                    boundary.get("architecture_boundary_changed") != architecture_changed
+                ):
+                    raise BoundaryError("architecture and boundary snapshots disagree")
+                validate_boundary_snapshot(
+                    boundary,
+                    target_fingerprint=plan.target_fingerprint,
+                    candidate_fingerprint=plan.candidate_fingerprint,
+                    effective_fingerprint=fingerprint_path(effective),
+                    candidate_text=_markdown_text(effective),
+                )
+            except BoundaryError:
+                raise SystemExit("维护边界审查快照缺失、无效或已漂移；请重新生成预览。") from None
 
     record_id = new_id("maintenance")
     backup_dir = local_state_root(root) / "maintenance-backups" / record_id
@@ -720,6 +862,9 @@ def format_improvement_plan(plan: BuildPlan) -> str:
     delta = plan.complexity.get("delta", {})
     architecture = plan.preflight.get("architecture_review", {})
     blocked = plan.preflight.get("status") != "pass" or architecture.get("status") != "pass"
+    boundary = plan.preflight.get("boundary_review")
+    if "boundary_review" in plan.preflight:
+        blocked = blocked or not isinstance(boundary, dict) or boundary.get("status") != "pass"
     architecture_decision = architecture.get("requirement_decision")
     impact = [
         f"目标：{plan.target}",
@@ -730,6 +875,7 @@ def format_improvement_plan(plan: BuildPlan) -> str:
         "目前尚未写入任何文件。",
     ]
     impact.extend(_architecture_impact(plan.preflight))
+    impact.extend(_boundary_impact(plan.preflight))
     if plan.findings:
         impact.append(f"预检发现 {len(plan.findings)} 个需要处理的问题。")
     next_action = "先修复预检问题，再重新生成方案。" if blocked else "确认实际修改范围后，再决定是否应用。"
@@ -737,6 +883,10 @@ def format_improvement_plan(plan: BuildPlan) -> str:
         next_action = "按需求裁决建立独立计划，再重新评审候选。"
     elif architecture.get("status") != "pass":
         next_action = "补齐架构审查声明及所需整体评审，再重新生成预览。"
+    elif "boundary_review" in plan.preflight and (
+        not isinstance(boundary, dict) or boundary.get("status") != "pass"
+    ):
+        next_action = "补齐边界声明、有效确认与适用行为案例，再重新生成预览。"
     return UserFeedback(
         status="blocked" if blocked else "awaiting-approval",
         result=(
@@ -749,6 +899,19 @@ def format_improvement_plan(plan: BuildPlan) -> str:
         decision="是否继续应用这次修改？" if not blocked else "",
         technical_details=[f"plan={plan.id}", f"root_cause={plan.root_cause_layer}"],
     ).render()
+
+
+def _boundary_impact(preflight: dict[str, Any]) -> list[str]:
+    if "boundary_review" not in preflight:
+        return ["边界确认：legacy_unknown；此历史计划没有边界确认快照。"]
+    report = preflight["boundary_review"]
+    if not isinstance(report, dict):
+        return ["边界审查快照无效，不能应用。"]
+    if report.get("status") != "pass":
+        return ["边界审查尚未通过，不能应用。"]
+    if report.get("confirmation_status") == "legacy_unknown":
+        return ["业务边界声明未改变；历史确认状态为 legacy_unknown。"]
+    return ["业务边界已确认并绑定本次候选；文本案例通过不代表真实任务效用。"]
 
 
 def _architecture_impact(preflight: dict[str, Any]) -> list[str]:
@@ -801,6 +964,7 @@ def format_maintenance_record(record: MaintenanceRecord) -> str:
                 f"可以安全撤销：{'是' if record.undo_available else '否'}。",
                 f"延后结构债务：{len(record.deferred_debt)} 项。",
                 *_architecture_impact(record.preflight),
+                *_boundary_impact(record.preflight),
             ],
             next_action="继续用真实任务观察效果；需要时可撤销本次修改。",
             technical_details=[f"record={record.id}"],
@@ -813,6 +977,7 @@ def format_maintenance_record(record: MaintenanceRecord) -> str:
             "写入后验证没有完整通过。",
             "系统已经恢复修改前内容。" if restored else "请先确认目标是否已经安全恢复。",
             *_architecture_impact(record.preflight),
+            *_boundary_impact(record.preflight),
         ],
         next_action="检查失败原因，修复候选后重新生成修改方案。",
         technical_details=[f"record={record.id}", f"status={record.status}"],

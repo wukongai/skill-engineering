@@ -221,3 +221,11 @@ Blueprint/IR 与 Architecture Guardian 已经从 Backlog 升级到独立
 - 保存原始私有对话或凭证；
 - 用单一静态分数宣称 Skill 真实效果；
 - 让所有简单 Skill 使用完整商业项目结构。
+
+## Skill 边界确认与防跑偏
+
+状态：已升级到[边界确认专项迭代](sprints/2026-10-29-skill-boundary-confirmation.md)，用户已确认范围且本轮本地交付完成；不是新的Backlog承诺，不代表发布，见[写后证据](testing/2026-10-29-skill-boundary-confirmation.md)。
+
+用户明确要求“不做什么”要与用户确认，文章仅作实践参考；2026-10-29 已授权继续原任务并修改状态。已完成的边界确认、门禁修正和类型验收见[已确认需求](specs/2026-10-29-skill-boundary-confirmation-spec.md)与[阶段规划](plans/2026-10-29-skill-boundary-confirmation-plan.md)；2026-10-29用户已确认暂不做通用运行时监控、自动模型评测平台或批量修改历史Skill。
+
+[维护架构审查专项](sprints/2026-10-29-maintenance-architecture-review.md)及后续强制门禁/意图激活已完成，依赖已解除。已复核新接口和原缺口，后续仅补未覆盖能力，不重建平行维护/审批链。入口为[恢复交接](handoffs/2026-10-29-skill-boundary-confirmation-next.md)，早前证据见[只读审查](testing/2026-10-29-skill-boundary-confirmation-audit.md)。

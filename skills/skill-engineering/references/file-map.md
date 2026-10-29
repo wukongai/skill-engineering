@@ -2,8 +2,7 @@
 
 这份文件是给人审核用的总览。你可以从这里快速看懂整个 skill 的结构、每个文件的职责,以及 agent 在不同任务里会读哪些文件。
 
-更完整的执行架构和全生命周期说明见
-`docs/guides/skill-engineering-execution-architecture.md`。
+更完整的执行架构和全生命周期说明见[执行架构指南](../../../docs/guides/skill-engineering-execution-architecture.md)。边界提案、确认与候选文本类型验收的唯一细则见[边界确认](boundary-confirmation.md)。
 
 说明:`stages/` 是本 skill 的内部 workflow step 拆分,不是 Anthropic Agent Skills 官方必需目录。简单 skill 不需要拆 workflow;只有复杂流程会让根 `SKILL.md` 变厚时,才把步骤拆成 `INSTRUCTIONS.md`。
 
@@ -25,6 +24,9 @@ flowchart TD
   D1 --> AB["references/authoring-brief.md"]
   D2 --> AB
   D2 --> A["references/authoring-standard.md"]
+  D2 --> BC["references/boundary-confirmation.md"]
+  D6 --> BC
+  D7 --> BC
   D3 --> C["skill.contract.yaml"]
   D4 --> DS["references/doctor-standard.md"]
   D4 --> QS["references/quality-score-standard.md"]
@@ -50,7 +52,8 @@ flowchart TD
 | `agents/openai.yaml` | UI 元数据和默认 prompt。 | agent UI 展示 skill 时使用。 |
 | [自然语言激活与承接](activation-routing.md)（`references/activation-routing.md`） | 创建、维护、检查的对象判断、上下文省略与反触发边界。 | 用户未说产品名、表达模糊或任务对象需要确认时读。 |
 | `references/selection-matrix.md` | 判断该做 skill、plugin、script、doc、profile 还是 no-op。 | 任何创建动作之前读。 |
-| `references/authoring-brief.md` | Authoring Brief 14 字段契约、就绪判定、脱敏和保存格式。 | 用户确认创建后、生成候选前必读。 |
+| `references/authoring-brief.md` | Authoring Brief 业务字段、就绪判定、脱敏和保存格式。 | 用户确认创建后、生成候选前必读。 |
+| [边界确认细则](boundary-confirmation.md)（`references/boundary-confirmation.md`） | 做/不做/完成条件的提案与确认、意图变化处理、严格输入、按能力文本案例及旧计划兼容的唯一细则源。 | 创建、维护边界判定或审核文本案例时读。 |
 | `references/content-completion-gate.md` | 内容完整性阻断规则、Agent-native 等价清单和语义检查。 | 候选预览/Apply 前必读。 |
 | `references/creation-review.md` | 写后流程、创建评审反馈模板、六态状态机和创建后自动化测试。 | 新建 Skill 写入后必读。 |
 | `references/host-adapters/` | 宿主共同能力契约与 Hermes/Codex/Claude Code/Pi/Kimi CLI 适配。 | 创建路径涉及宿主写入工具、审批或目录范围时读。 |
@@ -74,7 +77,8 @@ flowchart TD
 | `stages/evolve/INSTRUCTIONS.md` | 内部 workflow step:自动形成候选并推进到 Shadow/Release Plan。 | 自进化或周期性优化 Skill 时读。 |
 | `scripts/content_gate.py` | 内容完整性门禁;只用标准库,宿主有 Python 即可运行。 | 候选预览/Apply 前检查占位、空资源、断链和凭证。 |
 | `scripts/creation_review.py` | Doctor v2 的 portable creation profile;输出四维结构就绪度、等级、coverage 和修复项。 | 完整候选通过内容门禁后固定运行;不依赖独立 CLI。 |
-| `scripts/native_plan.py` | 把已保存脱敏 Brief、候选 manifest/fingerprint、target preflight 和创建评审固定成不可变 preview/apply/verify plan。 | 用户确认写入前后固定运行;任一漂移拒绝 Apply。 |
+| `scripts/native_plan.py` | 把已保存脱敏 Brief、边界确认、类型策略、候选 manifest/fingerprint、target preflight 和创建评审固定成不可变 preview/apply/verify plan。 | 用户确认写入前后固定运行;任一漂移拒绝 Apply。 |
+| `scripts/boundary_policy.py` | 标准库边界确认与候选文本检查规则；由核心同名模块生成，做字节一致性回归，不是 CLI 依赖。 | Native 创建与维护链路验证冻结输入时导入。 |
 | `scripts/skill_self_test.py` | 创建后声明式自动化测试(门禁、portable review、临时副本内真实运行 manifest 测试)。 | 创建完成后一键复跑;样例任务层由宿主 Agent 完成。 |
 | `scripts/doctor_skill.py` | 对完整 Python CLI Doctor 的薄包装;缺少 CLI 时不影响 portable 创建评审。 | 维护者需要额外 contract/provider/evaluation 规则时可选使用。 |
 | `tests/self-test.json` | portable runner 的脚本 allowlist、stdin、退出码、输出与 timeout 断言。 | 有确定性脚本的 Skill 创建评审和写后自测时读取。 |

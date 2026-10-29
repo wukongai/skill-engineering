@@ -118,3 +118,9 @@ create parameters
 ```
 
 A production scaffold may be structurally correct while still missing real behavioral evidence. That state is reported as incomplete, not as a failed scaffold and not as production-ready.
+
+## Confirmed boundary evidence (unreleased)
+
+The [boundary increment](specs/2026-10-29-skill-boundary-confirmation-spec.md) retains Brief business fields and freezes explicit confirmation alongside new Native previews. Maintenance places `boundary_review` beside `architecture_review` in the existing preflight/hash. Changed scope needs current confirmation and capability-based candidate-text checks; unchanged scope keeps historical confirmation unknown. Legacy valid plans retain their lifecycle, without upgrading unknown evidence.
+
+`boundary_policy.py` is stdlib-only canonical code; the Skill-only generated copy is byte-identical and tested. New snapshots revalidate the actual effective tree. Labels and fingerprints are local process evidence, not human authentication or runtime utility. See [ADR0013](adr/0013-confirmed-boundaries-and-behavior-policy.md) and [validation](testing/2026-10-29-skill-boundary-confirmation.md).

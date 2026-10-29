@@ -163,9 +163,12 @@ def active_architecture_input(env, version):
 
 
 def active_plan(env, version):
+    from test_maintenance import boundary_input
+
     return create_release_plan(
         env["root"], version.id, "active", active_source=env["skill"],
         architecture_review=active_architecture_input(env, version),
+        boundary_review=boundary_input(env["root"]),
     )
 
 
@@ -413,6 +416,24 @@ def test_active_release_without_review_cannot_create_applicable_parent_plan(env)
     assert fingerprint_path(env["skill"]) == before
 
 
+def test_active_release_without_boundary_cannot_create_applicable_parent_plan(env):
+    _, _, candidate = validated_candidate(env)
+    version = version_candidate(env["root"], candidate.id, "4.0.3")
+    with pytest.raises(SystemExit, match="--boundary-review"):
+        create_release_plan(env["root"], version.id, "active", active_source=env["skill"],
+                            architecture_review=active_architecture_input(env, version))
+    assert not list((env["root"] / ".skill-engineering" / "evolution" / "release-plans").glob("*.json"))
+
+
+@pytest.mark.parametrize("channel", ["shadow", "canary"])
+def test_non_active_release_rejects_unused_boundary_declaration(env, channel):
+    _, _, candidate = validated_candidate(env)
+    version = version_candidate(env["root"], candidate.id, "4.0.4")
+    with pytest.raises(SystemExit, match="Active"):
+        create_release_plan(env["root"], version.id, channel, project=env["project"],
+                            boundary_review=env["root"] / "unused-boundary.json")
+
+
 def test_active_release_rejected_review_cannot_create_parent_plan(env):
     _, _, candidate = validated_candidate(env)
     version = version_candidate(env["root"], candidate.id, "4.0.1")
@@ -467,19 +488,24 @@ def test_active_release_cannot_apply_legacy_unreviewed_child_plan(env, legacy_re
 
 
 def test_active_release_cli_forwards_frozen_review_into_maintenance_child(env, capsys):
+    from test_maintenance import boundary_input
+
     from skill_engineering.cli import main
     from skill_engineering.journey import load_build_plan
 
     _, _, candidate = validated_candidate(env)
     version = version_candidate(env["root"], candidate.id, "4.4.0")
     review = active_architecture_input(env, version)
+    boundary = boundary_input(env["root"])
     assert main([
         "--root", str(env["root"]), "release-plan", "--version", version.id,
         "--channel", "active", "--active-source", str(env["skill"]),
-        "--architecture-review", str(review), "--json",
+        "--architecture-review", str(review), "--boundary-review", str(boundary), "--json",
     ]) == 0
     plan = json.loads(capsys.readouterr().out)
     child = load_build_plan(env["root"], plan["child_plan_id"])
     assert child.preflight["architecture_review"]["status"] == "pass"
+    assert child.preflight["boundary_review"]["confirmation_status"] == "confirmed"
     review.write_text("invalid JSON after preview", encoding="utf-8")
+    boundary.write_text("invalid JSON after preview", encoding="utf-8")
     assert apply_release_plan(env["root"], plan["id"], approved=True).verification["status"] == "passed"

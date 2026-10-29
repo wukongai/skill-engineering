@@ -247,3 +247,9 @@ Original source code, Agent Skill instructions, references, schemas, tests, exam
 - [Licensing and installation guide](docs/guides/licensing-and-installation.md)
 - [Contributing guide](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
+
+## Confirmed Skill boundaries (local unreleased increment)
+
+Creation and maintenance propose responsibilities and exclusions for explicit user confirmation. Users may revise, reject, or confirm no extra exclusions; this does not broaden the stated mission. Unchanged scope can reuse an existing confirmation, while business changes invalidate it.
+
+New previews bind confirmation evidence. Empty assertions do not pass, and case coverage follows interaction, tool and side-effect capabilities. Candidate-text checks do not establish runtime utility. See the [maintenance guide](docs/guides/skill-maintenance-standard.md#用户边界确认与类型验收本地未发布增量) and [validation record](docs/testing/2026-10-29-skill-boundary-confirmation.md). The formal version stays 1.1.0; no new installation or release is performed.

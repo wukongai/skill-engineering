@@ -16,6 +16,32 @@ def test_improve_cli_parses_declaration_but_plan_reuses_frozen_input():
     assert build_parser().parse_args(["improve", "--plan", "saved-plan"]).architecture_review is None
 
 
+def test_improve_and_active_cli_parse_boundary_review():
+    args = build_parser().parse_args([
+        "improve", "demo", "--candidate", "candidate", "--boundary-review", "boundary.json",
+    ])
+    assert args.boundary_review == Path("boundary.json")
+    release = build_parser().parse_args([
+        "release-plan", "--version", "v", "--channel", "active",
+        "--boundary-review", "boundary.json",
+    ])
+    assert release.boundary_review == Path("boundary.json")
+
+
+@pytest.mark.parametrize("apply", [False, True])
+def test_improve_cli_rejects_retrofitting_boundary_onto_saved_plan(tmp_path, apply):
+    from test_boundary_maintenance import unchanged_input
+
+    root, target, plan, _ = _legacy_improve_plan(tmp_path)
+    arguments = ["--root", str(root), "improve", "--plan", plan.id,
+                 "--boundary-review", str(unchanged_input(root))]
+    if apply:
+        arguments.append("--apply")
+    with pytest.raises(SystemExit, match="重新预览"):
+        main(arguments)
+    assert not (root / ".skill-engineering" / "maintenance-backups").exists()
+
+
 def test_improve_cli_help_explains_preview_and_saved_plan_requirements(capsys):
     with pytest.raises(SystemExit) as error:
         build_parser().parse_args(["improve", "--help"])
@@ -97,23 +123,27 @@ def test_release_plan_cli_accepts_active_architecture_declaration():
 
 
 def test_improve_cli_freezes_architecture_input_into_existing_plan(tmp_path, capsys):
-    from test_maintenance import architecture_input, setup_pair
+    from test_maintenance import architecture_input, boundary_input, setup_pair
 
     root, target, candidate = setup_pair(tmp_path)
     path = architecture_input(root, target, candidate)
+    boundary = boundary_input(root)
     code = main([
         "--root", str(root), "improve", str(target), "--candidate", str(candidate),
         "--failure-mode", "修复触发", "--root-cause-layer", "trigger",
         "--expected-behavior", "明确请求才触发", "--regression-case", "tests/cases/trigger.yaml",
-        "--architecture-review", str(path), "--json",
+        "--architecture-review", str(path), "--boundary-review", str(boundary), "--json",
     ])
     preview = json.loads(capsys.readouterr().out)
     assert code == 0
     assert preview["preflight"]["architecture_review"]["status"] == "pass"
+    assert preview["preflight"]["boundary_review"]["confirmation_status"] == "confirmed"
     path.write_text("invalid JSON", encoding="utf-8")
+    boundary.write_text("invalid JSON", encoding="utf-8")
     assert main(["--root", str(root), "improve", "--plan", preview["id"], "--apply", "--json"]) == 0
     applied = json.loads(capsys.readouterr().out)
     assert applied["preflight"]["architecture_review"]["status"] == "pass"
+    assert applied["preflight"]["boundary_review"]["confirmation_status"] == "confirmed"
 
 
 def test_public_cli_contains_engineering_commands_not_hub_distribution():

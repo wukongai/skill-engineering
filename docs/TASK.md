@@ -205,3 +205,15 @@
 - [x] 完成 Microsoft Waza 竞品调研：固定上游 commit，核对 Skill CI、A/B、grader、trial、gate、snapshot/replay 和 dashboard 的真实实现边界；确认本项目已有 baseline/candidate/holdout/negative-transfer 结果比较器，但缺少自动 behavior runner。研究结论见 [`Waza 对比研究`](research/2026-07-20-microsoft-waza-comparison.md)。
 - [x] 将 Behavior Evaluation Lab 拆为独立 Backlog Epic，并创建新任务 handoff；本轮没有修改实现，也没有把该能力加入当前 Architecture Guardian Phase 1。
 - [x] 完成 `1va7/skill2loop` 固定 commit 调研、源码与测试核验、冲突/采用矩阵和 Observation Boundary 目标架构；实现工作留在 Backlog，不进入当前 v2 Phase 1：[`调研报告`](research/2026-07-20-skill2loop-observation-boundary.md)。
+
+## Skill 边界确认与防跑偏
+
+- [x] 保存用户明确要求、拟议方案、未确认范围和审查证据；不把规划保存写成功能完成。
+- [x] [维护架构审查专项](sprints/2026-10-29-maintenance-architecture-review.md)及其强制门禁/意图激活后续已完成；新基线全量 449 passed，原确认与断言缺口已只读复验。
+- [x] 2026-10-29 用户明确授权继续并修改任务状态，本轮现已完成本地应用与验证。
+- [x] 用户已明确选择本轮范围；[需求与验收](specs/2026-10-29-skill-boundary-confirmation-spec.md)、[实施计划](plans/2026-10-29-skill-boundary-confirmation-plan.md)、[确认边界与类型检查决定（ADR0013）](adr/0013-confirmed-boundaries-and-behavior-policy.md)与独立[专项迭代](sprints/2026-10-29-skill-boundary-confirmation.md)已落地。
+- [x] 隔离候选实现确认规则、Native和维护接入、类型检查及引导，定向TDD已运行。
+- [x] 独立评审通过，同一预览应用及Verify无漂移；写后601项与全部工程门禁通过，见[验证记录](testing/2026-10-29-skill-boundary-confirmation.md)。
+- [x] 项目与OB原卡按本轮交付收尾；单次及五轮宿主合成样例已记录，真实业务长期效用未验证。本地交付阶段未提交或推送；用户已追加授权本轮源码交付，见[提交与远端核验](testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)。未新增安装或正式发布。
+
+[已确认需求](specs/2026-10-29-skill-boundary-confirmation-spec.md) · [阶段规划](plans/2026-10-29-skill-boundary-confirmation-plan.md) · [恢复交接](handoffs/2026-10-29-skill-boundary-confirmation-next.md) · [候选登记](BACKLOG.md#skill-边界确认与防跑偏)

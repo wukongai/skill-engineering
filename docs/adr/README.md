@@ -18,3 +18,5 @@ ADR 记录跨版本仍重要的架构取舍。文件名使用 `NNNN-short-title.
 当前写入策略：[默认强制审查决定](0011-mandatory-maintenance-architecture-review.md)已实现并验证；取代前项无声明仍可 Apply 的兼容条款，保留历史读取与安全恢复。
 
 自然语言发现决定：[意图优先的Skill激活](0012-intent-first-skill-activation.md)采用元数据前置、上下文澄清与真实宿主trace，保持名称和现有执行链；本地实现与验证完成，未发布。
+
+- [确认边界与按类型行为检查（ADR0013）](0013-confirmed-boundaries-and-behavior-policy.md)：本轮本地实现决定；保留旧合法计划，不将指纹解释为真人认证。

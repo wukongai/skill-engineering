@@ -37,6 +37,8 @@ def plan_for(root: Path, target: Path, candidate: Path, **kwargs):
         kwargs["architecture_review"] = architecture_input(
             root, target, candidate, deletions=kwargs.get("deletions")
         )
+    if "boundary_review" not in kwargs:
+        kwargs["boundary_review"] = boundary_input(root)
     return create_improvement_plan(
         root,
         target,
@@ -49,6 +51,54 @@ def plan_for(root: Path, target: Path, candidate: Path, **kwargs):
         acceptance_cases=kwargs.pop("acceptance_cases", ["tests/cases/trigger.yaml"]),
         **kwargs,
     )
+
+
+def boundary_input(root, *, includes=None, excludes=None):
+    """Explicit synthetic operator fixture for the changed demo trigger contract."""
+    import json
+
+    from skill_engineering.boundary_policy import boundary_fingerprint
+
+    boundary = {
+        "goal": "只在明确请求演示任务时处理输入",
+        "mission": "按输入输出演示结果",
+        "owned_capabilities": ["处理演示任务"],
+        "excluded_capabilities": [],
+        "allowed_context": [],
+        "positive_triggers": ["明确请求演示任务"],
+        "negative_triggers": [],
+        "inputs": ["任务输入"],
+        "outputs": ["演示结果"],
+        "drift_signals": ["请求演示能力之外的任务"],
+        "redirect_strategy": ["说明边界并停止"],
+        "stop_conditions": ["没有任务输入"],
+        "side_effects": [],
+        "approvals": [],
+    }
+    assertions = {"must_include": includes or ["# Demo"]}
+    if excludes:
+        assertions["must_not_include"] = excludes
+    value = {
+        "schema_version": "1", "change": "changed", "boundary": boundary,
+        "confirmation": {
+            "schema_version": "1", "subject_id": "synthetic-demo-fixture",
+            "boundary_fingerprint": boundary_fingerprint(boundary),
+            "status": "confirmed", "source": "explicit_cli_argument",
+            "summary": "合成测试操作者确认本示例触发范围及无额外排除项。",
+            "excluded_decision": "none",
+            "behavior_policy": {"interaction": "single_turn", "uses_tools": False,
+                                "has_side_effects": False, "rationale": "演示 Skill 仅处理输入文本。"},
+        },
+        "cases": [
+            {"id": category, "category": category, "given": "合成输入或缺输入",
+             "expect": "输出演示结果或说明输入缺口", "must_not": ["猜测输入"],
+             "assertions": assertions}
+            for category in ("success", "insufficient")
+        ],
+    }
+    path = root / "boundary.json"
+    path.write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
+    return path
 
 
 def test_missing_maintenance_intent_or_regression_blocks_apply(tmp_path: Path):
@@ -308,6 +358,7 @@ def historical_unreviewed_record(root, target, candidate):
 
     record = apply_improvement_plan(root, plan_for(root, target, candidate))
     record.preflight.pop("architecture_review", None)
+    record.preflight.pop("boundary_review", None)
     save_maintenance_record(root, record)
     return record
 

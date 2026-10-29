@@ -38,6 +38,7 @@
 skill-engineering improve /path/to/skill \
   --candidate /path/to/candidate \
   --architecture-review /path/to/review.json \
+  --boundary-review /path/to/boundary.json \
   --failure-mode "description 过宽导致误触发" \
   --root-cause-layer trigger \
   --expected-behavior "只有明确请求才触发" \
@@ -98,3 +99,11 @@ MAINT101-110 区分 WARN 与 FAIL。最终快照得分相同,不代表修改过�
 - `SKILL.md` 更薄或至少没有无理由变厚。
 - 旧行为得到保护,高风险边界没有退化。
 - 修改有计划、证据、记录和恢复路径。
+
+## 用户边界确认与类型验收（本地未发布增量）
+
+普通用户无需编写JSON：Agent先说明做什么、不做什么及理由，复用已有明确表达，再把本轮确认与预览绑定。高级新维护预览同时需要架构声明和 `--boundary-review`；Active更新传同一参数；Apply使用冻结快照，不在同一计划上补传声明。
+
+`changed`包含当前业务边界、确认和有效类型案例；`unchanged`需真实理由，只表示本次未改边界，历史确认仍为未知。边界确认不授予写文件、外部动作、安装或发布权限。新创建使用 `native_plan.py preview --boundary-confirmation`。
+
+完整字段、类型矩阵和限制只在[确认细则](../../skills/skill-engineering/references/boundary-confirmation.md)维护。空断言不通过；单次任务不被强制套多轮主持循环。保留旧合法计划Apply、历史、Verify和Undo，缺新确认明确为legacy_unknown，不改旧hash。实现/验证状态见[专项记录](../testing/2026-10-29-skill-boundary-confirmation.md)。

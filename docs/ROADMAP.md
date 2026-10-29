@@ -25,6 +25,8 @@
 
 [自然语言自动激活](specs/2026-10-29-implicit-skill-activation-spec.md)已完成本地实现、原生宿主与既有安装验证；仍为未发布增量，不改变1.1.1/2.0排期，名称优化继续暂缓。
 
+[用户边界确认](specs/2026-10-29-skill-boundary-confirmation-spec.md)已按确认范围完成独立本地增量并验证；正式版本和其他Sprint不变。[专项迭代](sprints/2026-10-29-skill-boundary-confirmation.md)跟踪确认门禁、类型验收和真实证据限制，不扩展运行时平台或自动评测产品。
+
 ## `0.1.x`：本地生命周期基线
 
 ### 已交付能力

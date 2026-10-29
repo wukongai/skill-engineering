@@ -49,3 +49,7 @@
 - 想参与当前开发：先看 `1.1.1` Handoff 与 2026-08 Sprint；Spec/Plan 尚待当前任务创建。
 - 想恢复 Architecture Guardian：看已暂停的 `2.0.0` Sprint、Spec、Plan 和 ADR。
 - 想提议额外能力：先进入 Backlog，不直接扩大当前 Sprint。
+
+## 用户边界确认本地增量
+
+创建/维护当前边界确认、空断言阻断、能力相关类别、核心/portable一致性与原计划绑定，属于本轮本地未发布增量；状态见[专项迭代](sprints/2026-10-29-skill-boundary-confirmation.md)，效果限制见[验证记录](testing/2026-10-29-skill-boundary-confirmation.md)。不将候选文本通过写成真实多轮效用，也不改变正式1.1.0发行物。

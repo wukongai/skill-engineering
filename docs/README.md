@@ -60,3 +60,11 @@
 4. 跨版本架构取舍写 ADR。
 5. 当天过程写 Daily Log；稳定规则升级到正式文档后，Daily Log 不再作为执行入口。
 6. 发布前对齐 README、版本、Changelog、Roadmap、Task、Sprint 和测试证据。
+
+## 边界确认与防跑偏任务
+
+[需求与确认要求](specs/2026-10-29-skill-boundary-confirmation-spec.md) · [分阶段规划](plans/2026-10-29-skill-boundary-confirmation-plan.md) · [恢复交接](handoffs/2026-10-29-skill-boundary-confirmation-next.md) · [现状审查证据](testing/2026-10-29-skill-boundary-confirmation-audit.md)。
+
+2026-10-29 前置[维护架构审查专项](sprints/2026-10-29-maintenance-architecture-review.md)及后续已完成，用户已恢复任务。本轮边界确认增量已应用，混合工作区601项测试通过；干净提交候选结果另见[源码交付](testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)；真实业务长期效用未验证，没有新增发布承诺。
+
+边界确认实施入口：[专项迭代](sprints/2026-10-29-skill-boundary-confirmation.md)、[兼容决定](adr/0013-confirmed-boundaries-and-behavior-policy.md)、[实现与验证](testing/2026-10-29-skill-boundary-confirmation.md)。用户已确认本轮包含与排除范围，工程交付与OB收尾已完成；[结构化证据](testing/2026-10-29-skill-boundary-confirmation-evidence.json)区分候选文本、有限宿主样例与真实业务效用。

@@ -56,12 +56,19 @@ def _write_brief(project: Path, brief_id: str = "brief-demo") -> Path:
                 "mission": "把会议记录整理成可执行的行动项",
                 "owned_capabilities": ["提取决定", "识别负责人"],
                 "excluded_capabilities": ["音频转写", "发送任务通知"],
+                "allowed_context": ["用户提供的会议记录"],
+                "inputs": ["会议记录文本"],
+                "outputs": ["决定与行动项"],
+                "side_effects": [],
+                "approvals": [],
+                "redirect_strategy": ["说明输入边界并停止或交接"],
                 "drift_signals": ["开始讨论会议以外的业务决策"],
                 "stop_conditions": ["输入不是会议记录时停止"],
                 "acceptance_cases": ["有负责人和截止时间的行动项被正确提取"],
                 "behavior_cases": [
                     {
                         "id": "success",
+                        "category": "success",
                         "given": "有会议记录",
                         "expect": "提取决定",
                         "must_not": ["猜测"],
@@ -69,7 +76,17 @@ def _write_brief(project: Path, brief_id: str = "brief-demo") -> Path:
                             "must_include": ["提取明确"],
                             "must_not_include": ["伪造"],
                         },
-                    }
+                    },
+                    {
+                        "id": "negative", "category": "negative",
+                        "given": "音频输入", "expect": "停止", "must_not": [],
+                        "assertions": {"must_include": ["输入不是会议记录时停止"]},
+                    },
+                    {
+                        "id": "insufficient", "category": "insufficient",
+                        "given": "信息不足", "expect": "标注缺口", "must_not": [],
+                        "assertions": {"must_include": ["信息未提供时明确标注"]},
+                    },
                 ],
                 "examples": ["输入会议文本，输出决定"],
                 "schema_version": "1",
@@ -102,21 +119,36 @@ def _run(*args: object) -> subprocess.CompletedProcess[str]:
     )
 
 
-def _preview(project: Path, candidate: Path, target: Path, plan: Path):
-    return _run(
-        "preview",
-        "--project",
-        project,
-        "--brief-id",
-        "brief-demo",
-        "--candidate",
-        candidate,
-        "--target",
-        target,
-        "--plan",
-        plan,
-        "--json",
+def _write_confirmation(project: Path, *, status: str = "confirmed") -> Path:
+    from skill_engineering.boundary_policy import boundary_fingerprint
+
+    brief = json.loads(
+        (project / ".skill-engineering/authoring-briefs/brief-demo.json").read_text()
     )
+    path = project / ".skill-engineering/boundary-confirmations/brief-demo.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({
+        "schema_version": "1", "subject_id": "brief-demo",
+        "boundary_fingerprint": boundary_fingerprint(brief), "status": status,
+        "source": "explicit_cli_argument",
+        "summary": "测试操作员确认此合成样本边界，不代表真实用户记录。",
+        "excluded_decision": "listed" if brief["excluded_capabilities"] else "none",
+        "behavior_policy": {
+            "interaction": "single_turn", "uses_tools": False,
+            "has_side_effects": False, "rationale": "仅处理已提供文本，无工具或外部动作。",
+        },
+    }, ensure_ascii=False))
+    return path
+
+
+def _preview(project: Path, candidate: Path, target: Path, plan: Path, *,
+             confirmation: bool | Path = True):
+    arguments = ["preview", "--project", project, "--brief-id", "brief-demo",
+                 "--candidate", candidate, "--target", target, "--plan", plan, "--json"]
+    if confirmation is not False:
+        path = _write_confirmation(project) if confirmation is True else confirmation
+        arguments += ["--boundary-confirmation", path]
+    return _run(*arguments)
 
 
 def test_preview_writes_plan_but_not_target(tmp_path: Path):
@@ -136,7 +168,7 @@ def test_preview_writes_plan_but_not_target(tmp_path: Path):
     assert payload["candidate"]["files"]
     assert payload["creation_review"]["status"] == "pass"
     assert payload["behavior_tests"]["status"] == "passed"
-    assert payload["behavior_tests"]["passed"] == 1
+    assert payload["behavior_tests"]["passed"] == 3
     assert not target.exists()
 
 
@@ -188,6 +220,7 @@ def test_preview_rejects_persisted_unsanitized_brief(tmp_path: Path):
     project = tmp_path / "project"
     project.mkdir()
     brief = _write_brief(project)
+    confirmation = _write_confirmation(project)
     payload = json.loads(brief.read_text(encoding="utf-8"))
     payload["goal"] = "同步 api_key=DEMO_SECRET_VALUE"
     brief.write_text(json.dumps(payload), encoding="utf-8")
@@ -195,7 +228,7 @@ def test_preview_rejects_persisted_unsanitized_brief(tmp_path: Path):
     target = project / ".agents" / "skills" / "meeting-summary"
     plan = tmp_path / "plan.json"
 
-    result = _preview(project, candidate, target, plan)
+    result = _preview(project, candidate, target, plan, confirmation=confirmation)
 
     assert result.returncode == 1
     assert "脱敏" in result.stderr

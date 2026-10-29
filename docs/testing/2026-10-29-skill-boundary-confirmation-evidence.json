@@ -1,0 +1,190 @@
+{
+  "schema_version": "1",
+  "date": "2026-10-29",
+  "formal_version": "1.1.0",
+  "delivery": "local_unreleased",
+  "baseline_pytest": 449,
+  "candidate_pytest": {
+    "passed": 601,
+    "seconds": 6.28
+  },
+  "post_apply_pytest": {
+    "passed": 601,
+    "seconds": 7.88
+  },
+  "post_apply_gates": {
+    "pytest": {
+      "exit_code": 0
+    },
+    "ruff": {
+      "exit_code": 0
+    },
+    "skill_validation": {
+      "exit_code": 0
+    },
+    "content_gate": {
+      "exit_code": 0
+    },
+    "portable_self_test": {
+      "exit_code": 0
+    },
+    "production_doctor": {
+      "exit_code": 0
+    },
+    "credential_lint": {
+      "exit_code": 0
+    },
+    "release_consistency": {
+      "exit_code": 0
+    },
+    "diff_check": {
+      "exit_code": 0
+    }
+  },
+  "independent_review": {
+    "reviewer": "/root/review_boundary_candidate",
+    "conclusion": "pass",
+    "remaining_p1_p2": 0,
+    "targeted_tests_passed": 138,
+    "checked_areas": [
+      "ownership",
+      "routing",
+      "interfaces",
+      "state",
+      "failure",
+      "rollback"
+    ]
+  },
+  "maintenance": {
+    "plan_id": "improve-20261029032819-5a856586",
+    "plan_hash": "f878c3c487900579d064735024f8850e73c8128af4a48daf4430323e8e586708",
+    "record_id": "maintenance-20261029032853-935c3f45",
+    "status": "applied",
+    "verification_status": "passed",
+    "drifted": false,
+    "files": 16,
+    "deletions": 0,
+    "input_fingerprints": {
+      "target": "81625c1da26150a85848253bf264ece95c8a12c438bee61b40e84124d306271e",
+      "candidate": "ff9c282b90b95a5228a9c07c54a8189c9a2b8a2785c343bf701d98f02cc5b4bd",
+      "effective": "ff9c282b90b95a5228a9c07c54a8189c9a2b8a2785c343bf701d98f02cc5b4bd"
+    },
+    "confirmation_status": "confirmed",
+    "text_case_passed": 6,
+    "text_evidence_kind": "candidate_text",
+    "utility_claim": false
+  },
+  "source_application": {
+    "status": "applied",
+    "files": 30,
+    "plan_sha256": "5cfd73a5dd95f6b9ef68e7fd99a861023daf0cabbbb759ae5e97c3b0111dbd7b",
+    "all_after_fingerprints_match": true
+  },
+  "host_trial": {
+    "host": "Codex 子Agent /root/boundary_host_trial",
+    "input_kind": "synthetic_user_inputs",
+    "candidate_rules_loaded": true,
+    "single_samples": 1,
+    "multi_turn_samples": 5,
+    "observations": [
+      {
+        "sample": "multi-1",
+        "observation": "先发现现有会议整理能力，提出做、不做和暂缓，未把发群未决定当批准。"
+      },
+      {
+        "sample": "multi-2",
+        "observation": "吸收多负责人补充、缺项待确认和手工复制，不重复询问已明确范围。"
+      },
+      {
+        "sample": "multi-3",
+        "observation": "暂存跨项目催办岔题，继续已确认会议任务。"
+      },
+      {
+        "sample": "multi-4",
+        "observation": "明确换目标后暂停旧任务，重新提案新边界，没有强行拉回。"
+      },
+      {
+        "sample": "multi-5",
+        "observation": "明确停止后停止推进，只在对话保留恢复点。"
+      },
+      {
+        "sample": "single-1",
+        "observation": "复用明确单次文字范围，缺失标待确认，不机械安排每轮主持或重复确认。"
+      }
+    ],
+    "writes_or_external_messages": 0,
+    "real_business_utility_validated": false,
+    "raw_conversation_saved": false
+  },
+  "red_green": [
+    "空断言与未实现共享规则先59项失败后修复",
+    "Native缺确认、混合快照、报告篡改、重复JSON及非法Unicode先复现后修复",
+    "维护实际补丁不一致、漏项、多项、重复项先复现后修复",
+    "目录符号链接预览外写先复现后修复，外部哨兵不变"
+  ],
+  "limitations": [
+    "静态Doctor100/A仅结构就绪度",
+    "文本检查不证明真实多轮或工具行为",
+    "有限宿主试用为合成输入，不证明真人授权或真实业务长期效用",
+    "来源标签及指纹不认证人类身份",
+    "旧合法计划保留原路径并明确legacy_unknown",
+    "portable self-test的真实业务Agent试用仍pending，未进入validated",
+    "Obsidian应用内点击及Dataview渲染未验证"
+  ],
+  "scope_excluded_this_round": [
+    "通用运行时监控",
+    "自动模型评测平台",
+    "批量修改历史Skill"
+  ],
+  "git_install_release": {
+    "new_install": false,
+    "commit": false,
+    "push": false,
+    "tag_or_release": false,
+    "scope": "initial_local_implementation"
+  },
+  "ob_validation": {
+    "task_card": {
+      "ok": true,
+      "errors": 0,
+      "warnings": 0
+    },
+    "workflow": {
+      "ok": true,
+      "warnings": [
+        "无活动rules目录；通过共享Skills验证任务与日志入口"
+      ]
+    },
+    "agent_bridges": {
+      "ok": true,
+      "checked": 25,
+      "errors": 0
+    },
+    "status": "done",
+    "done_date": "2026-10-29",
+    "same_day_execution_rows": 1,
+    "personal_journal_review_modified": false,
+    "app_click_and_dataview_verified": false
+  },
+  "installation_entry_check": {
+    "codex_and_agents_are_existing_symlinks": true,
+    "both_resolve_to_repository_skill": true,
+    "canonical_portable_byte_equal": true,
+    "canonical_sha256": "67540a5b0e856e8f9d8cbcfb96af915ab3a430186bf8199f78053eccf1e5d251"
+  },
+  "closeout_document_contract_tests": {
+    "passed": 21,
+    "seconds": 0.09
+  },
+  "source_delivery": {
+    "status": "preparing",
+    "base_commit": "14ca74d95d0d67851ae59845b60cc387d8386381",
+    "branch": "codex/maintenance-architecture-review",
+    "authorized_commit": true,
+    "authorized_push": true,
+    "files": 53,
+    "clean_baseline_pytest": 356,
+    "historical_601_scope": "mixed_original_workspace",
+    "tag_or_formal_release": false
+  }
+}

@@ -12,9 +12,9 @@
 
 ## 流程
 
-1. 能力探索完成并确认创建或扩展 Skill 后，形成脱敏 Mini Governance Record。
+1. 能力探索完成并确认创建或扩展 Skill 后，按[边界确认细则](boundary-confirmation.md)先提出做/不做/完成条件，复用明确用户表达，形成脱敏 Mini Governance Record。
 2. `goal`、正向/反向触发、输出和验证缺失时保持 `needs_discovery`。
-3. Mini Product 和 mini Spec 就绪后生成完整候选；候选不能只是空骨架或泛化 Prompt。
+3. Mini Product 和 mini Spec 就绪后，按能力登记适用文本案例，再生成完整候选；候选不能只是空骨架或泛化 Prompt。
 4. Native Plan Preview 把 mini Plan 绑定到候选、目标和文件清单；用户确认实际影响后才 Apply。
 5. Apply 后运行 Verify、Content Gate、Creation Review 和可用的 Skill self-test。
 
@@ -26,4 +26,4 @@
 
 ## 恢复与兼容
 
-历史 Skill 没有 Mini Governance Record 时，恢复流程先根据现有文件和用户确认补建脱敏记录，不把推断内容写成历史事实。旧 Authoring Brief、Plan、维护记录和 1.x 状态继续兼容读取。
+历史 Skill 没有 Mini Governance Record 时，可根据现有文件逐步补建脱敏记录，不把推断写成历史确认。无业务边界变化的小修按[维护接入](boundary-confirmation.md#创建与维护接入)说明 unchanged 理由并保持 `legacy_unknown`；边界变化再确认当前提案。旧 Authoring Brief、Plan、维护记录和 1.x 状态继续兼容读取，不批量改写历史。

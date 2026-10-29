@@ -249,3 +249,9 @@ git diff --check
 - [版权与安装指南](docs/guides/licensing-and-installation.md)
 - [贡献指南](CONTRIBUTING.md)
 - [安全政策](SECURITY.md)
+
+## 用户确认 Skill 的边界（本地未发布增量）
+
+创建或维护时会先说明负责什么、建议不做什么，并让用户确认、修改或拒绝；同一边界恢复不反复问，业务范围变化后重新确认。用户可以明确确认无额外排除项，但这不扩大既有职责。
+
+新预览绑定确认事实；空断言不能算通过，行为类别按单次/持续对话、工具和副作用选择。候选文本通过与真实任务效果分别报告。高级参数、兼容和证据见[维护指南](docs/guides/skill-maintenance-standard.md#用户边界确认与类型验收本地未发布增量)与[专项记录](docs/testing/2026-10-29-skill-boundary-confirmation.md)。正式版本仍为1.1.0，无新增安装或发布。

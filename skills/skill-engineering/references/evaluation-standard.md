@@ -36,6 +36,8 @@ Skill 的“写得像不像”与“是否真的提升下游任务”是两个�
 
 ## 最小 Case Portfolio
 
+新创建与边界变化维护的候选文本类别按[边界确认与能力矩阵](boundary-confirmation.md#按能力安排候选文本案例)选择；它与下方真实结果 suite 分属不同证据层。无/空断言为 `uncovered`，非法案例为 `failed`，候选文本结果始终为 `evidence_kind=candidate_text`、`utility_claim=false`，不能替代真实试用。
+
 复杂或生产 skill 至少声明:
 
 1. success case:正常路径是否完成。

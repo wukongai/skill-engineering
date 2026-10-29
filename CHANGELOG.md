@@ -12,6 +12,8 @@
 
 ### Added
 
+- 本地未发布增量：创建/维护的用户边界确认、空排除的明确选择、有效断言与类型覆盖，以及核心/portable同源规则。新维护与Active复用原preflight；旧合法计划保留原生命周期并报告历史确认未知。文本证据不等于真实效用，见[专项记录](docs/testing/2026-10-29-skill-boundary-confirmation.md)。
+
 - 本地未发布增量：在原维护链路增加内部架构审查阶段及 `improve --architecture-review`，支持需求归属、完整候选评审、跨版本基线与已知债务。复用原计划哈希/Apply/Verify/Undo，原可选接入已由上方强制写入策略收紧，历史未审查记录仍可读；同秒历史按指纹因果顺序处理，歧义保守保留，凭证形态在声明持久化前拒绝。正式版本保持 1.1.0，具体结果见[本轮测试记录](docs/testing/2026-10-29-maintenance-architecture-review.md)。
 
 ### Planning

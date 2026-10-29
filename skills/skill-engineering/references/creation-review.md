@@ -12,6 +12,8 @@ python3 scripts/creation_review.py <新 Skill 目录> --profile personal --json
 可选增强,用于 contract、provider、evaluation 和更完整的工程规则;完整
 Doctor 不可用时,不得阻断 portable 创建评审。
 
+创建前的边界提案、确认与按能力文本案例按[边界确认细则](boundary-confirmation.md)执行；新 Native Preview 冻结确认与策略，写后评审不补造用户批准。
+
 ## 写后流程(固定顺序)
 
 1. Content Completion Gate 复跑(`scripts/content_gate.py` 或 Agent-native 等价清单);
@@ -82,3 +84,5 @@ runner 只执行 manifest 中明确列出的候选内 Python 脚本,在临时副
 记录失败模式并走现有 improve 流程,不得包装成成功。宿主没有 Python 时,
 确定性层按 `references/content-completion-gate.md` 的 Agent-native 等价清单执行,
 并向用户明示。
+
+Native 文本案例检查与上述脚本真实运行、自身业务试用分开报告。文本结果固定为 `evidence_kind=candidate_text`、`utility_claim=false`；即使断言通过，缺真实任务证据时仍为 `created_untried`，不能证明真实多轮纠偏、工具恢复或审批有效。
