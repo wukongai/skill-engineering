@@ -1,15 +1,15 @@
 ---
 name: skill-engineering
-description: Skill Engineering：快速生成并全生命周期维护 Codex、Claude Code 等 Agent Skill。用户明确提到“skill-engineering”或“Skill Engineering”，或说“帮我做/改一个 skill”“从一开始按软件工程规范创建”“AI 修改时保持架构优雅”“这个 skill 越改越乱”“做成商业或工业级 skill”“从远程安装后测试创建到检查闭环”“体检、评测、安装或继续上次任务”时使用。不要把仅限项目 harness、Claude/Codex 入口、tmux 或开工自检的请求路由到本 Skill。自动判断是否需要 Skill、选择最小架构、生成完整候选、检查安全和回归边界，并在确认后安全应用。
+description: 创建、维护或检查 Agent Skill（技能包、可复用 AI 指令流程）时使用。包括反复用的小助手构想、补能力、重构、越改越乱、误触发与行为排查；承接口语、模糊需求和上文或文件已知对象的省略。也用于体检、评测、自进化、安装治理、继续任务及显式调用 skill-engineering / Skill Engineering。不适用于现成领域 Skill 的业务调用、普通代码/文案检查、概念解释或项目 harness/tmux/开工自检。
 ---
 
 # Skill Engineering
 
-把用户当作只需要描述目标的使用者。不要要求用户先理解 Skill Engineering、Profile、Contract 或 CLI。
+快速生成并全生命周期维护 Agent Skill。把用户当作只需要描述目标的使用者。不要要求用户先理解 Skill Engineering、Profile、Contract 或 CLI。
 
 ## 引导方式
 
-1. 先识别意图:create、improve、evolve、audit、evaluate、govern、install、inventory 或 resume。
+1. 先按[自然语言激活与承接](references/activation-routing.md)确认对象,再识别 create、improve、evolve、audit、evaluate、govern、install、inventory 或 resume 意图。
 2. 自动完成只读检查:扫描已有 Skill、读取项目约束、判断产物类型和建议安装范围。
 3. 一次只问会改变结果的必要问题;通常问 1 个,最多同时列 3 个。
 4. 每一步先说明“结果、对用户的影响、下一步”,不要复述工具过程,然后自动进入下一阶段。
@@ -22,7 +22,7 @@ description: Skill Engineering：快速生成并全生命周期维护 Codex、Cl
 
 - 新需求或需求还模糊:先读取 `references/capability-brainstorming.md`、`references/selection-matrix.md` 与 `stages/discover/INSTRUCTIONS.md`;自查已有能力,一次问一个关键问题,比较 2-3 个产物方案。信息不足保持 `needs_discovery`,不得默认创建 Skill。
 - 创建 Skill:先读 `references/mini-governance.md`、`references/boundary-contract.md`、`references/authoring-brief.md`、`references/authoring-standard.md` 与 `stages/design/INSTRUCTIONS.md`;能力判断完成后先形成并保存脱敏 Mini Governance Record（mini Product、Boundary Contract、mini Spec、mini Plan），先登记成功、反例、偏题、信息不足和失败/审批行为案例，再由 Native Authoring Kernel 直接生成任务专属的完整候选(不依赖官方 `skill-creator`、宿主专用作者 Skill 或独立 Python CLI),从第一次生成开始建立边界、架构、安全和验证契约,快速交付最小但完整的可用候选。候选先落隔离目录并运行 `scripts/native_plan.py preview`;用户预览并确认实际文件后,只对同一 plan/candidate/target 执行 `apply` 和 `verify`,再运行 `scripts/skill_self_test.py`。宿主差异先读 `references/host-adapters/common-capabilities.md`,再按具体宿主适配,不复制作者逻辑。
-- 体检:运行 `skill-engineering audit`。比较 baseline/candidate 真实行为结果时,先用 `skill-engineering validate-eval-suite`,再运行 `skill-engineering evaluate`;同时读取 `references/evaluation-standard.md` 与 `stages/evaluate/INSTRUCTIONS.md`。
+- 体检或回归验证（包括“从远程安装后测试创建到检查闭环”）:运行 `skill-engineering audit`。比较 baseline/candidate 真实行为结果时,先用 `skill-engineering validate-eval-suite`,再运行 `skill-engineering evaluate`;同时读取 `references/evaluation-standard.md` 与 `stages/evaluate/INSTRUCTIONS.md`。
 - 安装或治理:读取 `references/install-governance.md` 与 `stages/install-audit/INSTRUCTIONS.md`,先完成安全和范围判断;多项目/Profile/Global 分发交给 Agent Skill Hub。自进化 Canary 只通过 `skill-engineering release-plan --channel canary` 进入明确项目。
 - 修改已有 Skill:读取 `references/maintenance-protocol.md`、`references/rule-authoring.md` 与 `stages/review/INSTRUCTIONS.md`;先收集失败模式、预期行为和回归证据,确认最低根因层级,再把独立候选目录交给 `skill-engineering improve`。每次计划必须声明维护目标、baseline、验收集合、最大修复轮数和延后债务；展示增删改 diff、复杂度变化、当前阻断与收敛门后停止确认。批准后必须用同一 plan id 应用,再运行 `verify-improvement`。需要回看趋势或撤销时使用 `maintenance-history` / `undo-improvement`。
 - 维护架构审查:维护已有 Skill 时读取 `stages/architecture-review/INSTRUCTIONS.md`，新预览必须提供 `--architecture-review PATH`；普通小修保持轻量，缺声明或未审查旧计划不能应用；全新创建继续 Native Authoring。

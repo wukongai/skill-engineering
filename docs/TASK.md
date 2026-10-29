@@ -4,6 +4,18 @@
 正式 Tag 的完整新手用户回归已在独立 Codex 项目完成。`1.1.1` 维护分级与版本管理
 已获准启动；`2.0.0` Architecture Guardian Phase 1 暂停，保持开发预览。
 
+## Done：自然语言与模糊语义自动激活
+
+- [x] IA-0：350项基线、隔离副本、[需求合同](specs/2026-10-29-implicit-skill-activation-spec.md)、[实施计划](plans/2026-10-29-implicit-skill-activation-plan.md)、[专项迭代](sprints/2026-10-29-implicit-skill-activation.md)已落地。
+- [x] IA-1：意图前置元数据、上下文澄清、反例与测试。
+- [x] IA-2：原生宿主实际激活与独立holdout验证。
+- [x] IA-3：独立评审、同一维护计划应用及既有安装合并验证。
+- [x] IA-4：工程门禁及[证据状态](testing/2026-10-29-implicit-skill-activation.md)回填。
+
+- [ ] IA-5：用户于2026-10-29追加本轮commit/push授权，正在完成[源码提交与推送收尾](testing/2026-10-29-implicit-skill-activation.md#源码提交与推送收尾)。
+
+名称优化继续暂缓，不扩展其他Sprint；本次提交推送依据本轮新授权。
+
 ## Done：CLI 强制维护架构审查（2026-10-29，后续授权）
 
 - [x] MR-0：404 项基线、独立候选与[需求合同](specs/2026-10-29-mandatory-architecture-review-spec.md)、[实施计划](plans/2026-10-29-mandatory-architecture-review-plan.md)、[架构决定](adr/0011-mandatory-maintenance-architecture-review.md)、[专项迭代](sprints/2026-10-29-mandatory-architecture-review.md)已落地。

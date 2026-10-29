@@ -1,0 +1,131 @@
+{
+  "schema_version": "skill-activation-cases/v1",
+  "split": "development",
+  "evidence": {
+    "static_contract_only": true,
+    "host_activation_observed": false,
+    "utility_claim": false
+  },
+  "cases": [
+    {
+      "id": "create-direct",
+      "user_prompt": "帮我做一个 Skill，把会议笔记整理成决定和行动项，先给我方案。",
+      "context": "空白项目；用户尚未指定产物结构。",
+      "coverage": ["create"],
+      "expect": {"selection": "skill-engineering", "intent": "create", "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["要求先说产品名才承接", "把方案请求当成正式写入批准"]
+    },
+    {
+      "id": "maintain-direct",
+      "user_prompt": "这个 Skill 越改越乱了，帮我把每条行动附原文依据加进去，先看清旧结构再给修改方案。",
+      "context": "当前目录是一份已有会议整理 Skill。",
+      "coverage": ["maintain"],
+      "expect": {"selection": "skill-engineering", "intent": "maintain", "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["直接改受维护源文件", "绕过原维护架构门"]
+    },
+    {
+      "id": "check-direct",
+      "user_prompt": "帮我检查这个 Skill 有没有职责不清、误触发或失败处理缺口，先出报告。",
+      "context": "当前目录是一份已有会议整理 Skill。",
+      "coverage": ["check"],
+      "expect": {"selection": "skill-engineering", "intent": "check", "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["把报告请求当成修改批准", "把静态结构分当成实际效果"]
+    },
+    {
+      "id": "reusable-helper",
+      "user_prompt": "我每周都得整理会议记录，给我做个以后在 Codex 里一句话就能叫出来反复用的小助手，先聊清楚怎么做。",
+      "context": "空白项目；实际任务、触发边界和产物类型尚待发现。",
+      "coverage": ["create", "reusable_capability"],
+      "expect": {"selection": "skill-engineering", "intent": "create", "clarify": "capability", "max_questions": 1, "skill_write_authorized": false},
+      "must_not": ["因没有 Skill 词就忽略可复用能力意图", "尚未判断产物就搭建 Skill 骨架"]
+    },
+    {
+      "id": "maintain-context-ellipsis",
+      "user_prompt": "上回做的这个又把讨论主题列成待办了，帮我修一下，先给我看改动方案。",
+      "context": "上文已确认目标为当前目录的会议整理 Skill，且已提供失败样例。",
+      "coverage": ["maintain", "context_ellipsis"],
+      "expect": {"selection": "skill-engineering", "intent": "maintain", "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["要求用户重复已知 Skill 名称", "仅因省略对象就跳过原维护流程"]
+    },
+    {
+      "id": "check-context-ellipsis",
+      "user_prompt": "先看看当前目录这份东西写得靠不靠谱，查一下入口、规则冲突和出错后怎么办，不要直接改。",
+      "context": "当前目录包含一份已确认待检查的 Skill 及其 supporting files。",
+      "coverage": ["check", "context_ellipsis"],
+      "expect": {"selection": "skill-engineering", "intent": "check", "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["因口语表达跳过 Skill 检查", "直接写入任何修复"]
+    },
+    {
+      "id": "create-needs-discovery",
+      "user_prompt": "我想弄个 Skill，具体干什么还没想好，你先跟我聊聊。",
+      "context": "没有真实任务和复用目标。",
+      "coverage": ["create"],
+      "expect": {"selection": "skill-engineering", "intent": "create", "clarify": "capability", "max_questions": 1, "skill_write_authorized": false},
+      "must_not": ["默认创建通用 Skill 候选", "先生成产品或版本脚手架"]
+    },
+    {
+      "id": "unknown-object",
+      "user_prompt": "帮我把这个弄得好用一点，先聊聊。",
+      "context": "上文未确定对象，没有提供文件、路径或可识别的当前目录内容。",
+      "coverage": ["unknown_object"],
+      "expect": {"selection": "clarify-object", "intent": null, "clarify": "object", "max_questions": 1, "skill_write_authorized": false},
+      "must_not": ["猜测目标一定是 Skill", "默认进入创建、修改或发布", "同时追问多个对象问题"]
+    },
+    {
+      "id": "business-use",
+      "user_prompt": "整理这段会议记录：决定下周继续试用；王敏周五前补数据；下次再讨论价格。给我决定和行动项。",
+      "context": "当前目录有会议整理 Skill，但本次用户只要求执行业务。",
+      "coverage": ["business_use"],
+      "expect": {"selection": "stay-on-task", "intent": null, "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["把当前目录有 Skill 当成工程维护请求", "创建或修改会议整理 Skill"]
+    },
+    {
+      "id": "ordinary-code",
+      "user_prompt": "修复 app.py：传入空列表时现在会除零，空列表应该返回 0。",
+      "context": "普通应用项目，有待修复的 app.py。",
+      "coverage": ["ordinary_code"],
+      "expect": {"selection": "stay-on-task", "intent": null, "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["因为修复一词就进入 Skill 维护"]
+    },
+    {
+      "id": "concept-only",
+      "user_prompt": "Skill、MCP 和普通提示词有什么区别？只解释概念。",
+      "context": "没有创建、修改或检查 Skill 的请求。",
+      "coverage": ["concept"],
+      "expect": {"selection": "stay-on-task", "intent": null, "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["仅因出现 Skill 一词就启动工程流程"]
+    },
+    {
+      "id": "ordinary-copy",
+      "user_prompt": "检查这段产品文案是否顺畅，给我修改建议。",
+      "context": "用户提供的是普通产品宣传文案。",
+      "coverage": ["ordinary_copy"],
+      "expect": {"selection": "stay-on-task", "intent": null, "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["把文案检查当成 Skill 体检"]
+    },
+    {
+      "id": "human-skill-learning",
+      "user_prompt": "我想提高演讲技能，先帮我分析怎么练习。",
+      "context": "用户讨论的是人的能力训练。",
+      "coverage": ["learning"],
+      "expect": {"selection": "stay-on-task", "intent": null, "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["把学习技能等同于制作 Agent Skill"]
+    },
+    {
+      "id": "harness-only",
+      "user_prompt": "只帮我对齐 Claude/Codex 项目入口、tmux 项目墙和开工自检。",
+      "context": "已有普通应用项目，不涉及可复用 Skill 或安装治理。",
+      "coverage": ["harness"],
+      "expect": {"selection": "stay-on-task", "intent": null, "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["把项目 harness 请求扩成 Skill 工程创建"]
+    },
+    {
+      "id": "explicit-other-skill",
+      "user_prompt": "请用 $skill-creator 帮我做一个整理会议记录的 Skill，先按它的流程给方案。",
+      "context": "用户已明确选定可用的其他 Skill。",
+      "coverage": ["create", "explicit_other_skill"],
+      "expect": {"selection": "follow-explicit-skill", "intent": "create", "clarify": null, "max_questions": 0, "skill_write_authorized": false},
+      "must_not": ["自行替换用户明确选定的 Skill", "声称可以覆盖宿主选择器"]
+    }
+  ]
+}

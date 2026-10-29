@@ -9,16 +9,19 @@ purpose: >-
 
 triggers:
   use_when:
+    - "用户希望创建、维护或检查 Agent Skill、技能包或可复用 AI 指令流程,无需提到本产品名。"
+    - "上下文、文件或路径已确认对象是 Skill,用户以口语、近义词、省略或模糊表达要求补能力、重构、排查触发或检查行为。"
+    - "用户描述反复使用的 Agent 小助手或能力构想,需要先探索真实任务与产物选择。"
     - "用户明确提到 skill-engineering 或 Skill Engineering,并要求测试、创建、检查、维护或发布它。"
-    - "用户希望快速生成从第一版开始就边界清楚、架构合理且可验证的 Skill。"
-    - "用户想创建、更新、重构、review、安装或体检 skill。"
+    - "用户要求从第一版工程化创建、更新、review、安装或体检 Skill。"
     - "用户希望 skill 根据失败、纠正或运行证据自动生成候选并进化。"
     - "用户需要判断某个能力应该做成 skill、plugin、script、project doc 还是 profile entry。"
     - "用户想检查 global/project/plugin/direct skill 暴露和路由成本。"
     - "AI 正在创建、修改或重构复杂/商业 skill,需要防止架构漂移并管理版本。"
   do_not_use_when:
-    - "任务只是普通应用开发,没有可复用 skill 或安装治理问题。"
+    - "任务只是普通应用开发、代码/文案检查、概念解释或学习某种技能,没有可复用 Skill 或安装治理问题。"
     - "用户要执行某个领域 skill 的业务流程,而不是工程化这个 skill。"
+    - "用户显式指定其他 Skill 或工具,且没有另行要求本 Skill 的工程流程。"
     - "任务只做项目 harness 初始化、Claude/Codex 入口对齐、tmux 项目墙或开工自检。"
 
 inputs:
@@ -316,6 +319,7 @@ tests:
     - tests/business-agent-boundary-cases.yaml
     - tests/host-adapter-fixtures.yaml
     - tests/architecture-review-cases.json
+    - tests/activation-cases.json
 
 evaluation:
   score_scope: structural_readiness

@@ -1,0 +1,299 @@
+{
+  "schema_version": "1",
+  "status": "pass",
+  "official_version": "1.1.0",
+  "implementation": {
+    "name_changed": false,
+    "display_name_changed": false,
+    "explicit_invocation_changed": false,
+    "implicit_invocation_was_already_enabled": true,
+    "description_characters": 220,
+    "description_delta": -109,
+    "root_line_delta": 0,
+    "added_instruction_files": 1,
+    "changed_package_files": 6,
+    "new_repository_tests": 6,
+    "core_or_global_router_added": false,
+    "other_skills_or_global_configuration_modified": false,
+    "unchanged_protected_worktree_files": 285
+  },
+  "tests": {
+    "baseline_worktree": 350,
+    "final_worktree": 356,
+    "final_installed_source_with_preexisting_changes": 449,
+    "red_contract_failures": 6,
+    "scope_note": "Installed source contains preexisting SEC102/other task tests; counts are not compared as identical snapshots."
+  },
+  "native_routing": {
+    "cli_version": "0.163.0",
+    "requested_model": "CLI default; no explicit model flag",
+    "fresh_ephemeral": true,
+    "inner_sandbox": "read-only",
+    "synthetic_inputs_only": true,
+    "baseline_development": {
+      "cases": 10,
+      "passed": 10,
+      "positive_count": 7,
+      "positive_root_reads": 7,
+      "negative_count": 3,
+      "false_activations": 0,
+      "inconclusive": 0,
+      "source_root_skill_sha256": "9858fc4c09de59bb7972a9545b1b986fad10495ecee06d5d1297373004df2737"
+    },
+    "candidate_development": {
+      "cases": 10,
+      "passed": 10,
+      "positive_count": 7,
+      "positive_root_reads": 7,
+      "negative_count": 3,
+      "false_activations": 0,
+      "inconclusive": 0,
+      "source_root_skill_sha256": "aaa7804694e7c8d2e016dd646b85b1f25e53f995201a0ca2a57daaf09e279558"
+    },
+    "candidate_holdout": {
+      "schema_version": "1",
+      "status": "pass",
+      "scope": "independent_frozen_candidate_holdout_initial_routing_and_clarification",
+      "source_root_skill_sha256": "aaa7804694e7c8d2e016dd646b85b1f25e53f995201a0ca2a57daaf09e279558",
+      "holdout_cases": 8,
+      "passed": 8,
+      "positive_cases": 4,
+      "positive_root_reads": 4,
+      "negative_cases": 4,
+      "target_false_activations": 0,
+      "positive_creator_only": 0,
+      "inconclusive_final": 0,
+      "all_workspaces_unchanged": true,
+      "clarification_manual_review": {
+        "required_holdout_cases": 2,
+        "passed": 2,
+        "development_cases_reviewed": [
+          "D04",
+          "D07"
+        ],
+        "development_passed": 2
+      },
+      "root_read_evidence": [
+        {
+          "case_id": "H01",
+          "manual_verdict": "pass",
+          "target_root_read": true,
+          "workspace_unchanged": true,
+          "root_event_ids": [
+            "item_1"
+          ],
+          "retained_event_file_sha256": "55c73ff786f08f7d79d2fd8aab3f24e4d8d8b43b1671b1304b59175f714a73ed",
+          "successful_tool_output_sha256": [
+            "bdaf47fa9654ccc81b6fd93ee5cfed79c2ae15a1868a2a8f1945e60503b2a4b9"
+          ]
+        },
+        {
+          "case_id": "H02",
+          "manual_verdict": "pass",
+          "target_root_read": true,
+          "workspace_unchanged": true,
+          "root_event_ids": [
+            "item_2"
+          ],
+          "retained_event_file_sha256": "d3b8253bd7da0f3942dee499e1b0a307ff2464c682f0a1ea1f93e89585d2bcb8",
+          "successful_tool_output_sha256": [
+            "11d65ad158fa550b852e74b1fdadc0f7fbe6c4eb226fbf760b6d852db0928508"
+          ]
+        },
+        {
+          "case_id": "H03",
+          "manual_verdict": "pass",
+          "target_root_read": true,
+          "workspace_unchanged": true,
+          "root_event_ids": [
+            "item_1"
+          ],
+          "retained_event_file_sha256": "162b79c13e0386b50292bb320d5746b6513c7bc86c03a3657d1856249ab1765d",
+          "successful_tool_output_sha256": [
+            "11d65ad158fa550b852e74b1fdadc0f7fbe6c4eb226fbf760b6d852db0928508"
+          ]
+        },
+        {
+          "case_id": "H04",
+          "manual_verdict": "pass",
+          "target_root_read": true,
+          "workspace_unchanged": true,
+          "root_event_ids": [
+            "item_1"
+          ],
+          "retained_event_file_sha256": "2f38dfe52b6f2dd7908ff839db3187d3bec2bed0295dad714d3d1b844973bd83",
+          "successful_tool_output_sha256": [
+            "11d65ad158fa550b852e74b1fdadc0f7fbe6c4eb226fbf760b6d852db0928508"
+          ]
+        },
+        {
+          "case_id": "H05",
+          "manual_verdict": "pass",
+          "target_root_read": false,
+          "workspace_unchanged": true,
+          "root_event_ids": [],
+          "retained_event_file_sha256": "c84e4a32fd15f329ed246431e5447f48817b38fbca931f835f60125abb244cb6",
+          "successful_tool_output_sha256": []
+        },
+        {
+          "case_id": "H06",
+          "manual_verdict": "pass",
+          "target_root_read": false,
+          "workspace_unchanged": true,
+          "root_event_ids": [],
+          "retained_event_file_sha256": "bd9204f620bd1225fb74eda8f7572c3f35398718234dff3c8a125168c51dfab5",
+          "successful_tool_output_sha256": []
+        },
+        {
+          "case_id": "H07",
+          "manual_verdict": "pass",
+          "target_root_read": false,
+          "workspace_unchanged": true,
+          "root_event_ids": [],
+          "retained_event_file_sha256": "29d935ab007d4740714eaf1c6bf1f23ffadaa7a4219bb9b014a28741fed9fd47",
+          "successful_tool_output_sha256": []
+        },
+        {
+          "case_id": "H08",
+          "manual_verdict": "pass",
+          "target_root_read": false,
+          "workspace_unchanged": true,
+          "root_event_ids": [],
+          "retained_event_file_sha256": "d51cb6750bb251cf936bb93b31adb327ea9c1d5949f39480a989dd1d3c1d77cd",
+          "successful_tool_output_sha256": []
+        }
+      ],
+      "controls": {
+        "fresh_ephemeral": true,
+        "inner_sandbox": "read-only",
+        "same_native_eval_parameters": true,
+        "official_creator_available": true,
+        "candidate_source_unchanged": true,
+        "auth_or_global_config_copied": false,
+        "full_conversations_retained": false,
+        "outer_ipc_network_permission_retry": true
+      },
+      "limitations": [
+        "Eight synthetic holdout cases in one sampled CLI environment; no guarantee for all natural-language requests or other models.",
+        "Measures initial routing, first-stage clarification and nonactivation; does not prove generated artifact quality or long-term utility.",
+        "Development D04/D07 manual clarification review used saved excerpts and read-proof summaries rather than original raw tool output.",
+        "One negative format-explanation case loaded official skill-creator without loading the target workflow; positive creator-only count is zero.",
+        "An initial startup-only failure produced eight inconclusive results; it is separate from this completed retry and was not treated as eight failures or passes."
+      ]
+    },
+    "actual_installed_smoke": {
+      "cases": 3,
+      "passed": 3,
+      "positive_count": 3,
+      "positive_root_reads": 3,
+      "negative_count": 0,
+      "false_activations": 0,
+      "inconclusive": 0,
+      "source_root_skill_sha256": "7ecbb74c7ca02b9d96319c94abff437e7f348150fd641259ee3bec296ecd2e8a"
+    },
+    "candidate_native_cases_passed": 21,
+    "official_creator_kept_available": true,
+    "body_read_required_for_activation": true,
+    "self_report_or_catalog_is_not_load_evidence": true,
+    "all_workspaces_unchanged": true,
+    "discovery_baseline": "pass",
+    "discovery_candidate": "pass",
+    "original_aliases_canonicalized_to_one_source": true,
+    "installed_smoke_injected_project_copy": false,
+    "installed_smoke_disabled_user_source": false,
+    "candidate_author_saw_holdout_or_baseline_scores": false,
+    "relative_routing_improvement_demonstrated": false
+  },
+  "self_hosted_maintenance": {
+    "worktree": {
+      "plan_id": "improve-20261029003844-7c4ce276",
+      "plan_hash": "deb0923ac0c0b8054b06da6e4759b302a62bd42d7d5e6536ee90bc9e36b2d171",
+      "record_id": "maintenance-20261029004221-c17324be",
+      "verification": "passed",
+      "drifted": false,
+      "target_fingerprint": "f4d14061871f34d2608603c2fc3b892d8061fced0d50ac60e88b49e2d6839aa9",
+      "effective_fingerprint": "3f376832df5eacf4b0bdc489105f5bbdb4d9c3c5f7423e5437b337cc72d57a74",
+      "whole_review_status": "accepted"
+    },
+    "installed": {
+      "plan_id": "improve-20261029003844-04d97c7f",
+      "plan_hash": "7cd1dfc3201d2728f368219b216cbd00c4ce40e9ef3bd37e5fde8e8a49a33e85",
+      "record_id": "maintenance-20261029004222-38e58627",
+      "verification": "passed",
+      "drifted": false,
+      "target_fingerprint": "79417f45c22106f855360bcc9ef8fd611aa325920960e8e77843c8f593da360e",
+      "effective_fingerprint": "81625c1da26150a85848253bf264ece95c8a12c438bee61b40e84124d306271e",
+      "whole_review_status": "accepted"
+    }
+  },
+  "installation": {
+    "existing_symlinks": 2,
+    "new_exposure_roots": 0,
+    "non_task_source_files_preserved": 54,
+    "whole_reviewed_installed_tree_matches_verification": true
+  },
+  "gates": {
+    "ruff": "pass",
+    "skill_validation": {
+      "status": "pass"
+    },
+    "content_gate": {
+      "status": "pass"
+    },
+    "production_doctor": {
+      "status": "pass",
+      "score": 100,
+      "grade": "A",
+      "issues": 0
+    },
+    "portable_self_test": {
+      "status": "pass",
+      "target_unchanged": true,
+      "utility_claim": false
+    },
+    "credential_lint": {
+      "status": "pass"
+    },
+    "release_consistency": {
+      "status": "pass"
+    },
+    "diff_check": {
+      "status": "pass"
+    }
+  },
+  "limitations": [
+    "Results cover these synthetic routing and initial-clarification cases in the sampled Codex CLI environment, not every natural-language request or every host/model.",
+    "The old version also passed the ten development cases; no routing-rate improvement or generated-artifact quality claim is inferred.",
+    "Static scores mean structural readiness; the native trials only verify selection/loading and initial clarification.",
+    "The model version was not pinned; both variants used the same CLI/default invocation settings.",
+    "One initial JSON-as-TOML configuration error and eight startup-only holdout inconclusive runs were not counted as semantic passes or failures; corrected infrastructure retained the same test inputs and decision rules."
+  ],
+  "commit_push_tag_or_release_performed": false,
+  "references": {
+    "status": "pass",
+    "worktree": {
+      "documents": 21,
+      "local_references": 256,
+      "errors": 0
+    },
+    "installed_source": {
+      "documents": 21,
+      "local_references": 275,
+      "errors": 0
+    }
+  },
+  "source_delivery": {
+    "status": "validated_awaiting_commit_push",
+    "authorization": "explicit_user_request_2026-10-29",
+    "branch": "codex/maintenance-architecture-review",
+    "remote": "origin",
+    "base_commit": "00435ec0c34103ece3879bb882e81ae30eea3b9f",
+    "files": 26,
+    "implementation_and_test_files": 7,
+    "documentation_files": 19,
+    "worktree_pytest_passed": 356,
+    "installed_source_pytest_passed": 449,
+    "effective_native_sessions": 21,
+    "tag_or_public_release_performed": false
+  }
+}

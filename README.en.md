@@ -10,6 +10,8 @@ Skill Engineering is a meta-Skill for creating, auditing, and maintaining Agent 
 
 The source working tree now requires architecture review for maintenance: missing declarations block preview, old unreviewed plans cannot apply, and Active updates use the same gate. Requirement decisions, cumulative growth against a whole-review baseline, and known-debt tracking reuse the existing maintenance flow. This increment remains unreleased. See the [maintenance guide](docs/guides/skill-maintenance-standard.md#内部架构审查未发布增量) for scope and evidence limits. The official release remains `1.1.0`.
 
+The unreleased source increment now front-loads creation, maintenance, and inspection intents for implicit discovery, including context-dependent vague requests. Unknown objects are clarified first, and ordinary business use remains outside this workflow. See the [activation entry](docs/guides/skill-maintenance-standard.md#自然语言入口未发布增量); the name and official release are unchanged.
+
 [Install now](#installation) · [Why it exists](#why-skill-engineering) · [See real use cases](#four-real-use-cases) · [Explore the roadmap](#roadmap)
 
 ## Installation

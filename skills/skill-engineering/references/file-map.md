@@ -48,6 +48,7 @@ flowchart TD
 | `SKILL.md` | 根入口。只放触发、路由、输出、停止点和验证命令。 | skill 被选中后一定读。 |
 | `skill.contract.yaml` | 机器可读契约。描述输入、输出、停止点、委托、禁止行为、状态和 provider 凭证边界。 | 设计、review 或 contract audit 时读。 |
 | `agents/openai.yaml` | UI 元数据和默认 prompt。 | agent UI 展示 skill 时使用。 |
+| [自然语言激活与承接](activation-routing.md)（`references/activation-routing.md`） | 创建、维护、检查的对象判断、上下文省略与反触发边界。 | 用户未说产品名、表达模糊或任务对象需要确认时读。 |
 | `references/selection-matrix.md` | 判断该做 skill、plugin、script、doc、profile 还是 no-op。 | 任何创建动作之前读。 |
 | `references/authoring-brief.md` | Authoring Brief 14 字段契约、就绪判定、脱敏和保存格式。 | 用户确认创建后、生成候选前必读。 |
 | `references/content-completion-gate.md` | 内容完整性阻断规则、Agent-native 等价清单和语义检查。 | 候选预览/Apply 前必读。 |
@@ -78,4 +79,5 @@ flowchart TD
 | `scripts/doctor_skill.py` | 对完整 Python CLI Doctor 的薄包装;缺少 CLI 时不影响 portable 创建评审。 | 维护者需要额外 contract/provider/evaluation 规则时可选使用。 |
 | `tests/self-test.json` | portable runner 的脚本 allowlist、stdin、退出码、输出与 timeout 断言。 | 有确定性脚本的 Skill 创建评审和写后自测时读取。 |
 | `tests/architecture-review-cases.json` | 架构声明读取器正反例；由仓库 pytest 对真实 loader 执行。 | 验证字段类型、安全和声明接入；不作为行为效果证据。 |
+| [自然语言激活开发案例](../tests/activation-cases.json)（`tests/activation-cases.json`） | 合成正反例与预期路由合同。 | 静态检查案例覆盖和格式；真实宿主选择另行验证。 |
 | `scripts/render_report.py` | 把 JSON doctor 报告渲染成 Markdown。 | 需要分享审计报告时用。 |

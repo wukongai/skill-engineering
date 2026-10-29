@@ -1,5 +1,21 @@
 # Backlog
 
+## Skill 工作任务的自然语言自动激活覆盖
+
+状态：已升级至[专项迭代](sprints/2026-10-29-implicit-skill-activation.md)并完成本地实现与原生宿主验证；保留本条作需求追溯，名称优化仍暂缓。
+
+- **名称决定**：已对外使用 `skill-engineering`，当前保留名称、显示名称与显式调用方式；暂不改名或增加短别名。
+- **真正需求**：用户无需说出产品名；只要任务是在创建、维护或检查Agent Skill，应能按任务意图进入Skill Engineering。重点是激活覆盖与入口路由，不是要求用户记住一组固定口令。
+- **代表性说法**：“帮我做一个Skill”“修改/维护/升级这个Skill”“检查/体检/评审这个Skill”。这些是待验证样例，不是穷举激活词。
+- **当前已知事实**：[入口描述](../skills/skill-engineering/SKILL.md)已有创建、修改、体检等语义，[自动调用配置](../skills/skill-engineering/agents/openai.yaml)为 `allow_implicit_invocation: true`。这只证明允许按描述匹配，不能据此宣称所有说法在各宿主均稳定命中。
+- **本轮实施与验证**：三意图已前置到预加载描述；新增上下文澄清与反例规范，冻结候选18条表达及真实安装3次复验通过。未改官方Skill或全局配置；[验证记录](testing/2026-10-29-implicit-skill-activation.md)说明实际覆盖与限制。
+- **反例边界**：只是调用某个业务Skill完成业务任务、解释Skill概念或出现同名词汇，不等同于创建/维护/检查Skill工程，不应据此强制进入本流程。
+- **实施合同**：按[自然语言激活需求](specs/2026-10-29-implicit-skill-activation-spec.md)与[实施计划](plans/2026-10-29-implicit-skill-activation-plan.md)执行；保留名称，不改全局配置或其他Skill，不授权发布。
+
+## 名称优化（暂缓）
+
+已对外使用skill-engineering，当前不改名、不增加短别名；是否优化名称后续单独评估，不与已恢复的自动激活混为一项。
+
 ## 维护架构审查的后续边界
 
 [本轮内部审查专项](sprints/2026-10-29-maintenance-architecture-review.md)仅实现声明与确定性事实门禁。完整架构语义/Blueprint 继续归属 2.0；真实模型运行与验收执行证据归属现有 Behavior Evaluation Lab。维护轮次上限的执行与跨计划归并仍需单独测试和修复，不以本轮架构审查宣称完成。
