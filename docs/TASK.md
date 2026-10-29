@@ -12,7 +12,7 @@
 - [x] IA-3：独立评审、同一维护计划应用及既有安装合并验证。
 - [x] IA-4：工程门禁及[证据状态](testing/2026-10-29-implicit-skill-activation.md)回填。
 
-- [ ] IA-5：用户于2026-10-29追加本轮commit/push授权，正在完成[源码提交与推送收尾](testing/2026-10-29-implicit-skill-activation.md#源码提交与推送收尾)。
+- [x] IA-5：按2026-10-29追加授权完成本轮提交推送及远端核验，见[源码提交与推送收尾](testing/2026-10-29-implicit-skill-activation.md#源码提交与推送收尾)。
 
 名称优化继续暂缓，不扩展其他Sprint；本次提交推送依据本轮新授权。
 

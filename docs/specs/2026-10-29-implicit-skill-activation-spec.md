@@ -1,6 +1,6 @@
 # Skill 自然语言与模糊语义激活需求
 
-状态：本地实现、独立评审、真实宿主路由与安装复验完成；未发布。
+状态：实现、独立评审、真实宿主路由、安装复验与源码提交推送完成；未正式发布。
 
 [当前任务](../TASK.md) · [实施计划](../plans/2026-10-29-implicit-skill-activation-plan.md) · [专项迭代](../sprints/2026-10-29-implicit-skill-activation.md) · [架构决定](../adr/0012-intent-first-skill-activation.md) · [验证记录](../testing/2026-10-29-implicit-skill-activation.md)
 

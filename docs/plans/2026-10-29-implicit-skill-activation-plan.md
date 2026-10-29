@@ -1,6 +1,6 @@
 # Skill 自然语言激活实施计划
 
-状态：Done；隔离实现、同一计划应用、原生宿主与既有安装验证完成；未发布。
+状态：Done；实现、同一计划应用、原生宿主与既有安装验证完成；源码已提交并推送独立分支，未正式发布。
 
 目标：让创建、维护和检查Skill的普通说法及有上下文的模糊表达稳定进入既有工程流程，保留名称与执行边界。
 
@@ -41,6 +41,6 @@
 
 - [x] 用户明确授权本轮commit、push及相关文档对齐。
 - [x] 独立核对26个文件范围，7个实现/测试文件匹配已验证候选；工作树356项回归通过。
-- [ ] 提交并推送origin/codex/maintenance-architecture-review，核对实际远端提交后回填[交付记录](../testing/2026-10-29-implicit-skill-activation.md#源码提交与推送收尾)。
+- [x] 功能提交[d726b1b](https://github.com/wukongai/skill-engineering/commit/d726b1b694cc71b14bc577f45aea4e29ae20b3e4)已推送origin/codex/maintenance-architecture-review并独立核对远端提交；文档交付状态已回填[交付记录](../testing/2026-10-29-implicit-skill-activation.md#源码提交与推送收尾)。
 
 仅收口本轮自动激活增量，名称优化继续暂缓；不创建Tag或正式Release。

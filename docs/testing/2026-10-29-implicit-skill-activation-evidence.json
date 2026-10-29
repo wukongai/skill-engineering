@@ -268,22 +268,22 @@
     "The model version was not pinned; both variants used the same CLI/default invocation settings.",
     "One initial JSON-as-TOML configuration error and eight startup-only holdout inconclusive runs were not counted as semantic passes or failures; corrected infrastructure retained the same test inputs and decision rules."
   ],
-  "commit_push_tag_or_release_performed": false,
+  "commit_push_tag_or_release_performed": true,
   "references": {
     "status": "pass",
     "worktree": {
       "documents": 21,
-      "local_references": 256,
+      "local_references": 261,
       "errors": 0
     },
     "installed_source": {
       "documents": 21,
-      "local_references": 275,
+      "local_references": 280,
       "errors": 0
     }
   },
   "source_delivery": {
-    "status": "validated_awaiting_commit_push",
+    "status": "pushed",
     "authorization": "explicit_user_request_2026-10-29",
     "branch": "codex/maintenance-architecture-review",
     "remote": "origin",
@@ -294,6 +294,21 @@
     "worktree_pytest_passed": 356,
     "installed_source_pytest_passed": 449,
     "effective_native_sessions": 21,
-    "tag_or_public_release_performed": false
-  }
+    "tag_or_public_release_performed": false,
+    "feature_commit": "d726b1b694cc71b14bc577f45aea4e29ae20b3e4",
+    "remote_branch_commit_verified": "d726b1b694cc71b14bc577f45aea4e29ae20b3e4",
+    "remote_main_commit_unchanged": "dec50013024efc29ff0864db0ed6fcd263fee366",
+    "followup_documentation_commit": "subsequent_commit_on_same_branch",
+    "rename": "deferred",
+    "current_chat_ready_to_archive": true,
+    "chat_archived_automatically": false,
+    "documentation_closeout_checks": {
+      "local_references": "pass",
+      "credential_lint": "pass",
+      "version_consistency": "pass",
+      "diff_check": "pass",
+      "implementation_snapshot": "unchanged"
+    }
+  },
+  "tag_or_public_release_performed": false
 }

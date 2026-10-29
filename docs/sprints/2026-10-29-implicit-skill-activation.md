@@ -1,6 +1,6 @@
 # 自然语言自动激活专项迭代
 
-状态：Done；自然语言激活实现与验证完成，改名继续暂缓；未发布。
+状态：Done；自然语言激活实现、安装验证与源码提交推送完成，改名继续暂缓；未正式发布。
 
 [当前任务](../TASK.md) · [需求与验收](../specs/2026-10-29-implicit-skill-activation-spec.md) · [实施计划](../plans/2026-10-29-implicit-skill-activation-plan.md) · [验证记录](../testing/2026-10-29-implicit-skill-activation.md)
 
@@ -12,4 +12,4 @@
 
 只交付既有Skill的激活覆盖，不修改官方Skill/全局配置，不新增Skill或模型Runner产品。正式1.1.0不变；实施阶段未执行commit/push。用户随后明确授权本轮提交推送，tag与正式发布继续排除。
 
-- [ ] IA-5：按2026-10-29追加授权提交并推送本轮独立范围，实际状态见[源码交付记录](../testing/2026-10-29-implicit-skill-activation.md#源码提交与推送收尾)。
+- [x] IA-5：按2026-10-29追加授权完成本轮独立范围提交推送及远端核验，实际状态见[源码交付记录](../testing/2026-10-29-implicit-skill-activation.md#源码提交与推送收尾)。
