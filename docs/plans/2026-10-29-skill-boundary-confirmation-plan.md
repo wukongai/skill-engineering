@@ -76,3 +76,5 @@ def validate_boundary_snapshot(report: dict, *, target_fingerprint: str, candida
 最多三轮实质修复；阻断未清或证据不足时保留具体未完成项，不继续增加无关能力。原未提交改动始终保留；任一基线漂移只停止受影响应用，不自动重置或覆盖。
 
 完成依据见[验证记录](../testing/2026-10-29-skill-boundary-confirmation.md)。宿主单次与五轮样例使用合成用户输入，仅验证这些边界协商样本；真实业务效用未验证，未进入 validated。
+
+源码提交与远端核验已完成：53个本轮文件，干净提交目录508项测试及工程门禁通过；[实际交付与限制](../testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)。

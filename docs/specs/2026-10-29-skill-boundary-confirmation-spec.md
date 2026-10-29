@@ -1,6 +1,6 @@
 # Skill 边界确认与防跑偏
 
-状态：本轮本地工程交付完成；已应用并验证。用户随后追加授权本轮提交与推送，进展见[源码交付](../testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)；未新增安装或正式发布，版本仍为1.1.0，真实业务长期效用未验证。
+状态：本轮本地工程交付完成；已应用并验证。用户随后授权的本轮源码提交与推送已完成，见[源码交付](../testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)；未新增安装或正式发布，版本仍为1.1.0，真实业务长期效用未验证。
 
 [文档入口](../README.md) · [当前任务](../TASK.md#skill-边界确认与防跑偏) · [实施计划](../plans/2026-10-29-skill-boundary-confirmation-plan.md) · [专项迭代](../sprints/2026-10-29-skill-boundary-confirmation.md) · [架构决定](../adr/0013-confirmed-boundaries-and-behavior-policy.md) · [恢复交接](../handoffs/2026-10-29-skill-boundary-confirmation-next.md) · [审查记录](../testing/2026-10-29-skill-boundary-confirmation-audit.md)
 

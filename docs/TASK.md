@@ -217,3 +217,5 @@
 - [x] 项目与OB原卡按本轮交付收尾；单次及五轮宿主合成样例已记录，真实业务长期效用未验证。本地交付阶段未提交或推送；用户已追加授权本轮源码交付，见[提交与远端核验](testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)。未新增安装或正式发布。
 
 [已确认需求](specs/2026-10-29-skill-boundary-confirmation-spec.md) · [阶段规划](plans/2026-10-29-skill-boundary-confirmation-plan.md) · [恢复交接](handoffs/2026-10-29-skill-boundary-confirmation-next.md) · [候选登记](BACKLOG.md#skill-边界确认与防跑偏)
+
+- [x] 边界确认源码已提交并正常推送既有交付分支，53个本轮文件、干净目录508项通过；[远端回执](testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)。

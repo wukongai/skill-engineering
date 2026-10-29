@@ -2,15 +2,17 @@
   "schema_version": "1",
   "date": "2026-10-29",
   "formal_version": "1.1.0",
-  "delivery": "local_unreleased",
+  "delivery": "source_pushed_unreleased",
   "baseline_pytest": 449,
   "candidate_pytest": {
     "passed": 601,
-    "seconds": 6.28
+    "seconds": 6.28,
+    "scope": "original_mixed_candidate"
   },
   "post_apply_pytest": {
     "passed": 601,
-    "seconds": 7.88
+    "seconds": 7.88,
+    "scope": "original_mixed_worktree"
   },
   "post_apply_gates": {
     "pytest": {
@@ -170,14 +172,15 @@
     "codex_and_agents_are_existing_symlinks": true,
     "both_resolve_to_repository_skill": true,
     "canonical_portable_byte_equal": true,
-    "canonical_sha256": "67540a5b0e856e8f9d8cbcfb96af915ab3a430186bf8199f78053eccf1e5d251"
+    "canonical_sha256": "67540a5b0e856e8f9d8cbcfb96af915ab3a430186bf8199f78053eccf1e5d251",
+    "scope": "original_worktree_existing_symlinks"
   },
   "closeout_document_contract_tests": {
     "passed": 21,
     "seconds": 0.09
   },
   "source_delivery": {
-    "status": "preparing",
+    "status": "pushed",
     "base_commit": "14ca74d95d0d67851ae59845b60cc387d8386381",
     "branch": "codex/maintenance-architecture-review",
     "authorized_commit": true,
@@ -185,6 +188,66 @@
     "files": 53,
     "clean_baseline_pytest": 356,
     "historical_601_scope": "mixed_original_workspace",
-    "tag_or_formal_release": false
-  }
+    "tag_or_formal_release": false,
+    "feature_commit": "07e4916e8bd38ee23b02119d63709b4ee336125e",
+    "verified_remote_feature_commit": "07e4916e8bd38ee23b02119d63709b4ee336125e",
+    "clean_candidate_pytest": {
+      "passed": 508,
+      "seconds": 6.68
+    },
+    "clean_applied_worktree_pytest": {
+      "passed": 508,
+      "seconds": 7.27
+    },
+    "gates": {
+      "ruff": {
+        "exit_code": 0
+      },
+      "skill_validation": {
+        "exit_code": 0
+      },
+      "content_gate": {
+        "exit_code": 0
+      },
+      "portable_self_test": {
+        "exit_code": 0
+      },
+      "production_doctor": {
+        "exit_code": 0
+      },
+      "credential_lint": {
+        "exit_code": 0
+      },
+      "release_consistency": {
+        "exit_code": 0
+      },
+      "diff_check": {
+        "exit_code": 0
+      }
+    },
+    "independent_review": {
+      "conclusion": "pass",
+      "files": 53,
+      "unchanged_code_test_script_files": 18,
+      "markdown_files": 33,
+      "local_links": 367,
+      "fragments": 43,
+      "reference_errors": 0
+    },
+    "maintenance": {
+      "plan_id": "improve-20261029081759-f952fa82",
+      "plan_hash": "141acb742f23cbc795649118da61d7359600e93833d04247a098a8d51ed3ed41",
+      "record_id": "maintenance-20261029081811-99b0666b",
+      "verification": "passed",
+      "drifted": false
+    },
+    "unrelated_changes_excluded": [
+      "SEC102",
+      "Skill Dissect",
+      "independent project closeout rules"
+    ],
+    "remote_main": "dec50013024efc29ff0864db0ed6fcd263fee366",
+    "original_main": "c98d846431f481579aaf6d1fbe039ad5adeb17cb"
+  },
+  "baseline_pytest_scope": "original_mixed_worktree"
 }

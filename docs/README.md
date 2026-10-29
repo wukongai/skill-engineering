@@ -68,3 +68,5 @@
 2026-10-29 前置[维护架构审查专项](sprints/2026-10-29-maintenance-architecture-review.md)及后续已完成，用户已恢复任务。本轮边界确认增量已应用，混合工作区601项测试通过；干净提交候选结果另见[源码交付](testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)；真实业务长期效用未验证，没有新增发布承诺。
 
 边界确认实施入口：[专项迭代](sprints/2026-10-29-skill-boundary-confirmation.md)、[兼容决定](adr/0013-confirmed-boundaries-and-behavior-policy.md)、[实现与验证](testing/2026-10-29-skill-boundary-confirmation.md)。用户已确认本轮包含与排除范围，工程交付与OB收尾已完成；[结构化证据](testing/2026-10-29-skill-boundary-confirmation-evidence.json)区分候选文本、有限宿主样例与真实业务效用。
+
+本轮边界确认源码已提交并推送，干净交付目录508项及全部工程门禁通过；[源码范围和远端回执](testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)。

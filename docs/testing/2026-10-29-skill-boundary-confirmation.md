@@ -1,6 +1,6 @@
 # 用户边界确认与类型验收验证记录
 
-状态：本轮本地工程交付完成，已应用并验证；本地实现阶段未提交或推送；用户随后已授权本轮源码提交与远端交付（见末节）。未新增安装或正式发布，版本仍1.1.0，真实业务长期效用未验证。
+状态：本轮本地工程交付完成，已应用并验证；本地实现阶段未提交或推送；用户随后授权的源码提交与远端交付已完成（见末节）。未新增安装或正式发布，版本仍1.1.0，真实业务长期效用未验证。
 
 [文档入口](../README.md) · [需求](../specs/2026-10-29-skill-boundary-confirmation-spec.md) · [实施计划](../plans/2026-10-29-skill-boundary-confirmation-plan.md) · [专项迭代](../sprints/2026-10-29-skill-boundary-confirmation.md) · [兼容决定](../adr/0013-confirmed-boundaries-and-behavior-policy.md) · [结构化证据](2026-10-29-skill-boundary-confirmation-evidence.json) · [早前审查](2026-10-29-skill-boundary-confirmation-audit.md)
 
@@ -24,7 +24,7 @@ Skill通过原维护引擎应用16个文件，无删除。不可变计划`improv
 
 另30个源码、测试和文档文件按逐文件指纹精确回写，写后全部匹配候选；原文件备份位于本机临时目录`/private/tmp/skill-boundary-build-c9080c9e/source-backup`。Skill原文件由维护引擎保存在本项目`.skill-engineering/maintenance-backups/maintenance-20261029032853-935c3f45`；恢复需先检查后续漂移，再走原Undo，不能覆盖新变更。
 
-全部原有非本轮文件受基线保护。两处既有安装入口指向本项目源码，当前源码变化可见，无新增安装；本轮没有commit/push/tag或Release。
+全部原有非本轮文件受基线保护。两处既有安装入口指向本项目源码，当前源码变化可见，无新增安装；初始本地实现阶段未commit/push；本轮追加授权后的源码交付见末节，仍无Tag或Release。
 
 ## 有限宿主试用与效用限制
 
@@ -38,4 +38,12 @@ Skill通过原维护引擎应用16个文件，无删除。不可变计划`improv
 
 ## 源码提交与推送收尾
 
-用户明确授权补齐本轮项目文档和OB Task，并commit、push。交付基于原远端分支`codex/maintenance-architecture-review`的`14ca74d`，只提取53个本轮文件及对应段落；保留原main独立Skill Dissect提交和其他任务改动。初始干净基线356项通过，隔离候选测试与实际远端结果随后回填；本节不把历史601项作为干净提交验证。提交到源码分支不代表Tag或正式Release。
+用户明确授权补齐本轮项目文档与OB Task，并commit、push。交付从原远端分支`codex/maintenance-architecture-review`的`14ca74d`提取53个本轮文件及对应段落，保留分支原历史；独立SEC102、Skill Dissect、自动收尾规则与原main独立提交未夹带。
+
+干净分支基线356项通过；导出候选508项通过（6.68s），应用后的实际提交目录508项通过（7.27s）。Ruff、Skill validation、Content Gate、portable self-test、production Doctor、credential lint、1.1.0一致性与diff check全部通过。历史601项仅属于原混合工作区，不作为本轮干净提交验证。有限宿主样例仍为此前合成输入，不重新包装成真实业务效用。
+
+独立导出审查通过：53文件范围、18个代码/测试/脚本与已审查实现逐字节一致，33份Markdown的367个本地链接、43个章节锚点零错误，六项架构边界通过。Skill另用绑定本次真实指纹的新计划`improve-20261029081759-f952fa82`应用；记录`maintenance-20261029081811-99b0666b`Verify为passed、drifted=false，不复用原混合工作区计划。
+
+功能提交[07e4916](https://github.com/wukongai/skill-engineering/commit/07e4916e8bd38ee23b02119d63709b4ee336125e)已正常推送[既有交付分支](https://github.com/wukongai/skill-engineering/tree/codex/maintenance-architecture-review)，推送后远端完整提交号已核验一致；远端main仍为`dec50013024efc29ff0864db0ed6fcd263fee366`。本地原main及未提交的其他任务内容保持，正式版本仍1.1.0；没有新增安装、强推、Tag或Release。随后文档提交只记录本轮交付回执。
+
+项目事实与OB原卡已同步，保留原归属、辅助分组、完成日期和同日唯一执行行，不改个人日志复盘；最终单卡、当日工作流、跨Agent入口与引用检查按实际读回回填。

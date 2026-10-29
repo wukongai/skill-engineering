@@ -27,7 +27,7 @@ Skill Engineering 的核心竞争力是“架构优先的快速生成 + 全生�
 
 [自然语言激活增量](specs/2026-10-29-implicit-skill-activation-spec.md)已完成本地实现与原生验证：创建、维护、检查及有上下文的模糊表达无需产品名，未知对象先澄清，业务调用不误路由。冻结候选18条表达及实际安装3次复验通过；名称不变，不把样本结果泛化为所有请求保证。
 
-[边界确认增量](specs/2026-10-29-skill-boundary-confirmation-spec.md)已按用户确认范围完成本地实现与验证：与用户协商做/不做，修正空断言并按能力验收；复用现有维护链，不建设通用运行时、自动评测平台或批量改写历史Skill。正式版本不变，实际状态见[专项迭代](sprints/2026-10-29-skill-boundary-confirmation.md)。
+[边界确认增量](specs/2026-10-29-skill-boundary-confirmation-spec.md)已按用户确认范围完成本地实现与验证：与用户协商做/不做，修正空断言并按能力验收；复用现有维护链，不建设通用运行时、自动评测平台或批量改写历史Skill。正式版本不变；本轮源码已提交并推送，见[交付与验证](testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)及[专项迭代](sprints/2026-10-29-skill-boundary-confirmation.md)。
 
 ## 目标用户
 
