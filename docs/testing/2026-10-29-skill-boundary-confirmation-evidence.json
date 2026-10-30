@@ -247,7 +247,7 @@
       "Skill Dissect",
       "independent project closeout rules"
     ],
-    "remote_main": "314afc2f33b8750e29cee2005514988037366ddf",
+    "remote_main": "8b0eab480cac092a2e22580329e52e6c6b05b45a",
     "original_main": "c98d846431f481579aaf6d1fbe039ad5adeb17cb",
     "remote_feature_branch_deleted": true,
     "local_feature_branch_deleted": true,
@@ -255,17 +255,18 @@
     "original_project_main": "c98d846431f481579aaf6d1fbe039ad5adeb17cb",
     "original_project_main_relation": "ahead_1_behind_6_against_remote_main",
     "original_project_main_independent_commit_preserved": true,
-    "original_project_main_pushed": false
+    "original_project_main_pushed": false,
+    "delivery_docs_commit": "8b0eab480cac092a2e22580329e52e6c6b05b45a"
   },
   "baseline_pytest_scope": "original_mixed_worktree",
   "final_branch_state": {
     "remote_heads": [
       "main"
     ],
-    "remote_main": "314afc2f33b8750e29cee2005514988037366ddf",
+    "remote_main": "8b0eab480cac092a2e22580329e52e6c6b05b45a",
     "remote_feature_branch": null,
     "local_feature_branch": null,
-    "delivery_snapshot": "314afc2f33b8750e29cee2005514988037366ddf",
+    "delivery_snapshot": "8b0eab480cac092a2e22580329e52e6c6b05b45a",
     "original_project_main": "c98d846431f481579aaf6d1fbe039ad5adeb17cb",
     "original_project_main_is_other_task": true
   }
