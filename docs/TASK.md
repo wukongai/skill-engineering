@@ -218,4 +218,4 @@
 
 [已确认需求](specs/2026-10-29-skill-boundary-confirmation-spec.md) · [阶段规划](plans/2026-10-29-skill-boundary-confirmation-plan.md) · [恢复交接](handoffs/2026-10-29-skill-boundary-confirmation-next.md) · [候选登记](BACKLOG.md#skill-边界确认与防跑偏)
 
-- [x] 边界确认源码已提交并正常推送既有交付分支，53个本轮文件、干净目录508项通过；[远端回执](testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)。
+- [x] 边界确认源码已合入远程 `main`，53个本轮文件、干净目录508项通过；目标功能分支已从本地和远程删除；[最终分支回执](testing/2026-10-29-skill-boundary-confirmation.md#最终分支与本地状态)。原项目本地 `main` 的独立 Skill Dissect 提交保留，未推送。

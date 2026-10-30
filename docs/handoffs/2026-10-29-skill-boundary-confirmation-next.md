@@ -1,6 +1,6 @@
 # Skill 边界确认与防跑偏交付入口
 
-状态：本轮本地工程交付完成，项目与OB原卡已对齐。用户追加授权的源码提交与推送已完成，实际回执见[当前提交与推送](../testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)；未新增安装或正式发布。
+状态：本轮本地工程交付完成，项目与OB原卡已对齐。用户追加授权的源码提交与推送已完成并合入远程 main，分支已清理；实际回执见[最终分支状态](../testing/2026-10-29-skill-boundary-confirmation.md#最终分支与本地状态)；未新增安装或正式发布。
 
 [文档入口](../README.md) · [当前任务](../TASK.md#skill-边界确认与防跑偏) · [已确认需求](../specs/2026-10-29-skill-boundary-confirmation-spec.md) · [实施计划](../plans/2026-10-29-skill-boundary-confirmation-plan.md) · [专项迭代](../sprints/2026-10-29-skill-boundary-confirmation.md) · [验证记录](../testing/2026-10-29-skill-boundary-confirmation.md)
 
@@ -26,4 +26,6 @@ Skill“不做什么”需与用户确认，文章仅作实践参考。用户在
 
 本机OB原主题任务卡保持原归属与辅助分组；项目文档为需求和工程事实唯一正文。单卡、当日日志工作流与跨Agent入口按最终回执记录。未修改个人日志复盘，Obsidian应用内点击与Dataview渲染未验证。
 
-功能提交[07e4916](https://github.com/wukongai/skill-engineering/commit/07e4916e8bd38ee23b02119d63709b4ee336125e)已在远端核验；干净交付目录508项通过，完整结果见[源码交付记录](../testing/2026-10-29-skill-boundary-confirmation.md#源码提交与推送收尾)。
+功能提交[07e4916](https://github.com/wukongai/skill-engineering/commit/07e4916e8bd38ee23b02119d63709b4ee336125e)和文档提交[314afc2](https://github.com/wukongai/skill-engineering/commit/314afc2f33b8750e29cee2005514988037366ddf)已合入远程[main](https://github.com/wukongai/skill-engineering/tree/main)，功能分支已删除；干净交付目录508项通过，完整结果见[最终分支状态](../testing/2026-10-29-skill-boundary-confirmation.md#最终分支与本地状态)。
+
+- 当前本地交付快照与远程 main 均为 `314afc2`；原项目本地 main 的 `c98d846` 是其他任务的独立提交，保留且未推送。

@@ -1,6 +1,6 @@
 # 用户边界确认与类型验收验证记录
 
-状态：本轮本地工程交付完成，已应用并验证；本地实现阶段未提交或推送；用户随后授权的源码提交与远端交付已完成（见末节）。未新增安装或正式发布，版本仍1.1.0，真实业务长期效用未验证。
+状态：本轮本地工程交付完成并已合入远程 main；远程与本次交付快照统一，目标功能分支已删除。原项目本地 main 的独立 Skill Dissect 提交保留，未纳入本次交付。未新增安装或正式发布，版本仍1.1.0，真实业务长期效用未验证。
 
 [文档入口](../README.md) · [需求](../specs/2026-10-29-skill-boundary-confirmation-spec.md) · [实施计划](../plans/2026-10-29-skill-boundary-confirmation-plan.md) · [专项迭代](../sprints/2026-10-29-skill-boundary-confirmation.md) · [兼容决定](../adr/0013-confirmed-boundaries-and-behavior-policy.md) · [结构化证据](2026-10-29-skill-boundary-confirmation-evidence.json) · [早前审查](2026-10-29-skill-boundary-confirmation-audit.md)
 
@@ -44,6 +44,12 @@ Skill通过原维护引擎应用16个文件，无删除。不可变计划`improv
 
 独立导出审查通过：53文件范围、18个代码/测试/脚本与已审查实现逐字节一致，33份Markdown的367个本地链接、43个章节锚点零错误，六项架构边界通过。Skill另用绑定本次真实指纹的新计划`improve-20261029081759-f952fa82`应用；记录`maintenance-20261029081811-99b0666b`Verify为passed、drifted=false，不复用原混合工作区计划。
 
-功能提交[07e4916](https://github.com/wukongai/skill-engineering/commit/07e4916e8bd38ee23b02119d63709b4ee336125e)已正常推送[既有交付分支](https://github.com/wukongai/skill-engineering/tree/codex/maintenance-architecture-review)，推送后远端完整提交号已核验一致；远端main仍为`dec50013024efc29ff0864db0ed6fcd263fee366`。本地原main及未提交的其他任务内容保持，正式版本仍1.1.0；没有新增安装、强推、Tag或Release。随后文档提交只记录本轮交付回执。
+功能提交[07e4916](https://github.com/wukongai/skill-engineering/commit/07e4916e8bd38ee23b02119d63709b4ee336125e)及文档提交[314afc2](https://github.com/wukongai/skill-engineering/commit/314afc2f33b8750e29cee2005514988037366ddf)已合入远程[main](https://github.com/wukongai/skill-engineering/tree/main)，远程 main 当前为`314afc2f33b8750e29cee2005514988037366ddf`。远程及本次交付快照内容一致，远程与本地目标功能分支均已删除。原项目本地 main 保留独立 `c98d846` Skill Dissect 提交，ahead 1 / behind 6；该差异属于其他任务，未覆盖、未推送。正式版本仍1.1.0；没有新增安装、强推、Tag或Release。
 
 项目事实与OB原卡已同步，保留原归属、辅助分组、完成日期和同日唯一执行行，不改个人日志复盘；最终单卡、当日工作流、跨Agent入口与引用检查按实际读回回填。
+
+## 最终分支与本地状态
+
+2026-10-31 最终核对：远程仅保留 `main`，目标功能分支已从远程和本地删除；当前隔离交付工作区 detached 在 `314afc2`，与远程 main 完全一致。原项目目录的本地 `main` 仍保留独立 Skill Dissect 提交 `c98d846`，不属于本轮交付，未做 reset、覆盖或推送。
+
+本轮项目事实和 OB 任务已完成同步，可以归档本次交付会话；若后续要统一原项目本地 main，需另立任务决定如何处理该独立提交。

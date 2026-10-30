@@ -180,9 +180,10 @@
     "seconds": 0.09
   },
   "source_delivery": {
-    "status": "pushed",
+    "status": "merged_to_remote_main",
     "base_commit": "14ca74d95d0d67851ae59845b60cc387d8386381",
-    "branch": "codex/maintenance-architecture-review",
+    "branch": null,
+    "historical_source_branch": "codex/maintenance-architecture-review",
     "authorized_commit": true,
     "authorized_push": true,
     "files": 53,
@@ -246,8 +247,26 @@
       "Skill Dissect",
       "independent project closeout rules"
     ],
-    "remote_main": "dec50013024efc29ff0864db0ed6fcd263fee366",
-    "original_main": "c98d846431f481579aaf6d1fbe039ad5adeb17cb"
+    "remote_main": "314afc2f33b8750e29cee2005514988037366ddf",
+    "original_main": "c98d846431f481579aaf6d1fbe039ad5adeb17cb",
+    "remote_feature_branch_deleted": true,
+    "local_feature_branch_deleted": true,
+    "delivery_worktree": "detached_at_314afc2",
+    "original_project_main": "c98d846431f481579aaf6d1fbe039ad5adeb17cb",
+    "original_project_main_relation": "ahead_1_behind_6_against_remote_main",
+    "original_project_main_independent_commit_preserved": true,
+    "original_project_main_pushed": false
   },
-  "baseline_pytest_scope": "original_mixed_worktree"
+  "baseline_pytest_scope": "original_mixed_worktree",
+  "final_branch_state": {
+    "remote_heads": [
+      "main"
+    ],
+    "remote_main": "314afc2f33b8750e29cee2005514988037366ddf",
+    "remote_feature_branch": null,
+    "local_feature_branch": null,
+    "delivery_snapshot": "314afc2f33b8750e29cee2005514988037366ddf",
+    "original_project_main": "c98d846431f481579aaf6d1fbe039ad5adeb17cb",
+    "original_project_main_is_other_task": true
+  }
 }
