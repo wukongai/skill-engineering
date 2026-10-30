@@ -247,7 +247,7 @@
       "Skill Dissect",
       "independent project closeout rules"
     ],
-    "remote_main": "8b0eab480cac092a2e22580329e52e6c6b05b45a",
+    "remote_main_contains_feature_commit": "314afc2f33b8750e29cee2005514988037366ddf",
     "original_main": "c98d846431f481579aaf6d1fbe039ad5adeb17cb",
     "remote_feature_branch_deleted": true,
     "local_feature_branch_deleted": true,
@@ -263,7 +263,7 @@
     "remote_heads": [
       "main"
     ],
-    "remote_main": "8b0eab480cac092a2e22580329e52e6c6b05b45a",
+    "remote_main_contains_feature_commit": "314afc2f33b8750e29cee2005514988037366ddf",
     "remote_feature_branch": null,
     "local_feature_branch": null,
     "delivery_snapshot": "8b0eab480cac092a2e22580329e52e6c6b05b45a",

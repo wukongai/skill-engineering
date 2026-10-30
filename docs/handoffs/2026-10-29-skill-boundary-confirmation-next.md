@@ -28,4 +28,4 @@ Skill“不做什么”需与用户确认，文章仅作实践参考。用户在
 
 功能提交[07e4916](https://github.com/wukongai/skill-engineering/commit/07e4916e8bd38ee23b02119d63709b4ee336125e)和文档提交[314afc2](https://github.com/wukongai/skill-engineering/commit/314afc2f33b8750e29cee2005514988037366ddf)已合入远程[main](https://github.com/wukongai/skill-engineering/tree/main)，功能分支已删除；干净交付目录508项通过，完整结果见[最终分支状态](../testing/2026-10-29-skill-boundary-confirmation.md#最终分支与本地状态)。
 
-- 当前本地交付快照与远程 main 均为最终提交 `8b0eab4`（功能交付主体为父提交 `314afc2`）；原项目本地 main 的 `c98d846` 是其他任务的独立提交，保留且未推送。
+- 当前本地交付快照与远程 main 均包含不可变功能提交 `314afc2`，后续文档收尾提交已追加；原项目本地 main 的 `c98d846` 是其他任务的独立提交，保留且未推送。
